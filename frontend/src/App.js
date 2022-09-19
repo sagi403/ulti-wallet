@@ -1,7 +1,10 @@
+import MainApp from "./components/MainApp";
+import "./App.css";
+
 const App = () => {
   return (
     <>
-      <h1>Welcome to Ulti Wallet</h1>
+      <MainApp />
     </>
   );
 };
