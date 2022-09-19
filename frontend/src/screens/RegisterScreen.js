@@ -1,6 +1,11 @@
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Link, useLocation } from "react-router-dom";
 
 const RegisterScreen = () => {
+  const location = useLocation();
+
+  const redirect = location.search ? location.search.split("=")[1] : "/";
+
   return (
     <Container className="w-25">
       <h1 className="mt-5 mb-3">Register</h1>
@@ -31,6 +36,15 @@ const RegisterScreen = () => {
           Sign Up
         </Button>
       </Form>
+
+      <Row className="py-3">
+        <Col>
+          Have an Account?{" "}
+          <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
+            Login
+          </Link>
+        </Col>
+      </Row>
     </Container>
   );
 };

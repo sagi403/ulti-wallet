@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWallet } from "@fortawesome/free-solid-svg-icons";
 
@@ -20,10 +21,14 @@ const HomeScreen = () => {
             Ulti makes it safe & easy for you to store, buy, send, receive, swap
             tokens on your web browser
           </h3>
-          <Button variant="outline-primary" className="me-3">
-            Sign Up
-          </Button>
-          <Button variant="primary">Sign In</Button>
+          <Link to="/register">
+            <Button variant="outline-primary" className="me-3">
+              Sign Up
+            </Button>
+          </Link>
+          <Link to="/login">
+            <Button variant="primary">Sign In</Button>
+          </Link>
         </Col>
         <Col>Add Picture</Col>
       </Row>
