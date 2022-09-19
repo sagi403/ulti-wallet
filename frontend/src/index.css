@@ -1,3 +1,12 @@
 main {
   min-height: 80vh;
 }
+
+.logo-home {
+  font-size: 5rem;
+}
+
+.desc-home {
+  font-size: 5.5rem;
+  font-weight: 900;
+}
