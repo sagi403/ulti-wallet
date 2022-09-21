@@ -4,27 +4,27 @@ const coinSchema = mongoose.Schema(
   {
     id: {
       type: Number,
-      require: true,
+      required: true,
     },
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     symbol: {
       type: String,
-      require: true,
+      required: true,
     },
     price: {
       type: Number,
-      require: true,
+      required: true,
     },
     balance: {
       type: Number,
-      require: true,
+      required: true,
     },
     value: {
       type: Number,
-      require: true,
+      required: true,
     },
   },
   {

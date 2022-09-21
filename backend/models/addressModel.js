@@ -4,19 +4,19 @@ const addressSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      require: true,
+      required: true,
       ref: "User",
     },
     coins: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        require: true,
+        required: true,
         ref: "Coin",
       },
     ],
     publicAddress: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
     },
   },
