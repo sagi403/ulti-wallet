@@ -1,17 +1,26 @@
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/userSlice";
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 
 const LoginScreen = () => {
   const location = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const redirect = location.search ? location.search.split("=")[1] : "/";
+  const { userInfo } = useSelector(state => state.user);
+
+  const redirect = location.search ? location.search.split("=")[1] : "/app";
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [userInfo, redirect, navigate]);
 
   const submitHandler = async e => {
     e.preventDefault();

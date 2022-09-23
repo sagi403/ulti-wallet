@@ -1,10 +1,23 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWallet } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import MainNavbar from "./MainNavbar";
 import Footer from "./Footer";
 
 const MainApp = () => {
+  const navigate = useNavigate();
+
+  const { userInfo } = useSelector(state => state.user);
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/login");
+    }
+  }, [userInfo, navigate]);
+
   return (
     <Container fluid>
       <Row>

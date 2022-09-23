@@ -2,8 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  userInfo: [],
-  loading: true,
+  userInfo: localStorage.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null,
+  loading: false,
   error: "",
 };
 
@@ -28,11 +30,12 @@ export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  // reducers: {
-  //   login: state => {
-  //     state.loggedIn = true;
-  //   },
-  // },
+  reducers: {
+    logout: state => {
+      localStorage.removeItem("userInfo");
+      return initialState;
+    },
+  },
   extraReducers: {
     [login.pending]: state => {
       state.loading = true;
@@ -48,6 +51,6 @@ const userSlice = createSlice({
   },
 });
 
-// export const { login } = userSlice.actions;
+export const { logout } = userSlice.actions;
 
 export default userSlice.reducer;
