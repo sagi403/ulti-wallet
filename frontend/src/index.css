@@ -15,3 +15,11 @@ main {
   /* position: fixed; */
   min-height: 100vh !important;
 }
+
+.nav-centered {
+  float: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
