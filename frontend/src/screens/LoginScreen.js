@@ -1,15 +1,23 @@
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../store/userSlice";
 
 const LoginScreen = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
+
+  const submitHandler = e => {
+    e.preventDefault();
+    dispatch(login());
+  };
 
   return (
     <Container className="w-25">
       <h1 className="mt-5 mb-3">Login</h1>
-      <Form>
+      <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control type="email" placeholder="Enter email" />
