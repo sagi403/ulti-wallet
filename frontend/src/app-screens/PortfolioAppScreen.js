@@ -1,6 +1,7 @@
 import { Col, Container, Row, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
+import coin from "../coin";
 
 const PortfolioAppScreen = () => {
   return (
@@ -54,14 +55,26 @@ const PortfolioAppScreen = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>bitcoin</td>
-                <td className="text-end">$9563.5</td>
-                <td className="text-end">+7.14%</td>
-                <td className="text-end">0.00516 BTC</td>
-                <td className="text-end">$5743.6</td>
-                <td className="text-end">33%</td>
-              </tr>
+              {coin.map(item => (
+                <tr key={item.id} className="portfolio-table-body">
+                  <td>
+                    <img src={item.logo} alt={item.name} className="mask" />
+                    {item.name}
+                  </td>
+                  <td className="text-end align-middle">${item.price}</td>
+                  <td className="text-end align-middle">
+                    {item.percent_change_24h > 0 && "+"}
+                    {item.percent_change_24h}%
+                  </td>
+                  <td className="text-end align-middle">
+                    {item.balance} {item.symbol}
+                  </td>
+                  <td className="text-end align-middle">
+                    ${(item.price * item.balance).toFixed(2)}
+                  </td>
+                  <td className="text-end align-middle">33%</td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </Col>

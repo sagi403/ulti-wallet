@@ -44,3 +44,11 @@ main {
   padding: 0 8px;
   color: #5d6872;
 }
+
+.mask {
+  clip-path: polygon(5% 75%, 5% 25%, 50% 0, 95% 25%, 95% 75%, 50% 100%);
+}
+
+.portfolio-table-body {
+  font-size: 1.2rem;
+}
