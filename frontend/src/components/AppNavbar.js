@@ -1,6 +1,7 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
+import { Outlet } from "react-router-dom";
 import { logout } from "../store/userSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,59 +16,63 @@ const MainNavbar = () => {
   const dispatch = useDispatch();
 
   return (
-    <nav>
-      <Navbar
-        bg="dark"
-        variant="dark"
-        expand="lg"
-        className="py-3"
-        collapseOnSelect
-      >
-        <Container fluid>
-          <LinkContainer to="/">
-            <Navbar.Brand>LOGO</Navbar.Brand>
-          </LinkContainer>
-
-          <Navbar className="nav-centered nav">
-            <LinkContainer to="/" className="btn-nav">
-              <Nav.Link>
-                <FontAwesomeIcon
-                  icon={faChartPie}
-                  style={{ color: "#ffac20" }}
-                />
-              </Nav.Link>
+    <>
+      <nav>
+        <Navbar
+          bg="dark"
+          variant="dark"
+          expand="lg"
+          className="py-3"
+          collapseOnSelect
+        >
+          <Container fluid>
+            <LinkContainer to="/">
+              <Navbar.Brand>LOGO</Navbar.Brand>
             </LinkContainer>
-            <LinkContainer to="/" className="btn-nav">
-              <Nav.Link>
-                <FontAwesomeIcon icon={faWallet} style={{ color: "#7344FF" }} />
-              </Nav.Link>
-            </LinkContainer>
-            <span className="separator">|</span>
-            <LinkContainer to="/" className="btn-nav">
-              <Nav.Link>
-                <FontAwesomeIcon
-                  icon={faArrowRightArrowLeft}
-                  style={{ color: "#208EE0" }}
-                />
-              </Nav.Link>
-            </LinkContainer>
-          </Navbar>
 
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="justify-content-end flex-grow-1">
-              <LinkContainer to="/">
+            <Navbar className="nav-centered nav">
+              <LinkContainer to="/" className="btn-nav">
                 <Nav.Link>
-                  <FontAwesomeIcon icon={faGear} />
+                  <FontAwesomeIcon
+                    icon={faChartPie}
+                    style={{ color: "#ffac20" }}
+                  />
                 </Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/" onClick={() => dispatch(logout())}>
+              <LinkContainer to="/" className="btn-nav">
                 <Nav.Link>
-                  <FontAwesomeIcon icon={faRightFromBracket} />
+                  <FontAwesomeIcon
+                    icon={faWallet}
+                    style={{ color: "#7344FF" }}
+                  />
                 </Nav.Link>
               </LinkContainer>
-              {/* {userInfo ? (
+              <span className="separator">|</span>
+              <LinkContainer to="/" className="btn-nav">
+                <Nav.Link>
+                  <FontAwesomeIcon
+                    icon={faArrowRightArrowLeft}
+                    style={{ color: "#208EE0" }}
+                  />
+                </Nav.Link>
+              </LinkContainer>
+            </Navbar>
+
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="justify-content-end flex-grow-1">
+                <LinkContainer to="/">
+                  <Nav.Link>
+                    <FontAwesomeIcon icon={faGear} />
+                  </Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/" onClick={() => dispatch(logout())}>
+                  <Nav.Link>
+                    <FontAwesomeIcon icon={faRightFromBracket} />
+                  </Nav.Link>
+                </LinkContainer>
+                {/* {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
                   <LinkContainer to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
@@ -83,7 +88,7 @@ const MainNavbar = () => {
                   </Nav.Link>
                 </LinkContainer>
               )} */}
-              {/* {userInfo && userInfo.isAdmin && (
+                {/* {userInfo && userInfo.isAdmin && (
                 <NavDropdown title="Admin" id="adminmenu">
                   <LinkContainer to="/admin/userlist">
                     <NavDropdown.Item>Users</NavDropdown.Item>
@@ -99,11 +104,13 @@ const MainNavbar = () => {
                   </LinkContainer>
                 </NavDropdown>
               )} */}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </nav>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+      </nav>
+      <Outlet />
+    </>
   );
 };
 

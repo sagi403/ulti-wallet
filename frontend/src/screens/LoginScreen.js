@@ -14,7 +14,9 @@ const LoginScreen = () => {
 
   const { userInfo } = useSelector(state => state.user);
 
-  const redirect = location.search ? location.search.split("=")[1] : "/app";
+  const redirect = location.search
+    ? location.search.split("=")[1]
+    : "/app/portfolio";
 
   useEffect(() => {
     if (userInfo) {
