@@ -23,3 +23,24 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.btn-nav {
+  font-size: 25px;
+  background-image: linear-gradient(150deg, #343b3d, #161a1d);
+  padding: 5px 10px;
+  margin: 0 8px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 4px 4px 10px 1px #161616;
+}
+
+.btn-nav:hover {
+  background: linear-gradient(to right, #343b3d, #161a1d);
+  box-shadow: 4px 4px 10px 1px rgb(15, 14, 14);
+}
+
+.separator {
+  font-size: 20px;
+  padding: 0 8px;
+  color: #5d6872;
+}

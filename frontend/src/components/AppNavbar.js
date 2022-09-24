@@ -3,28 +3,53 @@ import { useDispatch } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { logout } from "../store/userSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import {
+  faRightFromBracket,
+  faChartPie,
+  faWallet,
+  faArrowRightArrowLeft,
+  faGear,
+} from "@fortawesome/free-solid-svg-icons";
 
 const MainNavbar = () => {
   const dispatch = useDispatch();
 
   return (
     <nav>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar
+        bg="dark"
+        variant="dark"
+        expand="lg"
+        className="py-3"
+        collapseOnSelect
+      >
         <Container fluid>
           <LinkContainer to="/">
             <Navbar.Brand>LOGO</Navbar.Brand>
           </LinkContainer>
 
           <Navbar className="nav-centered nav">
-            <LinkContainer to="/">
-              <Nav.Link>LOGO</Nav.Link>
+            <LinkContainer to="/" className="btn-nav">
+              <Nav.Link>
+                <FontAwesomeIcon
+                  icon={faChartPie}
+                  style={{ color: "#ffac20" }}
+                />
+              </Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/">
-              <Nav.Link>LOGO</Nav.Link>
+            <LinkContainer to="/" className="btn-nav">
+              <Nav.Link>
+                <FontAwesomeIcon icon={faWallet} style={{ color: "#7344FF" }} />
+              </Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/">
-              <Nav.Link>LOGO</Nav.Link>
+            <span className="separator">|</span>
+            <LinkContainer to="/" className="btn-nav">
+              <Nav.Link>
+                <FontAwesomeIcon
+                  icon={faArrowRightArrowLeft}
+                  style={{ color: "#208EE0" }}
+                />
+              </Nav.Link>
             </LinkContainer>
           </Navbar>
 
@@ -34,7 +59,7 @@ const MainNavbar = () => {
             <Nav className="justify-content-end flex-grow-1">
               <LinkContainer to="/">
                 <Nav.Link>
-                  <FontAwesomeIcon icon={faRightFromBracket} />
+                  <FontAwesomeIcon icon={faGear} />
                 </Nav.Link>
               </LinkContainer>
               <LinkContainer to="/" onClick={() => dispatch(logout())}>
