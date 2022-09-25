@@ -57,7 +57,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Gey user profile
+// @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
