@@ -14,16 +14,8 @@ const coinSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    price: {
-      type: Number,
-      required: true,
-    },
-    balance: {
-      type: Number,
-      required: true,
-    },
-    value: {
-      type: Number,
+    logo: {
+      type: String,
       required: true,
     },
   },
