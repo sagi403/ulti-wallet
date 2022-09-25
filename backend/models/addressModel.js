@@ -20,11 +20,6 @@ const addressSchema = mongoose.Schema(
         },
       },
     ],
-    publicAddress: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      unique: true,
-    },
   },
   {
     timestamps: true,
