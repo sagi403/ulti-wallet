@@ -9,7 +9,7 @@ const addressSchema = mongoose.Schema(
     },
     coins: [
       {
-        userCoin: {
+        coin: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
           ref: "Coin",
