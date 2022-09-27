@@ -1,30 +1,31 @@
 import asyncHandler from "express-async-handler";
 import pool from "../db/index.js";
 import generateToken from "../utils/generateToken.js";
-// import User from "../models/userModel.js";
+import { matchPassword, hashPassword } from "../utils/passwordHelpers.js";
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
-  // const { email, password } = req.body;
+  const { email, password } = req.body;
 
-  const user = await pool.query("SELECT * FROM users");
-  console.log(user);
-  res.send(user);
+  let user = await pool.query("SELECT * FROM users WHERE email = $1 LIMIT 1", [
+    email,
+  ]);
+  [user] = user.rows;
 
-  // if (user && (await user.matchPassword(password))) {
-  //   res.json({
-  //     _id: user._id,
-  //     name: user.name,
-  //     email: user.email,
-  //     isAdmin: user.isAdmin,
-  //     token: generateToken(user._id),
-  //   });
-  // } else {
-  //   res.status(401);
-  //   throw new Error("Invalid email or password");
-  // }
+  if (user && (await matchPassword(password, user.password))) {
+    res.json({
+      user_id: user.user_id,
+      name: user.name,
+      email: user.email,
+      is_admin: user.is_admin,
+      token: generateToken(user.user_id),
+    });
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
 });
 
 // @desc    Register a new user
@@ -34,7 +35,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   const userExists = await pool.query(
-    "SELECT email FROM users WHERE email = $1",
+    "SELECT email FROM users WHERE email = $1 LIMIT 1",
     [email]
   );
 
@@ -43,12 +44,13 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
+  const hashedPassword = await hashPassword(password);
+
   let user = await pool.query(
     "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING user_id, name, email, is_admin",
-    [name, email, password]
+    [name, email, hashedPassword]
   );
-
-  user = user.rows[0];
+  [user] = user.rows;
 
   if (user) {
     res.status(201).json({
