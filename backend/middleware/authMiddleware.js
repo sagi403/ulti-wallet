@@ -14,8 +14,6 @@ const protect = asyncHandler(async (req, res, next) => {
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // req.user = await User.findById(decoded.id).select("-password");
-
       const user = await pool.query(
         "SELECT user_id, name, email, is_admin FROM users WHERE user_id = $1 LIMIT 1",
         [decoded.id]
