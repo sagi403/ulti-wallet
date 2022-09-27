@@ -65,20 +65,23 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 });
-/*
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
+  let user = await pool.query(
+    "SELECT user_id, name, email, is_admin FROM users WHERE user_id = $1 LIMIT 1",
+    [req.user.user_id]
+  );
+  [user] = user.rows;
 
   if (user) {
     res.json({
-      _id: user._id,
+      user_id: user.user_id,
       name: user.name,
       email: user.email,
-      isAdmin: user.isAdmin,
+      is_admin: user.is_admin,
     });
   } else {
     res.status(404);
@@ -86,5 +89,4 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-*/
-export { authUser, registerUser };
+export { authUser, registerUser, getUserProfile };
