@@ -1,27 +1,31 @@
-// import asyncHandler from "express-async-handler";
-// import User from "../models/userModel.js";
-// import Address from "../models/addressModel.js";
+import asyncHandler from "express-async-handler";
+import pool from "../db/index.js";
 
-// // @desc    Get user addresses
-// // @route   GET /api/address
-// // @access  Private
-// const getUserAddress = asyncHandler(async (req, res) => {
-//   const user = await User.findById(req.user._id);
+// @desc    Get user addresses
+// @route   GET /api/address
+// @access  Private
+const getUserAddress = asyncHandler(async (req, res) => {
+  const {
+    rows: [user],
+  } = await pool.query("SELECT id FROM users WHERE id = $1", [req.user.id]);
 
-//   if (!user) {
-//     res.status(404);
-//     throw new Error("User not found");
-//   }
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
 
-//   const userAddresses = await Address.find({ user });
+  const { rows: userAddresses } = await pool.query(
+    "SELECT * FROM addresses WHERE user_id = $1",
+    [user.id]
+  );
 
-//   if (userAddresses) {
-//     res.json(userAddresses);
-//   } else {
-//     res.status(404);
-//     throw new Error("Address not found for this user");
-//   }
-// });
+  if (userAddresses) {
+    res.json(userAddresses);
+  } else {
+    res.status(404);
+    throw new Error("Address not found for this user");
+  }
+});
 
 // // @desc    Get address coins
 // // @route   GET /api/address/coins
@@ -39,4 +43,4 @@
 // });
 // // need fix!!!!!!!!!!!!!!!!!!!!!
 
-// export { getUserAddress, getAddressCoins };
+export { getUserAddress };

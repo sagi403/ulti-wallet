@@ -9,10 +9,9 @@ import { matchPassword, hashPassword } from "../utils/passwordHelpers.js";
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  let user = await pool.query("SELECT * FROM users WHERE email = $1 LIMIT 1", [
-    email,
-  ]);
-  [user] = user.rows;
+  const {
+    rows: [user],
+  } = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
   if (user && (await matchPassword(password, user.password))) {
     res.json({
@@ -35,7 +34,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   const userExists = await pool.query(
-    "SELECT email FROM users WHERE email = $1 LIMIT 1",
+    "SELECT email FROM users WHERE email = $1",
     [email]
   );
 
@@ -46,11 +45,12 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const hashedPassword = await hashPassword(password);
 
-  let user = await pool.query(
+  const {
+    rows: [user],
+  } = await pool.query(
     "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email, is_admin",
     [name, email, hashedPassword]
   );
-  [user] = user.rows;
 
   if (user) {
     res.status(201).json({
@@ -70,11 +70,12 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  let user = await pool.query(
-    "SELECT id, name, email, is_admin FROM users WHERE id = $1 LIMIT 1",
+  const {
+    rows: [user],
+  } = await pool.query(
+    "SELECT id, name, email, is_admin FROM users WHERE id = $1",
     [req.user.id]
   );
-  [user] = user.rows;
 
   if (user) {
     res.json({
