@@ -11,14 +11,9 @@ const initialState = {
 
 export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
   try {
-    const { email, password } = user;
     const config = { headers: { "Content-Type": "application/json" } };
 
-    const { data } = await axios.post(
-      "/api/users/login",
-      { email, password },
-      config
-    );
+    const { data } = await axios.post("/api/users/login", user, config);
 
     localStorage.setItem("userInfo", JSON.stringify(data));
     return data;
@@ -26,6 +21,22 @@ export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
     thunkApi.rejectWithValue(error);
   }
 });
+
+export const register = createAsyncThunk(
+  "user/register",
+  async (user, thunkApi) => {
+    try {
+      const config = { headers: { "Content-Type": "application/json" } };
+
+      const { data } = await axios.post("/api/users", user, config);
+
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      return data;
+    } catch (error) {
+      thunkApi.rejectWithValue(error);
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
@@ -45,6 +56,17 @@ const userSlice = createSlice({
       state.userInfo = action.payload;
     },
     [login.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [register.pending]: state => {
+      state.loading = true;
+    },
+    [register.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.userInfo = action.payload;
+    },
+    [register.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
