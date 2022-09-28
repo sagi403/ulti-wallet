@@ -16,11 +16,11 @@ const authUser = asyncHandler(async (req, res) => {
 
   if (user && (await matchPassword(password, user.password))) {
     res.json({
-      user_id: user.user_id,
+      id: user.id,
       name: user.name,
       email: user.email,
       is_admin: user.is_admin,
-      token: generateToken(user.user_id),
+      token: generateToken(user.id),
     });
   } else {
     res.status(401);
@@ -47,18 +47,18 @@ const registerUser = asyncHandler(async (req, res) => {
   const hashedPassword = await hashPassword(password);
 
   let user = await pool.query(
-    "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING user_id, name, email, is_admin",
+    "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email, is_admin",
     [name, email, hashedPassword]
   );
   [user] = user.rows;
 
   if (user) {
     res.status(201).json({
-      user_id: user.user_id,
+      id: user.id,
       name: user.name,
       email: user.email,
       is_admin: user.is_admin,
-      token: generateToken(user.user_id),
+      token: generateToken(user.id),
     });
   } else {
     res.status(400);
@@ -71,14 +71,14 @@ const registerUser = asyncHandler(async (req, res) => {
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
   let user = await pool.query(
-    "SELECT user_id, name, email, is_admin FROM users WHERE user_id = $1 LIMIT 1",
-    [req.user.user_id]
+    "SELECT id, name, email, is_admin FROM users WHERE id = $1 LIMIT 1",
+    [req.user.id]
   );
   [user] = user.rows;
 
   if (user) {
     res.json({
-      user_id: user.user_id,
+      id: user.id,
       name: user.name,
       email: user.email,
       is_admin: user.is_admin,
