@@ -1,10 +1,13 @@
 import express from "express";
-import { getUserAddress } from "../controllers/addressControllers.js";
+import {
+  getUserAddresses,
+  getAddressCoins,
+} from "../controllers/addressControllers.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").get(protect, getUserAddress);
-// router.route("/coins").get(getAddressCoins);
+router.route("/").get(protect, getUserAddresses);
+router.route("/coins").get(protect, getAddressCoins);
 
 export default router;

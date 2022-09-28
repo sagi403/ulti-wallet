@@ -4,7 +4,7 @@ import pool from "../db/index.js";
 // @desc    Get user addresses
 // @route   GET /api/address
 // @access  Private
-const getUserAddress = asyncHandler(async (req, res) => {
+const getUserAddresses = asyncHandler(async (req, res) => {
   const {
     rows: [user],
   } = await pool.query("SELECT id FROM users WHERE id = $1", [req.user.id]);
@@ -19,28 +19,29 @@ const getUserAddress = asyncHandler(async (req, res) => {
     [user.id]
   );
 
-  if (userAddresses) {
-    res.json(userAddresses);
-  } else {
+  if (userAddresses.length === 0) {
     res.status(404);
     throw new Error("Address not found for this user");
   }
+
+  res.json(userAddresses);
 });
 
-// // @desc    Get address coins
-// // @route   GET /api/address/coins
-// // @access  Private
-// const getAddressCoins = asyncHandler(async (req, res) => {
-//   let address = await Address.findById(req.body.id);
-//   address = address.coins.map(coin => coin.populate("coin", "name"));
+// @desc    Get address coins
+// @route   GET /api/address/coins
+// @access  Private
+const getAddressCoins = asyncHandler(async (req, res) => {
+  const { rows: address } = await pool.query(
+    "SELECT * FROM addresses INNER JOIN coins ON addresses.coin_symbol = coins.symbol WHERE public_address = $1",
+    [req.body.id]
+  );
 
-//   if (!address) {
-//     res.status(404);
-//     throw new Error("Address not found");
-//   }
+  if (address.length === 0) {
+    res.status(404);
+    throw new Error("Address not found");
+  }
 
-//   res.json(address);
-// });
-// // need fix!!!!!!!!!!!!!!!!!!!!!
+  res.json(address);
+});
 
-export { getUserAddress };
+export { getUserAddresses, getAddressCoins };
