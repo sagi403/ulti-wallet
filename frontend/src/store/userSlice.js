@@ -18,7 +18,12 @@ export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
     localStorage.setItem("userInfo", JSON.stringify(data));
     return data;
   } catch (error) {
-    thunkApi.rejectWithValue(error);
+    const err =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+
+    return thunkApi.rejectWithValue(err);
   }
 });
 
@@ -33,7 +38,12 @@ export const register = createAsyncThunk(
       localStorage.setItem("userInfo", JSON.stringify(data));
       return data;
     } catch (error) {
-      thunkApi.rejectWithValue(error);
+      const err =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      return thunkApi.rejectWithValue(err);
     }
   }
 );
@@ -44,7 +54,7 @@ const userSlice = createSlice({
   reducers: {
     logout: state => {
       localStorage.removeItem("userInfo");
-      return initialState;
+      state.userInfo = null;
     },
   },
   extraReducers: {

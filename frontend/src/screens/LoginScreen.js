@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/userSlice";
 import { useEffect, useState } from "react";
+import Message from "../components/Message";
 
 const LoginScreen = () => {
   const location = useLocation();
@@ -12,7 +13,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { userInfo } = useSelector(state => state.user);
+  const { userInfo, error } = useSelector(state => state.user);
 
   const redirect = location.search
     ? location.search.split("=")[1]
@@ -33,6 +34,7 @@ const LoginScreen = () => {
   return (
     <Container className="w-25">
       <h1 className="mt-5 mb-3">Login</h1>
+      {error && <Message variant="danger">{error}</Message>}
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>

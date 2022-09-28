@@ -3,18 +3,20 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { register } from "../store/userSlice";
+import Message from "../components/Message";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState(null);
 
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector(state => state.user);
+  const { userInfo, error } = useSelector(state => state.user);
 
   const redirect = location.search
     ? location.search.split("=")[1]
@@ -30,8 +32,7 @@ const RegisterScreen = () => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      // Add proper error handling
-      console.log("Password don't match");
+      setMessage("Password don't match");
     } else {
       dispatch(register({ name, email, password }));
     }
@@ -40,6 +41,8 @@ const RegisterScreen = () => {
   return (
     <Container className="w-25">
       <h1 className="mt-5 mb-3">Register</h1>
+      {message && <Message variant="danger">{message}</Message>}
+      {error && <Message variant="danger">{error}</Message>}
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formBasicName">
           <Form.Label>Name</Form.Label>
