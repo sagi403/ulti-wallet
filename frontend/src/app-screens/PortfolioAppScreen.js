@@ -1,9 +1,28 @@
 import { Col, Container, Row, Table } from "react-bootstrap";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 import coin from "../coin";
+import checkUserToken from "../utils/checkUserToken";
 
 const PortfolioAppScreen = () => {
+  const navigate = useNavigate();
+
+  const { userInfo } = useSelector(state => state.user);
+
+  useEffect(() => {
+    const isUserAuth = async () => {
+      const auth = await checkUserToken(userInfo);
+
+      if (!auth) {
+        navigate("/login");
+      }
+    };
+    isUserAuth();
+  }, [userInfo, navigate]);
+
   return (
     <Container>
       <Row>

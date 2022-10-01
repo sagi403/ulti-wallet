@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import Message from "../components/Message";
+import checkUserToken from "../utils/checkUserToken";
 
 const LoginScreen = () => {
   const location = useLocation();
@@ -20,10 +21,15 @@ const LoginScreen = () => {
     : "/app/portfolio";
 
   useEffect(() => {
-    if (userInfo) {
-      navigate(redirect);
-    }
-  }, [userInfo, redirect, navigate]);
+    const isUserAuth = async () => {
+      const auth = await checkUserToken(userInfo);
+
+      if (auth) {
+        navigate(redirect);
+      }
+    };
+    isUserAuth();
+  }, [userInfo, navigate, redirect]);
 
   const submitHandler = async e => {
     e.preventDefault();
