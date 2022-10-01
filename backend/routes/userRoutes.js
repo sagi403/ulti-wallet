@@ -6,12 +6,15 @@ import {
   protectUserRoute,
 } from "../controllers/userControllers.js";
 import { protect } from "../middleware/authMiddleware.js";
-import { authUserValidation } from "../validation/userValidation.js";
+import {
+  authUserValidation,
+  registerUserValidation,
+} from "../validation/userValidation.js";
 import validateInputs from "../middleware/validateInputs.js";
 
 const router = express.Router();
 
-router.route("/").post(registerUser);
+router.route("/").post(registerUserValidation, validateInputs, registerUser);
 router.post("/login", authUserValidation, validateInputs, authUser);
 router.route("/profile").get(protect, getUserProfile);
 router.get("/protect", protect, protectUserRoute);
