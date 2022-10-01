@@ -1,5 +1,5 @@
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/userSlice";
 import { useEffect, useState } from "react";
@@ -7,7 +7,6 @@ import Message from "../components/Message";
 import checkUserToken from "../utils/checkUserToken";
 
 const LoginScreen = () => {
-  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,20 +15,16 @@ const LoginScreen = () => {
 
   const { userInfo, error } = useSelector(state => state.user);
 
-  const redirect = location.search
-    ? location.search.split("=")[1]
-    : "/app/portfolio";
-
   useEffect(() => {
     const isUserAuth = async () => {
       const auth = await checkUserToken(userInfo);
 
       if (auth) {
-        navigate(redirect);
+        navigate("/app/portfolio");
       }
     };
     isUserAuth();
-  }, [userInfo, navigate, redirect]);
+  }, [userInfo, navigate]);
 
   const submitHandler = async e => {
     e.preventDefault();
@@ -69,10 +64,7 @@ const LoginScreen = () => {
 
       <Row className="py-3">
         <Col>
-          New Customer?{" "}
-          <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
-            Register
-          </Link>
+          New Customer? <Link to="/register">Register</Link>
         </Col>
       </Row>
     </Container>

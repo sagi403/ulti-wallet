@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { register } from "../store/userSlice";
 import Message from "../components/Message";
+import checkUserToken from "../utils/checkUserToken";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -12,21 +13,21 @@ const RegisterScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
 
-  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { userInfo, error } = useSelector(state => state.user);
 
-  const redirect = location.search
-    ? location.search.split("=")[1]
-    : "/app/portfolio";
-
   useEffect(() => {
-    if (userInfo) {
-      navigate(redirect);
-    }
-  }, [userInfo, navigate, redirect]);
+    const isUserAuth = async () => {
+      const auth = await checkUserToken(userInfo);
+
+      if (auth) {
+        navigate("/app/portfolio");
+      }
+    };
+    isUserAuth();
+  }, [userInfo, navigate]);
 
   const submitHandler = e => {
     e.preventDefault();
@@ -93,10 +94,7 @@ const RegisterScreen = () => {
 
       <Row className="py-3">
         <Col>
-          Have an Account?{" "}
-          <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
-            Login
-          </Link>
+          Have an Account? <Link to="/login">Login</Link>
         </Col>
       </Row>
     </Container>
