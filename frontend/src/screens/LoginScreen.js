@@ -5,6 +5,8 @@ import { login } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import Message from "../components/Message";
 import checkUserToken from "../utils/checkUserToken";
+import validate from "../validation/validate.js";
+import loginSchema from "../validation/loginValidation.js";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -12,6 +14,7 @@ const LoginScreen = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [validationErrors, setValidationErrors] = useState(null);
 
   const { userInfo, error } = useSelector(state => state.user);
 
@@ -29,13 +32,29 @@ const LoginScreen = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
+    const { error } = validate({ email, password }, loginSchema);
+
+    if (error) {
+      setValidationErrors(error.details);
+      return;
+    }
+
+    setValidationErrors(null);
     dispatch(login({ email, password }));
   };
 
   return (
     <Container className="w-25">
       <h1 className="mt-5 mb-3">Login</h1>
+
       {error && <Message variant="danger">{error}</Message>}
+      {validationErrors &&
+        validationErrors.map((error, idx) => (
+          <Message key={idx} variant="danger">
+            {error.message}
+          </Message>
+        ))}
+
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>

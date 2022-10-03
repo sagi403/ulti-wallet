@@ -5,7 +5,7 @@ const validateInputs = (req, res, next) => {
 
   if (!errors.isEmpty()) {
     res.status(400);
-    throw new Error("Invalid email or password");
+    throw new Error("Invalid information provided");
   }
 
   next();

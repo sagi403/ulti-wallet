@@ -5,13 +5,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { register } from "../store/userSlice";
 import Message from "../components/Message";
 import checkUserToken from "../utils/checkUserToken";
+import validate from "../validation/validate.js";
+import registerSchema from "../validation/registerValidation.js";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState(null);
+  const [validationErrors, setValidationErrors] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,18 +34,32 @@ const RegisterScreen = () => {
   const submitHandler = e => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      setMessage("Password don't match");
-    } else {
-      dispatch(register({ name, email, password }));
+    const { error } = validate(
+      { name, email, password, confirmPassword },
+      registerSchema
+    );
+
+    if (error) {
+      setValidationErrors(error.details);
+      return;
     }
+
+    setValidationErrors(null);
+    dispatch(register({ name, email, password }));
   };
 
   return (
     <Container className="w-25">
       <h1 className="mt-5 mb-3">Register</h1>
-      {message && <Message variant="danger">{message}</Message>}
+
       {error && <Message variant="danger">{error}</Message>}
+      {validationErrors &&
+        validationErrors.map((error, idx) => (
+          <Message key={idx} variant="danger">
+            {error.message}
+          </Message>
+        ))}
+
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formBasicName">
           <Form.Label>Name</Form.Label>
