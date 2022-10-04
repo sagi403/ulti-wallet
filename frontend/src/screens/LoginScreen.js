@@ -60,6 +60,7 @@ const LoginScreen = () => {
         <FormFieldPartial
           label="Email address"
           type="email"
+          controlId="formBasicEmail"
           placeholder="name@example.com"
           value={email}
           onChange={e => setEmail(e.target.value)}
@@ -67,6 +68,7 @@ const LoginScreen = () => {
         <FormFieldPartial
           label="Password"
           type="password"
+          controlId="formBasicPassword"
           placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}

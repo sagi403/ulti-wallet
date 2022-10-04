@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Outlet } from "react-router-dom";
 import { logout } from "../store/userSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRightFromBracket,
   faChartPie,
@@ -11,6 +11,7 @@ import {
   faArrowRightArrowLeft,
   faGear,
 } from "@fortawesome/free-solid-svg-icons";
+import NavbarIconPartial from "../partials/NavbarIconPartial";
 
 const MainNavbar = () => {
   const dispatch = useDispatch();
@@ -31,47 +32,37 @@ const MainNavbar = () => {
             </LinkContainer>
 
             <Navbar className="nav-centered nav">
-              <LinkContainer to="/" className="btn-nav">
-                <Nav.Link>
-                  <FontAwesomeIcon
-                    icon={faChartPie}
-                    style={{ color: "#ffac20" }}
-                  />
-                </Nav.Link>
-              </LinkContainer>
-              <LinkContainer to="/" className="btn-nav">
-                <Nav.Link>
-                  <FontAwesomeIcon
-                    icon={faWallet}
-                    style={{ color: "#7344FF" }}
-                  />
-                </Nav.Link>
-              </LinkContainer>
+              <NavbarIconPartial
+                to="/"
+                icon={faChartPie}
+                color="#ffac20"
+                classes="btn-nav"
+              />
+              <NavbarIconPartial
+                to="/"
+                icon={faWallet}
+                color="#7344FF"
+                classes="btn-nav"
+              />
               <span className="separator">|</span>
-              <LinkContainer to="/" className="btn-nav">
-                <Nav.Link>
-                  <FontAwesomeIcon
-                    icon={faArrowRightArrowLeft}
-                    style={{ color: "#208EE0" }}
-                  />
-                </Nav.Link>
-              </LinkContainer>
+              <NavbarIconPartial
+                to="/"
+                icon={faArrowRightArrowLeft}
+                color="#208EE0"
+                classes="btn-nav"
+              />
             </Navbar>
 
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="justify-content-end flex-grow-1">
-                <LinkContainer to="/">
-                  <Nav.Link>
-                    <FontAwesomeIcon icon={faGear} />
-                  </Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/" onClick={() => dispatch(logout())}>
-                  <Nav.Link>
-                    <FontAwesomeIcon icon={faRightFromBracket} />
-                  </Nav.Link>
-                </LinkContainer>
+                <NavbarIconPartial to="/" icon={faGear} />
+                <NavbarIconPartial
+                  to="/"
+                  icon={faRightFromBracket}
+                  onClick={() => dispatch(logout())}
+                />
                 {/* {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
                   <LinkContainer to="/profile">

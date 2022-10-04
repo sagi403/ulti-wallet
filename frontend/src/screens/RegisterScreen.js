@@ -65,6 +65,7 @@ const RegisterScreen = () => {
         <FormFieldPartial
           label="Name"
           type="text"
+          controlId="formBasicName"
           placeholder="Name"
           value={name}
           onChange={e => setName(e.target.value)}
@@ -72,6 +73,7 @@ const RegisterScreen = () => {
         <FormFieldPartial
           label="Email address"
           type="email"
+          controlId="formBasicEmail"
           placeholder="name@example.com"
           value={email}
           onChange={e => setEmail(e.target.value)}
@@ -79,6 +81,7 @@ const RegisterScreen = () => {
         <FormFieldPartial
           label="Password"
           type="password"
+          controlId="formBasicPassword"
           placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
@@ -86,6 +89,7 @@ const RegisterScreen = () => {
         <FormFieldPartial
           label="Confirm Password"
           type="password"
+          controlId="formBasicConfirmPassword"
           placeholder="Confirm Password"
           value={confirmPassword}
           onChange={e => setConfirmPassword(e.target.value)}
