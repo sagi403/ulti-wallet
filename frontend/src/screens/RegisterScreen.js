@@ -5,8 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { register } from "../store/userSlice";
 import Message from "../components/Message";
 import checkUserToken from "../utils/checkUserToken";
-import validate from "../validation/validate.js";
-import registerSchema from "../validation/registerValidation.js";
+import validate from "../validation/validate";
+import registerSchema from "../validation/registerValidation";
+import FormFieldPartial from "../partials/FormFieldPartial";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -61,48 +62,35 @@ const RegisterScreen = () => {
         ))}
 
       <Form onSubmit={submitHandler}>
-        <Form.Group className="mb-3" controlId="formBasicName">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-          />
-        </Form.Group>
+        <FormFieldPartial
+          label="Name"
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
+        <FormFieldPartial
+          label="Email address"
+          type="email"
+          placeholder="name@example.com"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <FormFieldPartial
+          label="Password"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        <FormFieldPartial
+          label="Confirm Password"
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={e => setConfirmPassword(e.target.value)}
+        />
 
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
-          <Form.Label>Confirm password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Confirm password"
-            value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
-          />
-        </Form.Group>
         <Button variant="primary" type="submit">
           Sign Up
         </Button>
