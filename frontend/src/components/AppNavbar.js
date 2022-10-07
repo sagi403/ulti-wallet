@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Outlet } from "react-router-dom";
 import { logout } from "../store/userSlice";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRightFromBracket,
   faChartPie,

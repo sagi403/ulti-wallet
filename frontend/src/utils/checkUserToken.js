@@ -12,8 +12,8 @@ const checkUserToken = async userInfo => {
   };
 
   try {
-    const { data } = await axios.get("/api/users/protect", config);
-    return data;
+    await axios.get("/api/users/protect", config);
+    return true;
   } catch (error) {
     return false;
   }
