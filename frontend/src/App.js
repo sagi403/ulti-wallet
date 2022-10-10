@@ -4,26 +4,19 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import AppNavbar from "./components/AppNavbar";
 import PortfolioAppScreen from "./app-screens/PortfolioAppScreen";
-import AuthGuardRoute from "./components/AuthGuardRoute";
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route
-          path="app"
-          element={
-            <AuthGuardRoute redirectTo="/login">
-              <AppNavbar />
-            </AuthGuardRoute>
-          }
-        >
+        <Route path="app" element={<AppNavbar />}>
           <Route path="portfolio" element={<PortfolioAppScreen />} />
         </Route>
 
         <Route path="login" element={<LoginScreen />} />
         <Route path="register" element={<RegisterScreen />} />
         <Route path="/" element={<HomeScreen />} />
+        <Route path="*" element={<p>There's nothing here: 404!</p>} />
       </Routes>
     </Router>
   );

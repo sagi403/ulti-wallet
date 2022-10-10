@@ -1,16 +1,29 @@
 import { Col, Container, Row, Table } from "react-bootstrap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 import coin from "../coin";
 import checkUserToken from "../utils/checkUserToken";
+import axios from "axios";
 
 const PortfolioAppScreen = () => {
   const navigate = useNavigate();
 
   const { userInfo } = useSelector(state => state.user);
+
+  // const fetchCoinsData = async () => {
+  //   const headers = {
+  //     "X-CMC_PRO_API_KEY": process.env.CMC_API_KEY,
+  //   };
+  //   const { data } = await axios.get(
+  //     "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest",
+  //     headers
+  //   );
+  //   console.log(data);
+  // };
+  // fetchCoinsData();
 
   useEffect(() => {
     const isUserAuth = async () => {
