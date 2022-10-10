@@ -4,7 +4,6 @@ import {
   getUserProfile,
   registerUser,
   protectUserRoute,
-  getUserCoins,
 } from "../controllers/userControllers.js";
 import { protect } from "../middleware/authMiddleware.js";
 import {
@@ -19,6 +18,5 @@ router.route("/").post(registerUserValidation, validateInputs, registerUser);
 router.post("/login", authUserValidation, validateInputs, authUser);
 router.route("/profile").get(protect, getUserProfile);
 router.get("/protect", protect, protectUserRoute);
-router.route("/coins").get(protect, getUserCoins);
 
 export default router;

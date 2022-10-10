@@ -5,7 +5,7 @@ import pool from "../db/index.js";
 // @route   GET /api/cmc
 // @access  Private
 const getCmcCoins = asyncHandler(async (req, res) => {
-  const { rows: coins } = await pool.query("SELECT * FROM coins");
+  const { coins_id } = req.body;
   res.json(coins);
 });
 
