@@ -44,7 +44,11 @@ const getCoinsBasicInfo = asyncHandler(async (req, res) => {
 // @access  Private
 const getCoinsId = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
-    "SELECT coins.id FROM addresses INNER JOIN coins ON addresses.coin_symbol = coins.symbol WHERE user_id = $1",
+    `SELECT coins.id FROM addresses 
+    INNER JOIN coins ON 
+    addresses.coin_symbol = coins.symbol 
+    WHERE user_id = $1 
+    GROUP BY coins.id`,
     [req.user.id]
   );
 
@@ -53,15 +57,7 @@ const getCoinsId = asyncHandler(async (req, res) => {
     throw new Error("Coin not found");
   }
 
-  const coinsId = [];
-
-  for (let coin of coins) {
-    const { id } = coin;
-
-    if (!coinsId.includes(id)) {
-      coinsId.push(id);
-    }
-  }
+  const coinsId = coins.map(coin => coin.id);
 
   res.json(coinsId);
 });
