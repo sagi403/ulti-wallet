@@ -1,29 +1,18 @@
 import { Col, Container, Row, Table } from "react-bootstrap";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
-import coin from "../coin";
 import checkUserToken from "../utils/checkUserToken";
-import axios from "axios";
+import { coinData } from "../store/coinSlice";
 
 const PortfolioAppScreen = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { userInfo } = useSelector(state => state.user);
-
-  // const fetchCoinsData = async () => {
-  //   const headers = {
-  //     "X-CMC_PRO_API_KEY": process.env.CMC_API_KEY,
-  //   };
-  //   const { data } = await axios.get(
-  //     "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest",
-  //     headers
-  //   );
-  //   console.log(data);
-  // };
-  // fetchCoinsData();
+  const { coinInfo } = useSelector(state => state.coin);
 
   useEffect(() => {
     const isUserAuth = async () => {
@@ -34,7 +23,11 @@ const PortfolioAppScreen = () => {
       }
     };
     isUserAuth();
-  }, [userInfo, navigate]);
+
+    if (!coinInfo) {
+      dispatch(coinData(userInfo));
+    }
+  }, [userInfo, navigate, dispatch, coinInfo]);
 
   return (
     <Container>
@@ -87,26 +80,29 @@ const PortfolioAppScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {coin.map(item => (
-                <tr key={item.id} className="portfolio-table-body">
-                  <td>
-                    <img src={item.logo} alt={item.name} className="mask" />
-                    {item.name}
-                  </td>
-                  <td className="text-end align-middle">${item.price}</td>
-                  <td className="text-end align-middle">
-                    {item.percent_change_24h > 0 && "+"}
-                    {item.percent_change_24h}%
-                  </td>
-                  <td className="text-end align-middle">
-                    {item.balance} {item.symbol}
-                  </td>
-                  <td className="text-end align-middle">
-                    ${(item.price * item.balance).toFixed(2)}
-                  </td>
-                  <td className="text-end align-middle">33%</td>
-                </tr>
-              ))}
+              {coinInfo &&
+                coinInfo.map(item => (
+                  <tr key={item.id} className="portfolio-table-body">
+                    <td>
+                      <img src={item.logo} alt={item.name} className="mask" />
+                      {item.name}
+                    </td>
+                    <td className="text-end align-middle">
+                      ${item.price.toFixed(2)}
+                    </td>
+                    <td className="text-end align-middle">
+                      {item.percent_change_24h.toFixed(2) > 0 && "+"}
+                      {item.percent_change_24h.toFixed(2)}%
+                    </td>
+                    <td className="text-end align-middle">
+                      {item.balance} {item.symbol}
+                    </td>
+                    <td className="text-end align-middle">
+                      ${(item.price * item.balance).toFixed(2)}
+                    </td>
+                    <td className="text-end align-middle">33%</td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
         </Col>

@@ -4,6 +4,6 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").get(protect, getCmcCoins);
+router.route("/").post(protect, getCmcCoins);
 
 export default router;

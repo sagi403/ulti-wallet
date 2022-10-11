@@ -3,7 +3,7 @@ import axios from "axios";
 import pool from "../db/index.js";
 
 // @desc    Get CMC coins data
-// @route   GET /api/cmc
+// @route   POST /api/cmc
 // @access  Private
 const getCmcCoins = asyncHandler(async (req, res) => {
   const { coinsId } = req.body;
