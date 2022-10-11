@@ -11,6 +11,7 @@ import {
   faGear,
 } from "@fortawesome/free-solid-svg-icons";
 import NavbarIconPartial from "../partials/NavbarIconPartial";
+import { reset } from "../store/coinSlice";
 
 const MainNavbar = () => {
   const dispatch = useDispatch();
@@ -60,7 +61,10 @@ const MainNavbar = () => {
                 <NavbarIconPartial
                   to="/"
                   icon={faRightFromBracket}
-                  onClick={() => dispatch(logout())}
+                  onClick={() => {
+                    dispatch(logout());
+                    dispatch(reset());
+                  }}
                 />
                 {/* {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">

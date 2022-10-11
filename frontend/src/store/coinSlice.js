@@ -63,7 +63,12 @@ export const coinData = createAsyncThunk(
 const coinSlice = createSlice({
   name: "coin",
   initialState,
-  reducers: {},
+  reducers: {
+    reset: state => {
+      localStorage.removeItem("coinInfo");
+      state.coinInfo = null;
+    },
+  },
   extraReducers: {
     [coinData.pending]: state => {
       state.loading = true;
@@ -79,6 +84,6 @@ const coinSlice = createSlice({
   },
 });
 
-// export const { logout } = coinSlice.actions;
+export const { reset } = coinSlice.actions;
 
 export default coinSlice.reducer;
