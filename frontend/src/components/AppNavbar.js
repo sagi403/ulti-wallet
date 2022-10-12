@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import NavbarIconPartial from "../partials/NavbarIconPartial";
 import { reset } from "../store/coinSlice";
+import localString from "../utils/localString";
 
 const MainNavbar = () => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const MainNavbar = () => {
         >
           <Container fluid>
             <LinkContainer to="/">
-              <Navbar.Brand>LOGO ${totalValue.toFixed(2)}</Navbar.Brand>
+              <Navbar.Brand>LOGO ${localString(totalValue)}</Navbar.Brand>
             </LinkContainer>
 
             <Navbar className="nav-centered nav">

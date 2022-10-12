@@ -8,6 +8,7 @@ import checkUserToken from "../utils/checkUserToken";
 import { coinData } from "../store/coinSlice";
 import coinsGeneralData from "../utils/coinsGeneralData";
 import CoinsGeneralInfoBar from "../components/CoinsGeneralInfoBar";
+import localString from "../utils/localString";
 
 const PortfolioAppScreen = () => {
   const [total24hChange, setTotal24hChange] = useState(0);
@@ -58,8 +59,8 @@ const PortfolioAppScreen = () => {
           title="24h Change"
           info={
             total24hChange > 0
-              ? `+$${total24hChange}`
-              : `-$${total24hChange * -1}`
+              ? `+$${localString(total24hChange)}`
+              : `-$${localString(total24hChange * -1)}`
           }
         />
         |
@@ -72,8 +73,8 @@ const PortfolioAppScreen = () => {
           title="Best 24h Asset"
           info={
             best24hAsset &&
-            `${best24hAsset.name} ${best24hAsset.percent_change_24h.toFixed(
-              2
+            `${best24hAsset.name} ${localString(
+              best24hAsset.percent_change_24h
             )}%`
           }
         />
@@ -82,8 +83,8 @@ const PortfolioAppScreen = () => {
           title="Worst 24h Asset"
           info={
             worst24hAsset &&
-            `${worst24hAsset.name} ${worst24hAsset.percent_change_24h.toFixed(
-              2
+            `${worst24hAsset.name} ${localString(
+              worst24hAsset.percent_change_24h
             )}%`
           }
         />
@@ -122,20 +123,20 @@ const PortfolioAppScreen = () => {
                       {item.name}
                     </td>
                     <td className="text-end align-middle">
-                      ${item.price.toFixed(2)}
+                      ${localString(item.price)}
                     </td>
                     <td className="text-end align-middle">
-                      {item.percent_change_24h.toFixed(2) > 0 && "+"}
-                      {item.percent_change_24h.toFixed(2)}%
+                      {item.percent_change_24h > 0 && "+"}
+                      {localString(item.percent_change_24h)}%
                     </td>
                     <td className="text-end align-middle">
-                      {item.balance} {item.symbol}
+                      {localString(item.balance)} {item.symbol}
                     </td>
                     <td className="text-end align-middle">
-                      ${item.value.toFixed(2)}
+                      ${localString(item.value)}
                     </td>
                     <td className="text-end align-middle">
-                      {((item.value / totalValue) * 100).toFixed(2)}%
+                      {localString((item.value / totalValue) * 100)}%
                     </td>
                   </tr>
                 ))}
