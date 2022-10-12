@@ -8,7 +8,8 @@ CREATE TABLE users (
   name VARCHAR(50) NOT NULL,
   email VARCHAR(50) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  is_admin BOOLEAN NOT NULL DEFAULT false
+  is_admin BOOLEAN NOT NULL DEFAULT false,
+  created_at DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE coins (
@@ -23,7 +24,8 @@ CREATE TABLE addresses (
   public_address uuid NOT NULL DEFAULT uuid_generate_v4(),
   user_id uuid DEFAULT uuid_generate_v4() NOT NULL REFERENCES users(id),
   coin_id INT NOT NULL REFERENCES coins(id),
-  balance BIGINT NOT NULL 
+  balance BIGINT NOT NULL,
+  created_at DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
 

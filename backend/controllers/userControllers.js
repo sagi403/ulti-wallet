@@ -11,7 +11,10 @@ const authUser = asyncHandler(async (req, res) => {
 
   const {
     rows: [user],
-  } = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+  } = await pool.query(
+    "SELECT id, name, email, password, is_admin, AGE(created_at) AS created_at FROM users WHERE email = $1",
+    [email]
+  );
 
   if (user && (await matchPassword(password, user.password))) {
     res.json({
@@ -19,6 +22,8 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       is_admin: user.is_admin,
+      created_at:
+        Object.keys(user.created_at).length === 0 ? "0" : user.created_at,
       token: generateToken(user.id),
     });
   } else {
@@ -58,6 +63,7 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       is_admin: user.is_admin,
+      created_at: 0,
       token: generateToken(user.id),
     });
   } else {
@@ -73,7 +79,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
   const {
     rows: [user],
   } = await pool.query(
-    "SELECT id, name, email, is_admin FROM users WHERE id = $1",
+    "SELECT id, name, email, is_admin, AGE(created_at) AS created_at FROM users WHERE id = $1",
     [req.user.id]
   );
 
@@ -83,6 +89,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       is_admin: user.is_admin,
+      created_at:
+        Object.keys(user.created_at).length === 0 ? "0" : user.created_at,
     });
   } else {
     res.status(404);

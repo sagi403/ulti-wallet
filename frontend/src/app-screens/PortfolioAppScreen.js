@@ -57,11 +57,17 @@ const PortfolioAppScreen = () => {
         <CoinsGeneralInfoBar
           title="24h Change"
           info={
-            total24hChange > 0 ? `+$${total24hChange}` : `-$${total24hChange}`
+            total24hChange > 0
+              ? `+$${total24hChange}`
+              : `-$${total24hChange * -1}`
           }
         />
         |
-        <CoinsGeneralInfoBar title="Portfolio Age" info={total24hChange} />|
+        <CoinsGeneralInfoBar
+          title="Portfolio Age"
+          info={userInfo && userInfo.created_at}
+        />
+        |
         <CoinsGeneralInfoBar
           title="Best 24h Asset"
           info={
