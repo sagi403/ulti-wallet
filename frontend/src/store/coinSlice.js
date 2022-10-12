@@ -5,6 +5,9 @@ const initialState = {
   coinInfo: localStorage.getItem("coinInfo")
     ? JSON.parse(localStorage.getItem("coinInfo"))
     : null,
+  totalValue: localStorage.getItem("totalValue")
+    ? JSON.parse(localStorage.getItem("totalValue"))
+    : 0,
   loading: false,
   error: "",
 };
@@ -30,6 +33,8 @@ export const coinData = createAsyncThunk(
         config
       );
 
+      let totalValue = 0;
+
       for (let i = 0; i < userCoinsData.length; i++) {
         const {
           quote: {
@@ -45,10 +50,13 @@ export const coinData = createAsyncThunk(
           percent_change_24h,
           value,
         });
+
+        totalValue += value;
       }
 
       localStorage.setItem("coinInfo", JSON.stringify(coinsData));
-      return coinsData;
+      localStorage.setItem("totalValue", JSON.stringify(totalValue));
+      return { coinsData, totalValue };
     } catch (error) {
       const err =
         error.response && error.response.data.message
@@ -66,7 +74,9 @@ const coinSlice = createSlice({
   reducers: {
     reset: state => {
       localStorage.removeItem("coinInfo");
+      localStorage.removeItem("totalValue");
       state.coinInfo = null;
+      state.totalValue = 0;
     },
   },
   extraReducers: {
@@ -75,7 +85,8 @@ const coinSlice = createSlice({
     },
     [coinData.fulfilled]: (state, action) => {
       state.loading = false;
-      state.coinInfo = action.payload;
+      state.coinInfo = action.payload.coinsData;
+      state.totalValue = action.payload.totalValue;
     },
     [coinData.rejected]: (state, action) => {
       state.loading = false;

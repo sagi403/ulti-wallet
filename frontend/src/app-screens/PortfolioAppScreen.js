@@ -12,7 +12,7 @@ const PortfolioAppScreen = () => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector(state => state.user);
-  const { coinInfo } = useSelector(state => state.coin);
+  const { coinInfo, totalValue } = useSelector(state => state.coin);
 
   useEffect(() => {
     const isUserAuth = async () => {
@@ -98,9 +98,11 @@ const PortfolioAppScreen = () => {
                       {item.balance} {item.symbol}
                     </td>
                     <td className="text-end align-middle">
-                      ${(item.price * item.balance).toFixed(2)}
+                      ${item.value.toFixed(2)}
                     </td>
-                    <td className="text-end align-middle">33%</td>
+                    <td className="text-end align-middle">
+                      {((item.value / totalValue) * 100).toFixed(2)}%
+                    </td>
                   </tr>
                 ))}
             </tbody>
