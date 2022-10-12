@@ -40,7 +40,7 @@ const importData = async () => {
       id BIGINT GENERATED ALWAYS AS IDENTITY,
       public_address uuid NOT NULL DEFAULT uuid_generate_v4(),
       user_id uuid DEFAULT uuid_generate_v4() NOT NULL REFERENCES users(id),
-      coin_symbol VARCHAR(50) NOT NULL REFERENCES coins(symbol),
+      coin_id INT NOT NULL REFERENCES coins(id),
       balance BIGINT NOT NULL
     );
     `);
@@ -73,19 +73,19 @@ const importData = async () => {
     users_id.map(user => {
       for (let i = 0; i < 5; i++) {
         const { randomCoin, randomBalance } = randomCoinAndBalance(coins);
-        const { id } = user;
-        const { symbol } = randomCoin;
+        const { id: user_id } = user;
+        const { id: coin_id } = randomCoin;
 
-        addresses.push({ id, symbol, randomBalance });
+        addresses.push({ user_id, coin_id, randomBalance });
       }
     });
 
     for (let address of addresses) {
-      const { id, symbol, randomBalance } = address;
+      const { user_id, coin_id, randomBalance } = address;
 
       await pool.query(
-        "INSERT INTO addresses (user_id, coin_symbol, balance) VALUES ($1, $2, $3)",
-        [id, symbol, randomBalance]
+        "INSERT INTO addresses (user_id, coin_id, balance) VALUES ($1, $2, $3)",
+        [user_id, coin_id, randomBalance]
       );
     }
 

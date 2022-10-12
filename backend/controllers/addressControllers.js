@@ -32,7 +32,7 @@ const getUserAddresses = asyncHandler(async (req, res) => {
 // @access  Private
 const getAddressCoins = asyncHandler(async (req, res) => {
   const { rows: address } = await pool.query(
-    "SELECT * FROM addresses INNER JOIN coins ON addresses.coin_symbol = coins.symbol WHERE public_address = $1",
+    "SELECT * FROM addresses INNER JOIN coins ON addresses.coin_id = coins.id WHERE public_address = $1",
     [req.body.id]
   );
 

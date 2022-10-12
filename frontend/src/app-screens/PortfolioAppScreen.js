@@ -21,11 +21,13 @@ const PortfolioAppScreen = () => {
   const { coinInfo, totalValue } = useSelector(state => state.coin);
 
   useEffect(() => {
-    const { totalChange, bestAsset, worstAsset } = coinsGeneralData(coinInfo);
+    if (coinInfo) {
+      const { totalChange, bestAsset, worstAsset } = coinsGeneralData(coinInfo);
 
-    setTotal24hChange(totalChange);
-    setBest24hAsset(bestAsset);
-    setWorst24hAsset(worstAsset);
+      setTotal24hChange(totalChange);
+      setBest24hAsset(bestAsset);
+      setWorst24hAsset(worstAsset);
+    }
   }, [coinInfo]);
 
   useEffect(() => {

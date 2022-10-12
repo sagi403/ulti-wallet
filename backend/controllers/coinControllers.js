@@ -6,7 +6,7 @@ import pool from "../db/index.js";
 // @access  Private
 const getCoinsInfo = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
-    "SELECT * FROM addresses INNER JOIN coins ON addresses.coin_symbol = coins.symbol WHERE user_id = $1",
+    "SELECT * FROM addresses INNER JOIN coins ON addresses.coin_id = coins.id WHERE user_id = $1",
     [req.user.id]
   );
 
@@ -25,7 +25,7 @@ const getCoinsBasicInfo = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
     `SELECT coins.id, symbol, name, logo, SUM(balance) AS balance 
     FROM addresses INNER JOIN coins ON 
-    addresses.coin_symbol = coins.symbol 
+    addresses.coin_id = coins.id 
     WHERE user_id = $1 
     GROUP BY coins.id, symbol, name, logo`,
     [req.user.id]
@@ -46,7 +46,7 @@ const getCoinsId = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
     `SELECT coins.id FROM addresses 
     INNER JOIN coins ON 
-    addresses.coin_symbol = coins.symbol 
+    addresses.coin_id = coins.id 
     WHERE user_id = $1 
     GROUP BY coins.id`,
     [req.user.id]

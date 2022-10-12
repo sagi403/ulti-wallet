@@ -1,8 +1,4 @@
 const coinsGeneralData = coinInfo => {
-  if (!coinInfo) {
-    return;
-  }
-
   let bestAsset = coinInfo.reduce((prev, current) => {
     return prev.percent_change_24h < current.percent_change_24h
       ? current
