@@ -1,5 +1,5 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Outlet } from "react-router-dom";
 import { logout } from "../store/userSlice";
@@ -16,6 +16,8 @@ import { reset } from "../store/coinSlice";
 const MainNavbar = () => {
   const dispatch = useDispatch();
 
+  const { totalValue } = useSelector(state => state.coin);
+
   return (
     <>
       <nav>
@@ -28,7 +30,7 @@ const MainNavbar = () => {
         >
           <Container fluid>
             <LinkContainer to="/">
-              <Navbar.Brand>LOGO</Navbar.Brand>
+              <Navbar.Brand>LOGO ${totalValue.toFixed(2)}</Navbar.Brand>
             </LinkContainer>
 
             <Navbar className="nav-centered nav">
