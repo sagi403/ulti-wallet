@@ -9,15 +9,17 @@ import {
   faWallet,
   faArrowRightArrowLeft,
   faGear,
+  faArrowRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import NavbarIconPartial from "../partials/NavbarIconPartial";
-import { reset } from "../store/coinSlice";
+import { coinData, reset } from "../store/coinSlice";
 import localString from "../utils/localString";
 
 const MainNavbar = () => {
   const dispatch = useDispatch();
 
   const { totalValue } = useSelector(state => state.coin);
+  const { userInfo } = useSelector(state => state.user);
 
   return (
     <>
@@ -60,6 +62,11 @@ const MainNavbar = () => {
 
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="justify-content-end flex-grow-1">
+                <NavbarIconPartial
+                  to="/"
+                  icon={faArrowRotateLeft}
+                  onClick={() => dispatch(coinData(userInfo))}
+                />
                 <NavbarIconPartial to="/" icon={faGear} />
                 <NavbarIconPartial
                   to="/"
