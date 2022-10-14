@@ -40,6 +40,7 @@ const PortfolioAppScreen = () => {
             backgroundColor: [...coinInfo.map(coin => coin.color)],
             borderColor: "black",
             borderWidth: 2,
+            cutout: "90%",
           },
         ],
       });
@@ -69,10 +70,11 @@ const PortfolioAppScreen = () => {
     <Container>
       <Row>
         <Col>
-          <Row className="text-center">
-            <h3>Pie chart</h3>
-          </Row>
-          <Row style={{ width: "40vh" }} className="mx-auto">
+          <Row className="mx-auto doughnut_chart">
+            <div className="chart_content text-center">
+              <h3>${localString(totalValue)}</h3>
+              <h4>{coinInfo && `${coinInfo.length} Assets`}</h4>
+            </div>
             <DoughnutChart chartData={chartData} />
           </Row>
         </Col>

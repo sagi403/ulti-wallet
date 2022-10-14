@@ -52,3 +52,15 @@ main {
 .portfolio-table-body {
   font-size: 1.2rem;
 }
+
+.chart_content {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  transform: translate(-50%, -50%);
+}
+
+.doughnut_chart {
+  position: relative;
+  width: 40vh;
+}
