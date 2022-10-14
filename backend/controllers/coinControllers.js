@@ -23,11 +23,11 @@ const getCoinsInfo = asyncHandler(async (req, res) => {
 // @access  Private
 const getCoinsBasicInfo = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
-    `SELECT coins.id, symbol, name, logo, SUM(balance) AS balance 
+    `SELECT coins.id, symbol, name, logo, color, SUM(balance) AS balance
     FROM addresses INNER JOIN coins ON 
     addresses.coin_id = coins.id 
     WHERE user_id = $1 
-    GROUP BY coins.id, symbol, name, logo`,
+    GROUP BY coins.id, symbol, name, logo, color`,
     [req.user.id]
   );
 

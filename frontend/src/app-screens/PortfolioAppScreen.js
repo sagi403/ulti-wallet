@@ -37,7 +37,7 @@ const PortfolioAppScreen = () => {
           {
             label: "Asset Allocation",
             data: coinInfo.map(coin => coin.value),
-            backgroundColor: ["red", "green", "blue", "yellow", "grey"],
+            backgroundColor: [...coinInfo.map(coin => coin.color)],
             borderColor: "black",
             borderWidth: 2,
           },

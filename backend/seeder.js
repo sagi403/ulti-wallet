@@ -32,7 +32,8 @@ const importData = async () => {
       id INT NOT NULL UNIQUE,
       name VARCHAR(100) NOT NULL,
       symbol VARCHAR(50) NOT NULL UNIQUE,
-      logo VARCHAR(255) NOT NULL
+      logo VARCHAR(255) NOT NULL,
+      color VARCHAR(10) NOT NULL
     );
     `);
 
@@ -59,11 +60,11 @@ const importData = async () => {
     }
 
     for (let coin of coins) {
-      const { id, name, symbol, logo } = coin;
+      const { id, name, symbol, logo, color } = coin;
 
       await pool.query(
-        "INSERT INTO coins (id, name, symbol, logo) VALUES ($1, $2, $3, $4)",
-        [id, name, symbol, logo]
+        "INSERT INTO coins (id, name, symbol, logo, color) VALUES ($1, $2, $3, $4, $5)",
+        [id, name, symbol, logo, color]
       );
     }
 
