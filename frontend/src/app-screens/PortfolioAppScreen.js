@@ -9,11 +9,17 @@ import { coinData } from "../store/coinSlice";
 import coinsGeneralData from "../utils/coinsGeneralData";
 import CoinsGeneralInfoBar from "../components/CoinsGeneralInfoBar";
 import localString from "../utils/localString";
+import DoughnutChart from "../components/DoughnutChart";
 
 const PortfolioAppScreen = () => {
   const [total24hChange, setTotal24hChange] = useState(0);
   const [best24hAsset, setBest24hAsset] = useState(null);
   const [worst24hAsset, setWorst24hAsset] = useState(null);
+
+  const [chartData, setChartData] = useState({
+    labels: "",
+    datasets: [],
+  });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,6 +30,19 @@ const PortfolioAppScreen = () => {
   useEffect(() => {
     if (coinInfo) {
       const { totalChange, bestAsset, worstAsset } = coinsGeneralData(coinInfo);
+
+      setChartData({
+        labels: coinInfo.map(coin => coin.symbol),
+        datasets: [
+          {
+            label: "Asset Allocation",
+            data: coinInfo.map(coin => coin.value),
+            backgroundColor: ["red", "green", "blue", "yellow", "grey"],
+            borderColor: "black",
+            borderWidth: 2,
+          },
+        ],
+      });
 
       setTotal24hChange(totalChange);
       setBest24hAsset(bestAsset);
@@ -49,8 +68,13 @@ const PortfolioAppScreen = () => {
   return (
     <Container>
       <Row>
-        <Col className="d-flex justify-content-center">
-          <h3>Pie chart</h3>
+        <Col>
+          <Row className="text-center">
+            <h3>Pie chart</h3>
+          </Row>
+          <Row style={{ width: "40vh" }} className="mx-auto">
+            <DoughnutChart chartData={chartData} />
+          </Row>
         </Col>
       </Row>
       <hr />
@@ -66,7 +90,16 @@ const PortfolioAppScreen = () => {
         |
         <CoinsGeneralInfoBar
           title="Portfolio Age"
-          info={userInfo && userInfo.created_at}
+          info={
+            userInfo &&
+            (userInfo.created_at.years
+              ? `${userInfo.created_at.years} Year, ${userInfo.created_at.mons} Month, ${userInfo.created_at.days} Days`
+              : userInfo.created_at.mons
+              ? `${userInfo.created_at.mons} Month, ${userInfo.created_at.days} Days`
+              : userInfo.created_at.days
+              ? `${userInfo.created_at.days} Days`
+              : "New Portfolio")
+          }
         />
         |
         <CoinsGeneralInfoBar
