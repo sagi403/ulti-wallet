@@ -2,21 +2,18 @@ main {
   min-height: 80vh;
 }
 
-.logo-home {
+/* HomeScreen */
+.logo_home {
   font-size: 5rem;
 }
 
-.desc-home {
+.desc_home {
   font-size: 5.5rem;
   font-weight: 900;
 }
 
-.sidebar {
-  /* position: fixed; */
-  min-height: 100vh !important;
-}
-
-.nav-centered {
+/* AppNavbar */
+.nav_centered {
   float: none;
   position: absolute;
   top: 50%;
@@ -24,7 +21,7 @@ main {
   transform: translate(-50%, -50%);
 }
 
-.btn-nav {
+.btn_nav {
   font-size: 25px;
   background-image: linear-gradient(150deg, #343b3d, #161a1d);
   padding: 5px 10px;
@@ -34,7 +31,7 @@ main {
   box-shadow: 4px 4px 10px 1px #161616;
 }
 
-.btn-nav:hover {
+.btn_nav:hover {
   background: linear-gradient(to right, #343b3d, #161a1d);
   box-shadow: 4px 4px 10px 1px rgb(15, 14, 14);
 }
@@ -45,11 +42,16 @@ main {
   color: #5d6872;
 }
 
+/* PortfolioAppScreen */
+.portfolio {
+  background-color: #383d42;
+}
+
 .mask {
   clip-path: polygon(5% 75%, 5% 25%, 50% 0, 95% 25%, 95% 75%, 50% 100%);
 }
 
-.portfolio-table-body {
+.portfolio_table_body {
   font-size: 1.2rem;
 }
 
@@ -63,4 +65,41 @@ main {
 .doughnut_chart {
   position: relative;
   width: 40vh;
+  margin: 5%;
+}
+
+.chart_total_value {
+  color: aliceblue;
+}
+
+.chart_total_assets {
+  color: #808b96;
+}
+
+.dim {
+  color: #a9b2bb;
+  font-size: 75%;
+}
+.portfolio_hr {
+  border: 0;
+  height: 1px;
+  background: #333;
+  background-image: linear-gradient(to right, #333, #ccc, #333);
+}
+
+.general_info_bar {
+  border-right: 1px solid #333;
+  border-image: linear-gradient(to bottom, #333, #ccc, #333) 1;
+}
+
+.table_header {
+  background-color: #2d3135;
+}
+
+.rounded_top_left {
+  border-radius: 10px 0 0;
+}
+
+.rounded_top_right {
+  border-radius: 0 10px 0 0;
 }

@@ -33,28 +33,31 @@ const MainNavbar = () => {
         >
           <Container fluid>
             <LinkContainer to="/">
-              <Navbar.Brand>LOGO ${localString(totalValue)}</Navbar.Brand>
+              <Navbar.Brand>
+                LOGO <span className="dim">$</span>
+                {localString(totalValue)}
+              </Navbar.Brand>
             </LinkContainer>
 
-            <Navbar className="nav-centered nav">
+            <Navbar className="nav_centered nav">
               <NavbarIconPartial
                 to="/"
                 icon={faChartPie}
                 color="#ffac20"
-                classes="btn-nav"
+                classes="btn_nav"
               />
               <NavbarIconPartial
                 to="/"
                 icon={faWallet}
                 color="#7344FF"
-                classes="btn-nav"
+                classes="btn_nav"
               />
               <span className="separator">|</span>
               <NavbarIconPartial
                 to="/"
                 icon={faArrowRightArrowLeft}
                 color="#208EE0"
-                classes="btn-nav"
+                classes="btn_nav"
               />
             </Navbar>
 
