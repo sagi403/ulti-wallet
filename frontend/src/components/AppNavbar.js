@@ -14,9 +14,11 @@ import {
 import NavbarIconPartial from "../partials/NavbarIconPartial";
 import { coinData } from "../store/coinSlice";
 import localString from "../utils/localString";
+import { useLocation } from "react-router-dom";
 
 const MainNavbar = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const { totalValue } = useSelector(state => state.coin);
   const { userInfo } = useSelector(state => state.user);
@@ -41,7 +43,7 @@ const MainNavbar = () => {
 
             <Navbar className="nav_centered nav">
               <NavbarIconPartial
-                to="/"
+                to="/app/portfolio"
                 icon={faChartPie}
                 color="#ffac20"
                 classes="btn_nav"
@@ -66,7 +68,7 @@ const MainNavbar = () => {
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="justify-content-end flex-grow-1">
                 <NavbarIconPartial
-                  to="/"
+                  to={location.pathname}
                   icon={faArrowRotateLeft}
                   onClick={() => dispatch(coinData(userInfo))}
                 />

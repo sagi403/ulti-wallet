@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { coinData } from "./coinSlice";
 import axios from "axios";
 
 const initialState = {
@@ -21,6 +22,7 @@ export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
     localStorage.setItem("userInfo", JSON.stringify(data));
 
     thunkApi.dispatch(setCredentials(data.token));
+    await thunkApi.dispatch(coinData(data));
 
     return data;
   } catch (error) {
@@ -44,6 +46,7 @@ export const register = createAsyncThunk(
       localStorage.setItem("userInfo", JSON.stringify(data));
 
       thunkApi.dispatch(setCredentials(data.token));
+      await thunkApi.dispatch(coinData(data));
 
       return data;
     } catch (error) {
