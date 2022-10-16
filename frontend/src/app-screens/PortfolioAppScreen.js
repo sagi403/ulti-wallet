@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 import { coinData } from "../store/coinSlice";
 import coinsGeneralData from "../utils/coinsGeneralData";
-import CoinsGeneralInfoBar from "../components/CoinsGeneralInfoBar";
+import CoinInfoBarPartial from "../partials/CoinInfoBarPartial";
 import localString from "../utils/localString";
 import DoughnutChart from "../components/DoughnutChart";
 
@@ -75,7 +75,7 @@ const PortfolioAppScreen = () => {
         </Row>
         <hr className="portfolio_hr" />
         <Row className="py-5">
-          <CoinsGeneralInfoBar
+          <CoinInfoBarPartial
             title="24h Change"
             info={
               total24hChange > 0
@@ -84,7 +84,7 @@ const PortfolioAppScreen = () => {
             }
             classes="general_info_bar"
           />
-          <CoinsGeneralInfoBar
+          <CoinInfoBarPartial
             title="Portfolio Age"
             info={
               userInfo &&
@@ -98,7 +98,7 @@ const PortfolioAppScreen = () => {
             }
             classes="general_info_bar"
           />
-          <CoinsGeneralInfoBar
+          <CoinInfoBarPartial
             title="Best 24h Asset"
             info={
               best24hAsset &&
@@ -108,7 +108,7 @@ const PortfolioAppScreen = () => {
             }
             classes="general_info_bar"
           />
-          <CoinsGeneralInfoBar
+          <CoinInfoBarPartial
             title="Worst 24h Asset"
             info={
               worst24hAsset &&

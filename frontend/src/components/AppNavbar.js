@@ -36,7 +36,8 @@ const MainNavbar = () => {
           <Container fluid>
             <LinkContainer to="/">
               <Navbar.Brand>
-                LOGO <span className="dim">$</span>
+                <span className="logo">U</span>
+                <span className="dim">$</span>
                 {localString(totalValue)}
               </Navbar.Brand>
             </LinkContainer>

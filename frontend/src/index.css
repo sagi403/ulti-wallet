@@ -42,6 +42,16 @@ main {
   color: #5d6872;
 }
 
+.logo {
+  font-family: "Mr Dafoe", cursive;
+  position: relative;
+  padding: 0 15%;
+  font-size: 2rem;
+  background: -webkit-linear-gradient(#8d67fb, #82c0e8, #2a5ddd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* PortfolioAppScreen */
 .portfolio {
   background-color: #383d42;

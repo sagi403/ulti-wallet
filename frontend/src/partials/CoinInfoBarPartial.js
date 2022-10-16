@@ -1,6 +1,6 @@
 import { Col, Row } from "react-bootstrap";
 
-const CoinsGeneralInfoBar = ({ title, info, classes = "" }) => {
+const CoinInfoBarPartial = ({ title, info, classes = "" }) => {
   return (
     <Col className={`text-center ${classes}`}>
       <Row>
@@ -13,4 +13,4 @@ const CoinsGeneralInfoBar = ({ title, info, classes = "" }) => {
   );
 };
 
-export default CoinsGeneralInfoBar;
+export default CoinInfoBarPartial;
