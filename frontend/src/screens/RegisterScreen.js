@@ -26,7 +26,7 @@ const RegisterScreen = () => {
       const auth = await checkUserToken(userInfo);
 
       if (auth) {
-        navigate("/app/portfolio");
+        navigate("/app/portfolio", { replace: true });
       }
     };
     isUserAuth();
