@@ -39,7 +39,7 @@ const PortfolioAppScreen = () => {
             data: coinInfo.map(coin => coin.value),
             backgroundColor: [...coinInfo.map(coin => coin.color)],
             borderColor: "black",
-            borderWidth: 2,
+            borderWidth: 1,
             cutout: "95%",
           },
         ],
@@ -183,7 +183,10 @@ const PortfolioAppScreen = () => {
                         {item.percent_change_24h > 0 && "+"}
                         {localString(item.percent_change_24h)}%
                       </td>
-                      <td className="text-end align-middle chart_total_value">
+                      <td
+                        className="text-end align-middle chart_total_value"
+                        style={{ color: item.color }}
+                      >
                         {localString(item.balance)} {item.symbol}
                       </td>
                       <td className="text-end align-middle chart_total_value">

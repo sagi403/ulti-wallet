@@ -2,7 +2,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Outlet } from "react-router-dom";
-import { logout } from "../store/userSlice";
+import { logout } from "../store/generalSlice";
 import {
   faRightFromBracket,
   faChartPie,
@@ -12,7 +12,7 @@ import {
   faArrowRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import NavbarIconPartial from "../partials/NavbarIconPartial";
-import { coinData, reset } from "../store/coinSlice";
+import { coinData } from "../store/coinSlice";
 import localString from "../utils/localString";
 
 const MainNavbar = () => {
@@ -76,7 +76,6 @@ const MainNavbar = () => {
                   icon={faRightFromBracket}
                   onClick={() => {
                     dispatch(logout());
-                    dispatch(reset());
                   }}
                 />
                 {/* {userInfo ? (
