@@ -17,18 +17,18 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [validationErrors, setValidationErrors] = useState(null);
 
-  const { userInfo, error } = useSelector(state => state.user);
+  const { userInfo, error, token } = useSelector(state => state.user);
 
   useEffect(() => {
     const isUserAuth = async () => {
       const auth = await checkUserToken(userInfo);
 
-      if (auth) {
+      if (auth && token && userInfo.token === token) {
         navigate("/app/portfolio", { replace: true });
       }
     };
     isUserAuth();
-  }, [userInfo, navigate]);
+  }, [userInfo, navigate, token]);
 
   const submitHandler = async e => {
     e.preventDefault();

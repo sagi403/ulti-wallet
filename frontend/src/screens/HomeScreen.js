@@ -8,16 +8,18 @@ import checkUserToken from "../utils/checkUserToken";
 
 const HomeScreen = () => {
   const [isLogin, setIsLogin] = useState(false);
-  const { userInfo } = useSelector(state => state.user);
+  const { userInfo, token } = useSelector(state => state.user);
 
   useEffect(() => {
     const isUserAuth = async () => {
       const auth = await checkUserToken(userInfo);
 
-      auth ? setIsLogin(true) : setIsLogin(false);
+      auth && token && userInfo.token === token
+        ? setIsLogin(true)
+        : setIsLogin(false);
     };
     isUserAuth();
-  }, [userInfo]);
+  }, [userInfo, token]);
 
   return (
     <Container>

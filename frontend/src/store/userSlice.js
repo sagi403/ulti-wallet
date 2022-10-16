@@ -7,6 +7,9 @@ const initialState = {
     : null,
   loading: false,
   error: "",
+  token: localStorage.getItem("token")
+    ? JSON.parse(localStorage.getItem("token"))
+    : null,
 };
 
 export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
@@ -16,6 +19,9 @@ export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
     const { data } = await axios.post("/api/users/login", user, config);
 
     localStorage.setItem("userInfo", JSON.stringify(data));
+
+    thunkApi.dispatch(setCredentials(data.token));
+
     return data;
   } catch (error) {
     const err =
@@ -36,6 +42,9 @@ export const register = createAsyncThunk(
       const { data } = await axios.post("/api/users", user, config);
 
       localStorage.setItem("userInfo", JSON.stringify(data));
+
+      thunkApi.dispatch(setCredentials(data.token));
+
       return data;
     } catch (error) {
       const err =
@@ -54,7 +63,13 @@ const userSlice = createSlice({
   reducers: {
     reset: state => {
       localStorage.removeItem("userInfo");
+      localStorage.removeItem("token");
       state.userInfo = null;
+      state.token = false;
+    },
+    setCredentials: (state, action) => {
+      localStorage.setItem("token", JSON.stringify(action.payload));
+      state.token = action.payload;
     },
   },
   extraReducers: {
@@ -83,6 +98,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { reset } = userSlice.actions;
+export const { reset, setCredentials } = userSlice.actions;
 
 export default userSlice.reducer;

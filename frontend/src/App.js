@@ -4,13 +4,16 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import AppNavbar from "./components/AppNavbar";
 import PortfolioAppScreen from "./app-screens/PortfolioAppScreen";
+import RequireAuth from "./components/RequireAuth";
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="app" element={<AppNavbar />}>
-          <Route path="portfolio" element={<PortfolioAppScreen />} />
+        <Route element={<RequireAuth />}>
+          <Route path="app" element={<AppNavbar />}>
+            <Route path="portfolio" element={<PortfolioAppScreen />} />
+          </Route>
         </Route>
 
         <Route path="login" element={<LoginScreen />} />

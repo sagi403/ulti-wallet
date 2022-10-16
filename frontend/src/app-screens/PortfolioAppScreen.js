@@ -1,10 +1,8 @@
 import { Col, Container, Row, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
-import checkUserToken from "../utils/checkUserToken";
 import { coinData } from "../store/coinSlice";
 import coinsGeneralData from "../utils/coinsGeneralData";
 import CoinsGeneralInfoBar from "../components/CoinsGeneralInfoBar";
@@ -21,7 +19,6 @@ const PortfolioAppScreen = () => {
     datasets: [],
   });
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector(state => state.user);
@@ -52,19 +49,10 @@ const PortfolioAppScreen = () => {
   }, [coinInfo]);
 
   useEffect(() => {
-    const isUserAuth = async () => {
-      const auth = await checkUserToken(userInfo);
-
-      if (!auth) {
-        navigate("/login");
-      }
-    };
-    isUserAuth();
-
     if (!coinInfo) {
       dispatch(coinData(userInfo));
     }
-  }, [userInfo, navigate, dispatch, coinInfo]);
+  }, [dispatch, coinInfo, userInfo]);
 
   return (
     <Container fluid className="portfolio">
