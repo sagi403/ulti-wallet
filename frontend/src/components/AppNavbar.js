@@ -42,7 +42,7 @@ const MainNavbar = () => {
               </Navbar.Brand>
             </LinkContainer>
 
-            <Navbar className="nav_centered nav">
+            <Navbar className="nav_centered">
               <NavbarIconPartial
                 to="/app/portfolio"
                 icon={faChartPie}

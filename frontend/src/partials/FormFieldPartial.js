@@ -7,6 +7,7 @@ const FormFieldPartial = ({
   placeholder,
   value,
   onChange,
+  message,
 }) => {
   return (
     <Form.Group className="mb-3" controlId={controlId}>
@@ -16,7 +17,9 @@ const FormFieldPartial = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        isInvalid={message}
       />
+      <Form.Control.Feedback type="invalid">{message}</Form.Control.Feedback>
     </Form.Group>
   );
 };

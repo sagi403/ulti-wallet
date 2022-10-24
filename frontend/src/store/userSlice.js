@@ -74,6 +74,9 @@ const userSlice = createSlice({
       localStorage.setItem("token", JSON.stringify(action.payload));
       state.token = action.payload;
     },
+    resetError: state => {
+      state.error = "";
+    },
   },
   extraReducers: {
     [login.pending]: state => {
@@ -101,6 +104,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { reset, setCredentials } = userSlice.actions;
+export const { reset, setCredentials, resetError } = userSlice.actions;
 
 export default userSlice.reducer;

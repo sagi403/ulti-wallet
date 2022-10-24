@@ -35,9 +35,9 @@ const PortfolioAppScreen = () => {
             label: "Asset Allocation",
             data: coinInfo.map(coin => coin.value),
             backgroundColor: [...coinInfo.map(coin => coin.color)],
-            borderColor: "black",
-            borderWidth: 1,
-            cutout: "95%",
+            borderColor: "grey",
+            borderWidth: 0.5,
+            cutout: "80%",
           },
         ],
       });
@@ -120,7 +120,7 @@ const PortfolioAppScreen = () => {
         </Row>
         <Row className="pb-4">
           <Col>
-            <Table bordered hover variant="active">
+            <Table hover variant="active">
               <thead>
                 <tr className="table_header">
                   <th className="py-4 ps-4 rounded_top_left chart_total_assets">

@@ -113,3 +113,7 @@ main {
 .rounded_top_right {
   border-radius: 0 10px 0 0;
 }
+
+.table td {
+  border-bottom: 1px solid #3f4549;
+}
