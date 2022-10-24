@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { register, resetError } from "../store/userSlice";
 import Message from "../components/Message";
-import checkUserToken from "../utils/checkUserToken";
 import validate from "../validation/validate";
 import registerSchema from "../validation/registerValidation";
 import FormFieldPartial from "../partials/FormFieldPartial";
+import useAutoLogin from "../hooks/useAutoLogin";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -23,21 +23,21 @@ const RegisterScreen = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const autoLogin = useAutoLogin();
 
-  const { userInfo, error } = useSelector(state => state.user);
+  const { error, token, loggedIn } = useSelector(state => state.user);
 
   useEffect(() => {
-    const isUserAuth = async () => {
-      const auth = await checkUserToken(userInfo);
-
-      if (auth) {
-        navigate("/app/portfolio", { replace: true });
-      }
-    };
-    isUserAuth();
+    if (loggedIn) {
+      navigate("/app/portfolio", { replace: true });
+    }
 
     return () => dispatch(resetError());
-  }, [userInfo, navigate]);
+  }, [loggedIn]);
+
+  useEffect(() => {
+    autoLogin();
+  }, [token]);
 
   const submitHandler = e => {
     e.preventDefault();

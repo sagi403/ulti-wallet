@@ -4,14 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, resetError } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import Message from "../components/Message";
-import checkUserToken from "../utils/checkUserToken";
 import validate from "../validation/validate";
 import loginSchema from "../validation/loginValidation";
 import FormFieldPartial from "../partials/FormFieldPartial";
+import useAutoLogin from "../hooks/useAutoLogin";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const autoLogin = useAutoLogin();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,24 +21,19 @@ const LoginScreen = () => {
     password: null,
   });
 
-  const { userInfo, error, token } = useSelector(state => state.user);
+  const { error, token, loggedIn } = useSelector(state => state.user);
 
   useEffect(() => {
-    const isUserAuth = async () => {
-      try {
-        const auth = await checkUserToken(userInfo);
-
-        if (auth && token && userInfo.token === token) {
-          navigate("/app/portfolio", { replace: true });
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    isUserAuth();
+    if (loggedIn) {
+      navigate("/app/portfolio", { replace: true });
+    }
 
     return () => dispatch(resetError());
-  }, [userInfo, navigate, token]);
+  }, [loggedIn]);
+
+  useEffect(() => {
+    autoLogin();
+  }, [token]);
 
   const submitHandler = async e => {
     e.preventDefault();

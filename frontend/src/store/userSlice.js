@@ -3,14 +3,11 @@ import { coinData } from "./coinSlice";
 import axios from "axios";
 
 const initialState = {
-  userInfo: localStorage.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : null,
+  token: null,
+  userInfo: null,
   loading: false,
-  error: "",
-  token: localStorage.getItem("token")
-    ? JSON.parse(localStorage.getItem("token"))
-    : null,
+  error: null,
+  loggedIn: false,
 };
 
 export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
@@ -19,12 +16,11 @@ export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
 
     const { data } = await axios.post("/api/users/login", user, config);
 
-    localStorage.setItem("userInfo", JSON.stringify(data));
+    localStorage.setItem("token", JSON.stringify(data.token));
 
-    thunkApi.dispatch(setCredentials(data.token));
-    await thunkApi.dispatch(coinData(data));
+    // await thunkApi.dispatch(coinData(data));
 
-    return data;
+    return data.token;
   } catch (error) {
     const err =
       error.response && error.response.data.message
@@ -43,12 +39,11 @@ export const register = createAsyncThunk(
 
       const { data } = await axios.post("/api/users", user, config);
 
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      localStorage.setItem("token", JSON.stringify(data.token));
 
-      thunkApi.dispatch(setCredentials(data.token));
-      await thunkApi.dispatch(coinData(data));
+      // await thunkApi.dispatch(coinData(data));
 
-      return data;
+      return data.token;
     } catch (error) {
       const err =
         error.response && error.response.data.message
@@ -68,14 +63,15 @@ const userSlice = createSlice({
       localStorage.removeItem("userInfo");
       localStorage.removeItem("token");
       state.userInfo = null;
-      state.token = false;
-    },
-    setCredentials: (state, action) => {
-      localStorage.setItem("token", JSON.stringify(action.payload));
-      state.token = action.payload;
+      state.token = null;
+      state.loggedIn = false;
     },
     resetError: state => {
       state.error = "";
+    },
+    setUserInfo: (state, action) => {
+      state.userInfo = action.payload;
+      state.loggedIn = true;
     },
   },
   extraReducers: {
@@ -84,7 +80,7 @@ const userSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       state.loading = false;
-      state.userInfo = action.payload;
+      state.token = action.payload;
     },
     [login.rejected]: (state, action) => {
       state.loading = false;
@@ -95,7 +91,7 @@ const userSlice = createSlice({
     },
     [register.fulfilled]: (state, action) => {
       state.loading = false;
-      state.userInfo = action.payload;
+      state.token = action.payload;
     },
     [register.rejected]: (state, action) => {
       state.loading = false;
@@ -104,6 +100,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { reset, setCredentials, resetError } = userSlice.actions;
+export const { reset, resetError, setUserInfo } = userSlice.actions;
 
 export default userSlice.reducer;

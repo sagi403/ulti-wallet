@@ -1,25 +1,11 @@
-import { useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWallet } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import checkUserToken from "../utils/checkUserToken";
 
 const HomeScreen = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const { userInfo, token } = useSelector(state => state.user);
-
-  useEffect(() => {
-    const isUserAuth = async () => {
-      const auth = await checkUserToken(userInfo);
-
-      auth && token && userInfo.token === token
-        ? setIsLogin(true)
-        : setIsLogin(false);
-    };
-    isUserAuth();
-  }, [userInfo, token]);
+  const { loggedIn } = useSelector(state => state.user);
 
   return (
     <Container>
@@ -37,7 +23,7 @@ const HomeScreen = () => {
             Ulti makes it safe & easy for you to store, buy, send, receive, swap
             tokens on your web browser
           </h3>
-          {isLogin ? (
+          {loggedIn ? (
             <Link to="/app/portfolio">
               <Button variant="outline-primary" className="me-3">
                 Portfolio
