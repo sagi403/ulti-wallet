@@ -7,7 +7,10 @@ const registerSchema = {
   confirmPassword: Joi.string()
     .equal(Joi.ref("password"))
     .required()
-    .label("Confirm Password"),
+    .label("Confirm Password")
+    .error(() => ({
+      message: `"Confirm Password" must be the same as the password`,
+    })),
 };
 
 export default registerSchema;

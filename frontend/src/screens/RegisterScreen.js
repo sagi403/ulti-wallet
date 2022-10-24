@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { register } from "../store/userSlice";
+import { register, resetError } from "../store/userSlice";
 import Message from "../components/Message";
 import checkUserToken from "../utils/checkUserToken";
 import validate from "../validation/validate";
@@ -14,7 +14,12 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [validationErrors, setValidationErrors] = useState(null);
+  const [errorsMessage, setErrorsMessage] = useState({
+    name: null,
+    email: null,
+    password: null,
+    confirmPassword: null,
+  });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,22 +35,36 @@ const RegisterScreen = () => {
       }
     };
     isUserAuth();
+
+    return () => dispatch(resetError());
   }, [userInfo, navigate]);
 
   const submitHandler = e => {
     e.preventDefault();
+    dispatch(resetError());
 
+    const errors = {};
     const { error } = validate(
       { name, email, password, confirmPassword },
       registerSchema
     );
 
     if (error) {
-      setValidationErrors(error.details);
+      for (let errorItem of error.details) {
+        const { context, message } = errorItem;
+
+        errors[context.key] = message;
+      }
+      setErrorsMessage(errors);
       return;
     }
 
-    setValidationErrors(null);
+    setErrorsMessage({
+      name: null,
+      email: null,
+      password: null,
+      confirmPassword: null,
+    });
     dispatch(register({ name, email, password }));
   };
 
@@ -54,12 +73,6 @@ const RegisterScreen = () => {
       <h1 className="mt-5 mb-3">Register</h1>
 
       {error && <Message variant="danger">{error}</Message>}
-      {validationErrors &&
-        validationErrors.map((error, idx) => (
-          <Message key={idx} variant="danger">
-            {error.message}
-          </Message>
-        ))}
 
       <Form onSubmit={submitHandler}>
         <FormFieldPartial
@@ -69,6 +82,7 @@ const RegisterScreen = () => {
           placeholder="Name"
           value={name}
           onChange={e => setName(e.target.value)}
+          message={errorsMessage && errorsMessage.name}
         />
         <FormFieldPartial
           label="Email address"
@@ -77,6 +91,7 @@ const RegisterScreen = () => {
           placeholder="name@example.com"
           value={email}
           onChange={e => setEmail(e.target.value)}
+          message={errorsMessage && errorsMessage.email}
         />
         <FormFieldPartial
           label="Password"
@@ -85,6 +100,7 @@ const RegisterScreen = () => {
           placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
+          message={errorsMessage && errorsMessage.password}
         />
         <FormFieldPartial
           label="Confirm Password"
@@ -93,6 +109,7 @@ const RegisterScreen = () => {
           placeholder="Confirm Password"
           value={confirmPassword}
           onChange={e => setConfirmPassword(e.target.value)}
+          message={errorsMessage && errorsMessage.confirmPassword}
         />
 
         <Button variant="primary" type="submit">
