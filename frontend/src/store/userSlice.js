@@ -18,7 +18,7 @@ export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
 
     localStorage.setItem("token", JSON.stringify(data.token));
 
-    // await thunkApi.dispatch(coinData(data));
+    await thunkApi.dispatch(coinData());
 
     return data.token;
   } catch (error) {
@@ -41,9 +41,40 @@ export const register = createAsyncThunk(
 
       localStorage.setItem("token", JSON.stringify(data.token));
 
-      // await thunkApi.dispatch(coinData(data));
+      await thunkApi.dispatch(coinData());
 
       return data.token;
+    } catch (error) {
+      const err =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      return thunkApi.rejectWithValue(err);
+    }
+  }
+);
+
+export const autoLogin = createAsyncThunk(
+  "user/autoLogin",
+  async (data, thunkApi) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("token"));
+
+      if (!token) {
+        return thunkApi.rejectWithValue(false);
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get("/api/users/profile", config);
+
+      return data;
     } catch (error) {
       const err =
         error.response && error.response.data.message
@@ -80,6 +111,7 @@ const userSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       state.loading = false;
+      state.loggedIn = true;
       state.token = action.payload;
     },
     [login.rejected]: (state, action) => {
@@ -91,9 +123,22 @@ const userSlice = createSlice({
     },
     [register.fulfilled]: (state, action) => {
       state.loading = false;
+      state.loggedIn = true;
       state.token = action.payload;
     },
     [register.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [autoLogin.pending]: state => {
+      state.loading = true;
+    },
+    [autoLogin.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.userInfo = action.payload;
+      state.loggedIn = true;
+    },
+    [autoLogin.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

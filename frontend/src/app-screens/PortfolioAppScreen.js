@@ -50,7 +50,7 @@ const PortfolioAppScreen = () => {
 
   useEffect(() => {
     if (!coinInfo) {
-      dispatch(coinData(userInfo));
+      dispatch(coinData());
     }
   }, [dispatch, coinInfo, userInfo]);
 

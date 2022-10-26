@@ -5,31 +5,18 @@ import RegisterScreen from "./screens/RegisterScreen";
 import AppNavbar from "./components/AppNavbar";
 import PortfolioAppScreen from "./app-screens/PortfolioAppScreen";
 import RequireAuth from "./components/RequireAuth";
-import { useSelector } from "react-redux";
-import useAutoLogin from "./hooks/useAutoLogin";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { autoLogin } from "./store/userSlice";
 
 const App = () => {
-  const [loading, setLoading] = useState(true);
-  const { loggedIn } = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
-  const autoLogin = useAutoLogin();
+  const { loading } = useSelector(state => state.user);
 
   useEffect(() => {
-    (async () => {
-      let status = await autoLogin();
-
-      if (!status) {
-        setLoading(false);
-      }
-    })();
+    dispatch(autoLogin());
   }, []);
-
-  useEffect(() => {
-    if (loggedIn && loading) {
-      setLoading(false);
-    }
-  }, [loggedIn]);
 
   return (
     !loading && (

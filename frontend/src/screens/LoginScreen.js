@@ -1,18 +1,16 @@
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { login, resetError } from "../store/userSlice";
+import { autoLogin, login, resetError } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import Message from "../components/Message";
 import validate from "../validation/validate";
 import loginSchema from "../validation/loginValidation";
 import FormFieldPartial from "../partials/FormFieldPartial";
-import useAutoLogin from "../hooks/useAutoLogin";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const autoLogin = useAutoLogin();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,19 +19,16 @@ const LoginScreen = () => {
     password: null,
   });
 
-  const { error, token, loggedIn } = useSelector(state => state.user);
+  const { error, loggedIn } = useSelector(state => state.user);
 
   useEffect(() => {
     if (loggedIn) {
+      dispatch(autoLogin());
       navigate("/app/portfolio", { replace: true });
     }
 
     return () => dispatch(resetError());
   }, [loggedIn]);
-
-  useEffect(() => {
-    autoLogin();
-  }, [token]);
 
   const submitHandler = async e => {
     e.preventDefault();

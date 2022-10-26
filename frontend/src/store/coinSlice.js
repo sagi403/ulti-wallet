@@ -14,11 +14,15 @@ const initialState = {
 
 export const coinData = createAsyncThunk(
   "coin/coinData",
-  async (user, thunkApi) => {
+  async (data, thunkApi) => {
     const coinsData = [];
 
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      };
 
       const { data: coinsId } = await axios.get("/api/coins/coinsId", config);
       const { data: userCoinsData } = await axios.get(

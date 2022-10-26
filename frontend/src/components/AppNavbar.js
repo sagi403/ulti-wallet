@@ -21,7 +21,6 @@ const MainNavbar = () => {
   const location = useLocation();
 
   const { totalValue } = useSelector(state => state.coin);
-  const { userInfo } = useSelector(state => state.user);
 
   return (
     <>
@@ -71,7 +70,7 @@ const MainNavbar = () => {
                 <NavbarIconPartial
                   to={location.pathname}
                   icon={faArrowRotateLeft}
-                  onClick={() => dispatch(coinData(userInfo))}
+                  onClick={() => dispatch(coinData())}
                 />
                 <NavbarIconPartial to="/" icon={faGear} />
                 <NavbarIconPartial
