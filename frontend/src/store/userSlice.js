@@ -6,6 +6,7 @@ const initialState = {
   token: null,
   userInfo: null,
   loading: false,
+  loadingLogin: false,
   error: null,
   loggedIn: false,
 };
@@ -59,29 +60,11 @@ export const autoLogin = createAsyncThunk(
   "user/autoLogin",
   async (data, thunkApi) => {
     try {
-      const token = JSON.parse(localStorage.getItem("token"));
-
-      if (!token) {
-        return thunkApi.rejectWithValue(false);
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      };
-
-      const { data } = await axios.get("/api/users/profile", config);
+      const { data } = await axios.get("/api/users/profile");
 
       return data;
     } catch (error) {
-      const err =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
-
-      return thunkApi.rejectWithValue(err);
+      return thunkApi.rejectWithValue(false);
     }
   }
 );
@@ -131,15 +114,15 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
     [autoLogin.pending]: state => {
-      state.loading = true;
+      state.loadingLogin = true;
     },
     [autoLogin.fulfilled]: (state, action) => {
-      state.loading = false;
+      state.loadingLogin = false;
       state.userInfo = action.payload;
       state.loggedIn = true;
     },
     [autoLogin.rejected]: (state, action) => {
-      state.loading = false;
+      state.loadingLogin = false;
       state.error = action.payload;
     },
   },

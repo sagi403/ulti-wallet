@@ -84,11 +84,4 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Check user token
-// @route   GET /api/users/protect
-// @access  Private
-const protectUserRoute = asyncHandler(async (req, res) => {
-  res.send(true);
-});
-
-export { authUser, registerUser, getUserProfile, protectUserRoute };
+export { authUser, registerUser, getUserProfile };

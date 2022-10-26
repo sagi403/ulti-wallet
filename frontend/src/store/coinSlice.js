@@ -18,24 +18,11 @@ export const coinData = createAsyncThunk(
     const coinsData = [];
 
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
-        },
-      };
-
-      const { data: coinsId } = await axios.get("/api/coins/coinsId", config);
-      const { data: userCoinsData } = await axios.get(
-        "/api/coins/basic",
-        config
-      );
-      const { data: cmcCoinsData } = await axios.post(
-        "/api/cmc",
-        {
-          coinsId,
-        },
-        config
-      );
+      const { data: coinsId } = await axios.get("/api/coins/coinsId");
+      const { data: userCoinsData } = await axios.get("/api/coins/basic");
+      const { data: cmcCoinsData } = await axios.post("/api/cmc", {
+        coinsId,
+      });
 
       let totalValue = 0;
 

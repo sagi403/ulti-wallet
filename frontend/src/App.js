@@ -12,14 +12,14 @@ import { autoLogin } from "./store/userSlice";
 const App = () => {
   const dispatch = useDispatch();
 
-  const { loading } = useSelector(state => state.user);
+  const { loadingLogin } = useSelector(state => state.user);
 
   useEffect(() => {
     dispatch(autoLogin());
   }, []);
 
   return (
-    !loading && (
+    !loadingLogin && (
       <Router>
         <Routes>
           <Route element={<RequireAuth />}>

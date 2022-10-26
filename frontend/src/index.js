@@ -5,6 +5,17 @@ import "./bootstrap.min.css";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import axios from "axios";
+
+axios.interceptors.request.use(config => {
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  return config;
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
