@@ -1,6 +1,5 @@
 import asyncHandler from "express-async-handler";
 import axios from "axios";
-import pool from "../db/index.js";
 
 // @desc    Get CMC coins data
 // @route   POST /api/cmc
@@ -11,25 +10,19 @@ const getCmcCoins = asyncHandler(async (req, res) => {
   const config = {
     headers: {
       "X-CMC_PRO_API_KEY": process.env.CMC_API_KEY,
+      Accept: "application/json",
+      "Accept-Encoding": "deflate,gzip",
     },
   };
 
   const {
     data: { data },
   } = await axios.get(
-    "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest",
+    `https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=${coinsId.toString()}`,
     config
   );
 
-  const coinsInfo = [];
-
-  for (let coin of data) {
-    if (coinsId.includes(coin.id)) {
-      coinsInfo.push(coin);
-    }
-  }
-
-  res.json(coinsInfo);
+  res.json(data);
 });
 
 export { getCmcCoins };

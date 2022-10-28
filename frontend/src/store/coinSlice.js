@@ -31,7 +31,7 @@ export const coinData = createAsyncThunk(
           quote: {
             USD: { price, percent_change_24h },
           },
-        } = cmcCoinsData.find(cmcCoin => cmcCoin.id === userCoinsData[i].id);
+        } = cmcCoinsData[userCoinsData[i].id];
 
         const value = +userCoinsData[i].balance * price;
 
