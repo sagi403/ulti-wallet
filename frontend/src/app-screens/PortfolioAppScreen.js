@@ -8,6 +8,8 @@ import coinsGeneralData from "../utils/coinsGeneralData";
 import CoinInfoBarPartial from "../partials/CoinInfoBarPartial";
 import localString from "../utils/localString";
 import DoughnutChart from "../components/DoughnutChart";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 const PortfolioAppScreen = () => {
   const [total24hChange, setTotal24hChange] = useState(0);
@@ -21,8 +23,17 @@ const PortfolioAppScreen = () => {
 
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector(state => state.user);
-  const { coinInfo, totalValue } = useSelector(state => state.coin);
+  const {
+    userInfo,
+    loading: loadingUser,
+    error: errorUser,
+  } = useSelector(state => state.user);
+  const {
+    coinInfo,
+    totalValue,
+    loading: loadingCoin,
+    error: errorCoin,
+  } = useSelector(state => state.coin);
 
   useEffect(() => {
     if (coinInfo) {
@@ -54,7 +65,11 @@ const PortfolioAppScreen = () => {
     }
   }, [dispatch, coinInfo, userInfo]);
 
-  return (
+  return loadingCoin || loadingUser ? (
+    <Loader />
+  ) : errorCoin || errorUser ? (
+    <Message variant="danger">{errorCoin || errorUser}</Message>
+  ) : (
     <Container fluid className="portfolio">
       <Container>
         <Row>
