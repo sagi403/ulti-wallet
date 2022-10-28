@@ -48,8 +48,13 @@ const RegisterScreen = () => {
       for (let errorItem of error.details) {
         const { context, message } = errorItem;
 
-        errors[context.key] = message;
+        if (!errors[context.key]) {
+          errors[context.key] = [];
+        }
+
+        errors[context.key].push(message);
       }
+
       setErrorsMessage(errors);
       return;
     }
@@ -77,7 +82,7 @@ const RegisterScreen = () => {
           placeholder="Name"
           value={name}
           onChange={e => setName(e.target.value)}
-          message={errorsMessage && errorsMessage.name}
+          messages={errorsMessage && errorsMessage.name}
         />
         <FormFieldPartial
           label="Email address"
@@ -86,7 +91,7 @@ const RegisterScreen = () => {
           placeholder="name@example.com"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          message={errorsMessage && errorsMessage.email}
+          messages={errorsMessage && errorsMessage.email}
         />
         <FormFieldPartial
           label="Password"
@@ -95,7 +100,7 @@ const RegisterScreen = () => {
           placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
-          message={errorsMessage && errorsMessage.password}
+          messages={errorsMessage && errorsMessage.password}
         />
         <FormFieldPartial
           label="Confirm Password"
@@ -104,7 +109,7 @@ const RegisterScreen = () => {
           placeholder="Confirm Password"
           value={confirmPassword}
           onChange={e => setConfirmPassword(e.target.value)}
-          message={errorsMessage && errorsMessage.confirmPassword}
+          messages={errorsMessage && errorsMessage.confirmPassword}
         />
 
         <Button variant="primary" type="submit">
