@@ -55,6 +55,7 @@ main {
 /* PortfolioAppScreen */
 .portfolio {
   background-color: #383d42;
+  min-height: 100vh;
 }
 
 .mask {
@@ -116,4 +117,27 @@ main {
 
 .table td {
   border-bottom: 1px solid #3f4549;
+}
+
+/* ExchangeAppScreen */
+.coin_cards {
+  padding-top: 10rem;
+}
+
+.coin_card_upper {
+  padding: 1rem;
+  width: 40rem;
+  background: #222637;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 0 20px 1px rgb(22, 21, 21);
+  margin: auto;
+}
+
+.coin_card_lower {
+  padding: 1rem;
+  width: 40rem;
+  background: #1a1e21;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 0 20px 1px rgb(22, 21, 21);
+  margin: auto;
 }
