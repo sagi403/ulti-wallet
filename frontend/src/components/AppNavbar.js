@@ -56,7 +56,7 @@ const MainNavbar = () => {
               />
               <span className="separator">|</span>
               <NavbarIconPartial
-                to="/"
+                to="/app/exchange"
                 icon={faArrowRightArrowLeft}
                 color="#208EE0"
                 classes="btn_nav"

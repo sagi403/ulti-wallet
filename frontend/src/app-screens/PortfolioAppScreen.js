@@ -93,7 +93,7 @@ const PortfolioAppScreen = () => {
           <CoinInfoBarPartial
             title="24h Change"
             info={
-              total24hChange > 0
+              total24hChange >= 0
                 ? `+$${localString(total24hChange)}`
                 : `-$${localString(total24hChange * -1)}`
             }

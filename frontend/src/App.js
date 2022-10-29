@@ -8,6 +8,7 @@ import RequireAuth from "./components/RequireAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { autoLogin } from "./store/userSlice";
+import ExchangeAppScreen from "./app-screens/ExchangeAppScreen";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const App = () => {
           <Route element={<RequireAuth />}>
             <Route path="app" element={<AppNavbar />}>
               <Route path="portfolio" element={<PortfolioAppScreen />} />
+              <Route path="exchange" element={<ExchangeAppScreen />} />
             </Route>
           </Route>
 

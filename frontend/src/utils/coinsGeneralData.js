@@ -17,7 +17,6 @@ const coinsGeneralData = coinInfo => {
 
     totalChange += initialChange * (coin.percent_change_24h / 100);
   }
-  totalChange = totalChange.toFixed(2);
 
   return { totalChange, bestAsset, worstAsset };
 };
