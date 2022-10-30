@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
-import { coinData } from "../store/coinSlice";
+import { coinUserData } from "../store/coinSlice";
 import coinsGeneralData from "../utils/coinsGeneralData";
 import CoinInfoBarPartial from "../partials/CoinInfoBarPartial";
 import localString from "../utils/localString";
@@ -57,7 +57,7 @@ const PortfolioAppScreen = () => {
       setBest24hAsset(bestAsset);
       setWorst24hAsset(worstAsset);
     } else {
-      dispatch(coinData());
+      dispatch(coinUserData());
     }
   }, [dispatch, coinInfo]);
 

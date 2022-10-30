@@ -41,7 +41,7 @@ const LoginScreen = () => {
       for (let errorItem of error.details) {
         const { context, message } = errorItem;
 
-        errors[context.key] = message;
+        errors[context.key] = [message];
       }
 
       setErrorsMessage(errors);
@@ -66,7 +66,7 @@ const LoginScreen = () => {
           placeholder="name@example.com"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          message={errorsMessage && errorsMessage.email}
+          messages={errorsMessage && errorsMessage.email}
         />
         <FormFieldPartial
           label="Password"
@@ -75,7 +75,7 @@ const LoginScreen = () => {
           placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
-          message={errorsMessage && errorsMessage.password}
+          messages={errorsMessage && errorsMessage.password}
         />
 
         <Button variant="primary" type="submit">

@@ -12,7 +12,7 @@ import {
   faArrowRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import NavbarIconPartial from "../partials/NavbarIconPartial";
-import { coinData } from "../store/coinSlice";
+import { coinUserData } from "../store/coinSlice";
 import localString from "../utils/localString";
 import { useLocation } from "react-router-dom";
 
@@ -70,7 +70,7 @@ const MainNavbar = () => {
                 <NavbarIconPartial
                   to={location.pathname}
                   icon={faArrowRotateLeft}
-                  onClick={() => dispatch(coinData())}
+                  onClick={() => dispatch(coinUserData())}
                 />
                 <NavbarIconPartial to="/" icon={faGear} />
                 <NavbarIconPartial
