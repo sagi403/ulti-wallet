@@ -148,6 +148,11 @@ const ExchangeAppScreen = () => {
           </Button>
         </div>
 
+        <div className="exchange_info">
+          <p>1 {coinExchangeFrom.symbol} = 14.23452 ETH</p>{" "}
+          {/* Need to update */}
+        </div>
+
         <ChooseCoinModal
           show={modalShow}
           onHide={() => setModalShow(false)}
