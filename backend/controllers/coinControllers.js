@@ -18,7 +18,7 @@ const getCoinsInfo = asyncHandler(async (req, res) => {
   res.json(coins);
 });
 
-// @desc    Get coins basic information
+// @desc    Get user coins basic information
 // @route   GET /api/coins/basic
 // @access  Private
 const getCoinsBasicInfo = asyncHandler(async (req, res) => {
@@ -39,18 +39,46 @@ const getCoinsBasicInfo = asyncHandler(async (req, res) => {
   res.json(coins);
 });
 
-// @desc    Get coins id
+// @desc    Get all coins basic information
+// @route   GET /api/coins/basicAll
+// @access  Private
+const getAllCoinsBasicInfo = asyncHandler(async (req, res) => {
+  const { rows: coins } = await pool.query(`SELECT * FROM coins`);
+
+  if (coins.length === 0) {
+    res.status(404);
+    throw new Error("Coin not found");
+  }
+
+  res.json(coins);
+});
+
+// @desc    Get user coins id
 // @route   GET /api/coins/coinsId
 // @access  Private
 const getCoinsId = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
-    `SELECT coins.id FROM addresses 
-    INNER JOIN coins ON 
-    addresses.coin_id = coins.id 
+    `SELECT coin_id FROM addresses 
     WHERE user_id = $1 
-    GROUP BY coins.id`,
+    GROUP BY coin_id`,
     [req.user.id]
   );
+
+  if (coins.length === 0) {
+    res.status(404);
+    throw new Error("Coin not found");
+  }
+
+  const coinsId = coins.map(coin => coin.coin_id);
+
+  res.json(coinsId);
+});
+
+// @desc    Get all coins id
+// @route   GET /api/coins/coinsIdAll
+// @access  Private
+const getAllCoinsId = asyncHandler(async (req, res) => {
+  const { rows: coins } = await pool.query(`SELECT id FROM coins`);
 
   if (coins.length === 0) {
     res.status(404);
@@ -62,4 +90,10 @@ const getCoinsId = asyncHandler(async (req, res) => {
   res.json(coinsId);
 });
 
-export { getCoinsInfo, getCoinsBasicInfo, getCoinsId };
+export {
+  getCoinsInfo,
+  getCoinsBasicInfo,
+  getCoinsId,
+  getAllCoinsBasicInfo,
+  getAllCoinsId,
+};
