@@ -24,6 +24,7 @@ const ExchangeAppScreen = () => {
     if (coinAmount > coin.balance) {
       setCoinAmount(coin.balance);
     }
+
     coinAmount ? setCoinReceivedMessage(true) : setCoinReceivedMessage(false);
   };
 
@@ -119,27 +120,32 @@ const ExchangeAppScreen = () => {
           </div>
         )}
 
-        <div className="btn_group_container">
+        <div className="btn_container">
           <ButtonGroup className="coin_amount_btn_group">
             <Button
               className="coin_amount_btn"
               onClick={() => handlePickAmountBtn("")}
             >
-              Min
+              MIN
             </Button>
             <Button
               className="coin_amount_btn"
               onClick={() => handlePickAmountBtn(coinExchangeFrom.balance / 2)}
             >
-              Half
+              HALF
             </Button>
             <Button
               className="coin_amount_btn"
               onClick={() => handlePickAmountBtn(coinExchangeFrom.balance)}
             >
-              Max
+              ALL
             </Button>
           </ButtonGroup>
+        </div>
+        <div className="btn_container">
+          <Button className="coins_exchange" disabled={!coinReceivedMessage}>
+            {coinReceivedMessage ? "EXCHANGE" : "ENTER AMOUNT"}
+          </Button>
         </div>
 
         <ChooseCoinModal
