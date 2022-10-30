@@ -187,7 +187,7 @@ const PortfolioAppScreen = () => {
                         {localString(item.percent_change_24h)}%
                       </td>
                       <td
-                        className="text-end align-middle chart_total_value"
+                        className="text-end align-middle"
                         style={{ color: item.color }}
                       >
                         {localString(item.balance)} {item.symbol}
