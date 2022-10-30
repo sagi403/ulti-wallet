@@ -1,7 +1,12 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
 import localString from "../utils/localString";
 
-const ChooseCoinModal = ({ show, onHide, coinInfo }) => {
+const ChooseCoinModal = ({ show, onHide, coinInfo, onCoinPick }) => {
+  const handleCoinPick = coin => {
+    onCoinPick(coin);
+    onHide();
+  };
+
   return (
     <Modal
       show={show}
@@ -26,7 +31,7 @@ const ChooseCoinModal = ({ show, onHide, coinInfo }) => {
                 <tr
                   key={item.id}
                   className="portfolio_table_body"
-                  onClick={onHide}
+                  onClick={() => handleCoinPick(item)}
                 >
                   <td className="ps-4 pt-3">
                     <Row>

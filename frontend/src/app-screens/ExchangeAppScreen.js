@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import ChooseCoinModal from "../components/ChooseCoinModal";
+import localString from "../utils/localString";
 
 const ExchangeAppScreen = () => {
   const [coinExchangeFrom, setCoinExchangeFrom] = useState("");
@@ -19,8 +20,23 @@ const ExchangeAppScreen = () => {
     }
   }, [coinInfo]);
 
-  const handleSetCoinAmount = () => {
+  const handleSetCoinAmount = coin => {
+    if (coinAmount > coin.balance) {
+      setCoinAmount(coin.balance);
+    }
     coinAmount ? setCoinReceivedMessage(true) : setCoinReceivedMessage(false);
+  };
+
+  const handleCoinPick = coin => {
+    setCoinExchangeFrom(coin);
+    setCoinAmount("");
+    setCoinReceivedMessage(false);
+  };
+
+  const handlePickAmountBtn = amount => {
+    setCoinAmount(amount);
+
+    amount ? setCoinReceivedMessage(true) : setCoinReceivedMessage(false);
   };
 
   return (
@@ -29,7 +45,7 @@ const ExchangeAppScreen = () => {
         <div className="coin_card_upper">
           <Row className="m-0">
             <Col className="d-flex justify-content-start">
-              <p className="exchange_extra_data">
+              <p className="chart_total_assets">
                 Balance: {coinExchangeFrom.balance} {coinExchangeFrom.name}
               </p>
             </Col>
@@ -54,20 +70,22 @@ const ExchangeAppScreen = () => {
                 style={{ color: coinExchangeFrom.color }}
                 value={coinAmount}
                 onChange={e => setCoinAmount(e.target.value)}
-                onBlur={handleSetCoinAmount}
+                onBlur={() => handleSetCoinAmount(coinExchangeFrom)}
               />
             </Col>
           </Row>
           <Row className="m-0">
             <Col className="d-flex justify-content-end">
-              <p className="exchange_extra_data">Balance:0.4214</p>
+              <p className="chart_total_assets">
+                ${localString(coinAmount * coinExchangeFrom.price)}
+              </p>
             </Col>
           </Row>
         </div>
         <div className="coin_card_lower">
           <Row className="m-0">
             <Col className="d-flex justify-content-start">
-              <p className="exchange_extra_data">
+              <p className="chart_total_assets">
                 Balance: {coinExchangeFrom.balance} {coinExchangeFrom.name}
               </p>
             </Col>
@@ -94,15 +112,41 @@ const ExchangeAppScreen = () => {
             </Col>
           </Row>
         </div>
+
         {coinReceivedMessage && (
           <div className="alert received_alert" role="alert">
             🎉 You will receive = $24.56 in ETH
           </div>
         )}
+
+        <div className="btn_group_container">
+          <ButtonGroup className="coin_amount_btn_group">
+            <Button
+              className="coin_amount_btn"
+              onClick={() => handlePickAmountBtn("")}
+            >
+              Min
+            </Button>
+            <Button
+              className="coin_amount_btn"
+              onClick={() => handlePickAmountBtn(coinExchangeFrom.balance / 2)}
+            >
+              Half
+            </Button>
+            <Button
+              className="coin_amount_btn"
+              onClick={() => handlePickAmountBtn(coinExchangeFrom.balance)}
+            >
+              Max
+            </Button>
+          </ButtonGroup>
+        </div>
+
         <ChooseCoinModal
           show={modalShow}
           onHide={() => setModalShow(false)}
           coinInfo={coinInfo}
+          onCoinPick={handleCoinPick}
         />
       </Container>
     </Container>
