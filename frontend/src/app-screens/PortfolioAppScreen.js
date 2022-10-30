@@ -56,14 +56,10 @@ const PortfolioAppScreen = () => {
       setTotal24hChange(totalChange);
       setBest24hAsset(bestAsset);
       setWorst24hAsset(worstAsset);
-    }
-  }, [coinInfo]);
-
-  useEffect(() => {
-    if (!coinInfo) {
+    } else {
       dispatch(coinData());
     }
-  }, [dispatch, coinInfo, userInfo]);
+  }, [dispatch, coinInfo]);
 
   return loadingCoin || loadingUser ? (
     <Loader />
