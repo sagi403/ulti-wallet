@@ -179,7 +179,9 @@ const ExchangeAppScreen = () => {
 
         {coinReceivedMessage && (
           <div className="alert received_alert" role="alert">
-            🎉 You will receive = $24.56 in ETH
+            🎉 You will receive = $
+            {localString(coinReceiveAmount * coinExchangeTo.price)} in{" "}
+            {coinExchangeTo.symbol}
           </div>
         )}
 
@@ -213,8 +215,14 @@ const ExchangeAppScreen = () => {
         </div>
 
         <div className="exchange_info">
-          <p>1 {coinExchangeFrom.symbol} = 14.23452 ETH</p>{" "}
-          {/* Need to update */}
+          <p>
+            1 {coinExchangeFrom.symbol} ={" "}
+            {localString(coinExchangeFrom.price / coinExchangeTo.price) ===
+            "0.00"
+              ? localString(coinExchangeFrom.price / coinExchangeTo.price, 5)
+              : localString(coinExchangeFrom.price / coinExchangeTo.price)}{" "}
+            {coinExchangeTo.symbol}
+          </p>
         </div>
 
         <ChooseCoinModal
