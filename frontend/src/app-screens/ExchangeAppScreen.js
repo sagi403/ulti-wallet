@@ -214,7 +214,7 @@ const ExchangeAppScreen = () => {
           </Button>
         </div>
 
-        <div className="exchange_info">
+        <div className="exchange_info pb-4">
           <p>
             1 {coinExchangeFrom.symbol} ={" "}
             {localString(coinExchangeFrom.price / coinExchangeTo.price) ===
