@@ -1,6 +1,6 @@
-const localString = x => {
+const localString = (x, fraction = 2) => {
   return x?.toLocaleString("en-US", {
-    maximumFractionDigits: 2,
+    maximumFractionDigits: fraction,
     minimumFractionDigits: 2,
   });
 };

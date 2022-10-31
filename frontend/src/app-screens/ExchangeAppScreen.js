@@ -10,7 +10,8 @@ import { coinAllData, coinUserData } from "../store/coinSlice";
 const ExchangeAppScreen = () => {
   const [coinExchangeFrom, setCoinExchangeFrom] = useState("");
   const [coinExchangeTo, setCoinExchangeTo] = useState("");
-  const [coinAmount, setCoinAmount] = useState("");
+  const [coinPayAmount, setCoinPayAmount] = useState("");
+  const [coinReceiveAmount, setCoinReceiveAmount] = useState("0.00");
   const [coinReceivedMessage, setCoinReceivedMessage] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [modalPickUser, setModalPickUser] = useState(true);
@@ -36,21 +37,42 @@ const ExchangeAppScreen = () => {
   }, [dispatch, userCoinsInfo, allCoinsInfo]);
 
   const handleSetCoinAmount = coin => {
-    if (coinAmount > coin.balance) {
-      setCoinAmount(coin.balance);
+    coinPayAmount
+      ? setCoinReceivedMessage(true)
+      : setCoinReceivedMessage(false);
+
+    if (coinPayAmount > coin.balance) {
+      setCoinPayAmount(coin.balance);
+      setCoinReceiveAmount(
+        (coin.balance * coinExchangeFrom.price) / coinExchangeTo.price
+      );
+      return;
     }
 
-    coinAmount ? setCoinReceivedMessage(true) : setCoinReceivedMessage(false);
+    setCoinReceiveAmount(
+      (coinPayAmount * coinExchangeFrom.price) / coinExchangeTo.price
+    );
   };
 
   const handleCoinPick = coin => {
     modalPickUser ? setCoinExchangeFrom(coin) : setCoinExchangeTo(coin);
-    setCoinAmount("");
-    setCoinReceivedMessage(false);
+
+    if (modalPickUser) {
+      setCoinPayAmount("");
+      setCoinReceiveAmount("0.00");
+      setCoinReceivedMessage(false);
+    } else {
+      setCoinReceiveAmount(
+        (coinPayAmount * coinExchangeFrom.price) / coin.price
+      );
+    }
   };
 
   const handlePickAmountBtn = amount => {
-    setCoinAmount(amount);
+    setCoinPayAmount(amount);
+    setCoinReceiveAmount(
+      (amount * coinExchangeFrom.price) / coinExchangeTo.price
+    );
 
     amount ? setCoinReceivedMessage(true) : setCoinReceivedMessage(false);
   };
@@ -68,6 +90,7 @@ const ExchangeAppScreen = () => {
   return (
     <Container fluid className="portfolio">
       <Container className="coin_cards">
+        {/* UPPER CARD */}
         <div className="coin_card_upper">
           <Row className="m-0">
             <Col className="d-flex justify-content-start">
@@ -97,8 +120,8 @@ const ExchangeAppScreen = () => {
                 placeholder="0.00"
                 className="amount_exchange"
                 style={{ color: coinExchangeFrom.color }}
-                value={coinAmount}
-                onChange={e => setCoinAmount(e.target.value)}
+                value={coinPayAmount}
+                onChange={e => setCoinPayAmount(+e.target.value)}
                 onBlur={() => handleSetCoinAmount(coinExchangeFrom)}
               />
             </Col>
@@ -106,11 +129,13 @@ const ExchangeAppScreen = () => {
           <Row className="m-0">
             <Col className="d-flex justify-content-end">
               <p className="chart_total_assets">
-                ${localString(coinAmount * coinExchangeFrom.price)}
+                =${localString(coinPayAmount * coinExchangeFrom.price)}
               </p>
             </Col>
           </Row>
         </div>
+
+        {/* LOWER CARD */}
         <div className="coin_card_lower">
           <Row className="m-0">
             <Col className="d-flex justify-content-start">
@@ -135,12 +160,19 @@ const ExchangeAppScreen = () => {
               </h2>
             </Col>
             <Col className="d-flex justify-content-end">
-              <h2>0.36851</h2>
+              <p
+                className="amount_received"
+                style={{ color: coinExchangeTo.color }}
+              >
+                {localString(coinReceiveAmount, 5)}
+              </p>
             </Col>
           </Row>
           <Row className="m-0">
             <Col className="d-flex justify-content-end">
-              <p>Balance:0.4214</p>
+              <p className="chart_total_assets">
+                =${localString(coinReceiveAmount * coinExchangeTo.price)}
+              </p>
             </Col>
           </Row>
         </div>
@@ -173,6 +205,7 @@ const ExchangeAppScreen = () => {
             </Button>
           </ButtonGroup>
         </div>
+
         <div className="btn_container">
           <Button className="coins_exchange" disabled={!coinReceivedMessage}>
             {coinReceivedMessage ? "EXCHANGE" : "ENTER AMOUNT"}
