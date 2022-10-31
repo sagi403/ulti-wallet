@@ -51,7 +51,7 @@ const ChooseCoinModal = ({ show, onHide, coinInfo, onCoinPick }) => {
                           {localString(item.balance)} {item.symbol}
                         </Row>
                         <Row className="coin_subtitle justify-content-end">
-                          ${localString(item.value)}
+                          ${localString(item.balance * item.price)}
                         </Row>
                       </Col>
                     </Row>

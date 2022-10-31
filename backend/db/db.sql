@@ -39,3 +39,5 @@ INSERT INTO addresses (public_address, user_id, coin_id, balance) VALUES ('19068
 SELECT * FROM addresses INNER JOIN users ON addresses.user_id = users.id;
 
 SELECT * FROM addresses INNER JOIN coins ON addresses.coin_id = coins.symbol;
+
+SELECT coins.id, symbol, name, logo, color, SUM(balance) AS balance FROM coins LEFT JOIN addresses ON coins.id = addresses.coin_id WHERE user_id = "c173c41e-1b8b-4b5b-a0a4-3e41f12cf10a" GROUP BY coins.id, symbol, name, logo, color

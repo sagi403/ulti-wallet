@@ -7,6 +7,7 @@ const initialState = {
     : null,
   totalValue: 0,
   userCoinsInfo: null,
+  allCoinsInfo: null,
   loading: false,
   error: "",
 };
@@ -81,6 +82,39 @@ export const coinUserData = createAsyncThunk(
   }
 );
 
+export const coinAllData = createAsyncThunk(
+  "coin/coinAllData",
+  async (data, thunkApi) => {
+    try {
+      const coinInfo = thunkApi.getState().coin.coinInfo;
+
+      if (!coinInfo) {
+        return thunkApi.rejectWithValue("No coin info found");
+      }
+
+      const coinsData = [];
+
+      const { data: userCoinsData } = await axios.get("/api/coins/basicAll");
+
+      for (let coin of userCoinsData) {
+        const price = coinInfo[coin.id].price;
+        coin.balance = +coin.balance;
+
+        coinsData.push({ ...coin, price });
+      }
+
+      return coinsData;
+    } catch (error) {
+      const err =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      return thunkApi.rejectWithValue(err);
+    }
+  }
+);
+
 const coinSlice = createSlice({
   name: "coin",
   initialState,
@@ -89,6 +123,7 @@ const coinSlice = createSlice({
       localStorage.removeItem("coinInfo");
       state.coinInfo = null;
       state.userCoinsInfo = null;
+      state.allCoinsInfo = null;
       state.totalValue = 0;
     },
   },
@@ -113,6 +148,17 @@ const coinSlice = createSlice({
       state.totalValue = action.payload.totalValue;
     },
     [coinUserData.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [coinAllData.pending]: state => {
+      state.loading = true;
+    },
+    [coinAllData.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.allCoinsInfo = action.payload;
+    },
+    [coinAllData.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

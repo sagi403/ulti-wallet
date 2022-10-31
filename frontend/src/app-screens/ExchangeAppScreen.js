@@ -1,26 +1,39 @@
 import { useEffect, useState } from "react";
 import { Button, ButtonGroup, Col, Container, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import ChooseCoinModal from "../components/ChooseCoinModal";
 import localString from "../utils/localString";
+import { coinAllData, coinUserData } from "../store/coinSlice";
 
 const ExchangeAppScreen = () => {
   const [coinExchangeFrom, setCoinExchangeFrom] = useState("");
+  const [coinExchangeTo, setCoinExchangeTo] = useState("");
   const [coinAmount, setCoinAmount] = useState("");
   const [coinReceivedMessage, setCoinReceivedMessage] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+  const [modalPickUser, setModalPickUser] = useState(true);
 
-  const { coinInfo, userCoinsInfo, loading, error } = useSelector(
+  const dispatch = useDispatch();
+
+  const { coinInfo, userCoinsInfo, allCoinsInfo, loading, error } = useSelector(
     state => state.coin
   );
 
   useEffect(() => {
-    if (userCoinsInfo) {
-      setCoinExchangeFrom(userCoinsInfo[0]);
+    if (!userCoinsInfo) {
+      dispatch(coinUserData());
+      return;
     }
-  }, [userCoinsInfo]);
+    if (!allCoinsInfo) {
+      dispatch(coinAllData());
+      return;
+    }
+
+    userCoinsInfo && setCoinExchangeFrom(userCoinsInfo[0]);
+    allCoinsInfo && setCoinExchangeTo(allCoinsInfo[0]);
+  }, [dispatch, userCoinsInfo, allCoinsInfo]);
 
   const handleSetCoinAmount = coin => {
     if (coinAmount > coin.balance) {
@@ -31,7 +44,7 @@ const ExchangeAppScreen = () => {
   };
 
   const handleCoinPick = coin => {
-    setCoinExchangeFrom(coin);
+    modalPickUser ? setCoinExchangeFrom(coin) : setCoinExchangeTo(coin);
     setCoinAmount("");
     setCoinReceivedMessage(false);
   };
@@ -40,6 +53,16 @@ const ExchangeAppScreen = () => {
     setCoinAmount(amount);
 
     amount ? setCoinReceivedMessage(true) : setCoinReceivedMessage(false);
+  };
+
+  const handleWhoPickModal = select => {
+    if (select === "user") {
+      setModalPickUser(true);
+    } else if (select === "all") {
+      setModalPickUser(false);
+    }
+
+    setModalShow(true);
   };
 
   return (
@@ -60,7 +83,10 @@ const ExchangeAppScreen = () => {
                 alt={coinExchangeFrom.name}
                 className="mask"
               />
-              <h2 className="coin_picker" onClick={() => setModalShow(true)}>
+              <h2
+                className="coin_picker"
+                onClick={() => handleWhoPickModal("user")}
+              >
                 {coinExchangeFrom.symbol} &nbsp;&nbsp;&nbsp;
                 <FontAwesomeIcon icon={faChevronDown} />
               </h2>
@@ -89,19 +115,22 @@ const ExchangeAppScreen = () => {
           <Row className="m-0">
             <Col className="d-flex justify-content-start">
               <p className="chart_total_assets">
-                Balance: {coinExchangeFrom.balance} {coinExchangeFrom.name}
+                Balance: {coinExchangeTo.balance} {coinExchangeTo.name}
               </p>
             </Col>
           </Row>
           <Row className="m-0">
             <Col className="d-flex justify-content-start">
               <img
-                src={coinExchangeFrom.logo}
-                alt={coinExchangeFrom.name}
+                src={coinExchangeTo.logo}
+                alt={coinExchangeTo.name}
                 className="mask"
               />
-              <h2 className="coin_picker">
-                {coinExchangeFrom.symbol} &nbsp;&nbsp;&nbsp;
+              <h2
+                className="coin_picker"
+                onClick={() => handleWhoPickModal("all")}
+              >
+                {coinExchangeTo.symbol} &nbsp;&nbsp;&nbsp;
                 <FontAwesomeIcon icon={faChevronDown} />
               </h2>
             </Col>
@@ -158,7 +187,7 @@ const ExchangeAppScreen = () => {
         <ChooseCoinModal
           show={modalShow}
           onHide={() => setModalShow(false)}
-          coinInfo={userCoinsInfo}
+          coinInfo={modalPickUser ? userCoinsInfo : allCoinsInfo}
           onCoinPick={handleCoinPick}
         />
       </Container>

@@ -43,7 +43,18 @@ const getCoinsBasicInfo = asyncHandler(async (req, res) => {
 // @route   GET /api/coins/basicAll
 // @access  Private
 const getAllCoinsBasicInfo = asyncHandler(async (req, res) => {
-  const { rows: coins } = await pool.query(`SELECT * FROM coins`);
+  const { rows: coins } = await pool.query(
+    `SELECT coins.id, symbol, name, logo, color, balance FROM coins
+    LEFT JOIN
+    (SELECT coins.id, SUM(balance) AS balance
+    FROM addresses INNER JOIN coins ON 
+    addresses.coin_id = coins.id 
+    WHERE user_id = $1 
+    GROUP BY coins.id) AS result
+    ON result.id = coins.id
+    ORDER BY balance ASC`,
+    [req.user.id]
+  );
 
   if (coins.length === 0) {
     res.status(404);
