@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
-import { coinUserData } from "../store/coinSlice";
+import { coinCmcData, coinUserData } from "../store/coinSlice";
 import coinsGeneralData from "../utils/coinsGeneralData";
 import CoinInfoBarPartial from "../partials/CoinInfoBarPartial";
 import localString from "../utils/localString";
@@ -30,22 +30,28 @@ const PortfolioAppScreen = () => {
   } = useSelector(state => state.user);
   const {
     coinInfo,
+    userCoinsInfo,
     totalValue,
     loading: loadingCoin,
     error: errorCoin,
   } = useSelector(state => state.coin);
 
   useEffect(() => {
-    if (coinInfo) {
-      const { totalChange, bestAsset, worstAsset } = coinsGeneralData(coinInfo);
+    if (!userCoinsInfo) {
+      dispatch(coinUserData());
+      return;
+    }
+    if (coinInfo && userCoinsInfo) {
+      const { totalChange, bestAsset, worstAsset } =
+        coinsGeneralData(userCoinsInfo);
 
       setChartData({
-        labels: coinInfo.map(coin => coin.symbol),
+        labels: userCoinsInfo.map(coin => coin.symbol),
         datasets: [
           {
             label: "Asset Allocation",
-            data: coinInfo.map(coin => coin.value),
-            backgroundColor: [...coinInfo.map(coin => coin.color)],
+            data: userCoinsInfo.map(coin => coin.value),
+            backgroundColor: [...userCoinsInfo.map(coin => coin.color)],
             borderColor: "grey",
             borderWidth: 0.5,
             cutout: "80%",
@@ -57,9 +63,9 @@ const PortfolioAppScreen = () => {
       setBest24hAsset(bestAsset);
       setWorst24hAsset(worstAsset);
     } else {
-      dispatch(coinUserData());
+      dispatch(coinCmcData());
     }
-  }, [dispatch, coinInfo]);
+  }, [dispatch, coinInfo, userCoinsInfo]);
 
   return loadingCoin || loadingUser ? (
     <Loader />
@@ -77,7 +83,7 @@ const PortfolioAppScreen = () => {
                   {localString(totalValue)}
                 </h3>
                 <h4 className="chart_total_assets">
-                  {coinInfo && `${coinInfo.length} Assets`}
+                  {userCoinsInfo && `${userCoinsInfo.length} Assets`}
                 </h4>
               </div>
               <DoughnutChart chartData={chartData} />
@@ -155,8 +161,8 @@ const PortfolioAppScreen = () => {
                 </tr>
               </thead>
               <tbody>
-                {coinInfo &&
-                  coinInfo.map(item => (
+                {userCoinsInfo &&
+                  userCoinsInfo.map(item => (
                     <tr key={item.id} className="portfolio_table_body">
                       <td className="ps-4">
                         <Row>

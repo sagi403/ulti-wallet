@@ -5,49 +5,35 @@ const initialState = {
   coinInfo: localStorage.getItem("coinInfo")
     ? JSON.parse(localStorage.getItem("coinInfo"))
     : null,
-  totalValue: localStorage.getItem("totalValue")
-    ? JSON.parse(localStorage.getItem("totalValue"))
-    : 0,
+  totalValue: 0,
+  userCoinsInfo: null,
   loading: false,
   error: "",
 };
 
-export const coinUserData = createAsyncThunk(
-  "coin/coinUserData",
+export const coinCmcData = createAsyncThunk(
+  "coin/coinCmcData",
   async (data, thunkApi) => {
-    const coinsData = [];
-
     try {
-      const { data: coinsId } = await axios.get("/api/coins/coinsId");
-      const { data: userCoinsData } = await axios.get("/api/coins/basic");
+      const { data: coinsId } = await axios.get("/api/coins/coinsIdAll");
       const { data: cmcCoinsData } = await axios.post("/api/cmc", {
         coinsId,
       });
 
-      let totalValue = 0;
+      const coinsData = {};
 
-      for (let i = 0; i < userCoinsData.length; i++) {
+      for (let id in cmcCoinsData) {
         const {
           quote: {
             USD: { price, percent_change_24h },
           },
-        } = cmcCoinsData[userCoinsData[i].id];
+        } = cmcCoinsData[id];
 
-        const value = +userCoinsData[i].balance * price;
-
-        coinsData.push({
-          ...userCoinsData[i],
-          price,
-          percent_change_24h,
-          value,
-        });
-
-        totalValue += value;
+        coinsData[id] = { price, percent_change_24h };
       }
 
       localStorage.setItem("coinInfo", JSON.stringify(coinsData));
-      localStorage.setItem("totalValue", JSON.stringify(totalValue));
-      return { coinsData, totalValue };
+      return { coinsData };
     } catch (error) {
       const err =
         error.response && error.response.data.message
@@ -59,41 +45,30 @@ export const coinUserData = createAsyncThunk(
   }
 );
 
-export const coinAllData = createAsyncThunk(
-  "coin/coinAllData",
+export const coinUserData = createAsyncThunk(
+  "coin/coinUserData",
   async (data, thunkApi) => {
-    const coinsData = [];
-
     try {
-      const { data: coinsId } = await axios.get("/api/coins/coinsIdAll");
-      const { data: userCoinsData } = await axios.get("/api/coins/basicAll");
-      const { data: cmcCoinsData } = await axios.post("/api/cmc", {
-        coinsId,
-      });
+      const coinInfo = thunkApi.getState().coin.coinInfo;
 
+      if (!coinInfo) {
+        return thunkApi.rejectWithValue("No coin info found");
+      }
+
+      const coinsData = [];
       let totalValue = 0;
 
-      for (let i = 0; i < userCoinsData.length; i++) {
-        const {
-          quote: {
-            USD: { price, percent_change_24h },
-          },
-        } = cmcCoinsData[userCoinsData[i].id];
+      const { data: userCoinsData } = await axios.get("/api/coins/basic");
 
-        const value = +userCoinsData[i].balance * price;
+      for (let coin of userCoinsData) {
+        coin.balance = +coin.balance;
+        const value = coin.balance * coinInfo[coin.id].price;
 
-        coinsData.push({
-          ...userCoinsData[i],
-          price,
-          percent_change_24h,
-          value,
-        });
+        coinsData.push({ ...coin, ...coinInfo[coin.id], value });
 
         totalValue += value;
       }
 
-      localStorage.setItem("coinInfo", JSON.stringify(coinsData));
-      localStorage.setItem("totalValue", JSON.stringify(totalValue));
       return { coinsData, totalValue };
     } catch (error) {
       const err =
@@ -112,33 +87,32 @@ const coinSlice = createSlice({
   reducers: {
     reset: state => {
       localStorage.removeItem("coinInfo");
-      localStorage.removeItem("totalValue");
       state.coinInfo = null;
+      state.userCoinsInfo = null;
       state.totalValue = 0;
     },
   },
   extraReducers: {
+    [coinCmcData.pending]: state => {
+      state.loading = true;
+    },
+    [coinCmcData.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.coinInfo = action.payload.coinsData;
+    },
+    [coinCmcData.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     [coinUserData.pending]: state => {
       state.loading = true;
     },
     [coinUserData.fulfilled]: (state, action) => {
       state.loading = false;
-      state.coinInfo = action.payload.coinsData;
+      state.userCoinsInfo = action.payload.coinsData;
       state.totalValue = action.payload.totalValue;
     },
     [coinUserData.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [coinAllData.pending]: state => {
-      state.loading = true;
-    },
-    [coinAllData.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.coinInfo = action.payload.coinsData;
-      state.totalValue = action.payload.totalValue;
-    },
-    [coinAllData.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

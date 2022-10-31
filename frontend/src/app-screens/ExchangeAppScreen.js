@@ -12,13 +12,15 @@ const ExchangeAppScreen = () => {
   const [coinReceivedMessage, setCoinReceivedMessage] = useState(false);
   const [modalShow, setModalShow] = useState(false);
 
-  const { coinInfo, loading, error } = useSelector(state => state.coin);
+  const { coinInfo, userCoinsInfo, loading, error } = useSelector(
+    state => state.coin
+  );
 
   useEffect(() => {
-    if (coinInfo) {
-      setCoinExchangeFrom(coinInfo[0]);
+    if (userCoinsInfo) {
+      setCoinExchangeFrom(userCoinsInfo[0]);
     }
-  }, [coinInfo]);
+  }, [userCoinsInfo]);
 
   const handleSetCoinAmount = coin => {
     if (coinAmount > coin.balance) {
@@ -156,7 +158,7 @@ const ExchangeAppScreen = () => {
         <ChooseCoinModal
           show={modalShow}
           onHide={() => setModalShow(false)}
-          coinInfo={coinInfo}
+          coinInfo={userCoinsInfo}
           onCoinPick={handleCoinPick}
         />
       </Container>
