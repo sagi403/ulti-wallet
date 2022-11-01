@@ -6,6 +6,8 @@ import localString from "../utils/localString";
 import { coinAllData, coinUserData } from "../store/coinSlice";
 import ExchangeCardUpper from "../partials/ExchangeCardUpper";
 import ExchangeCardLower from "../partials/ExchangeCardLower";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowsUpDown } from "@fortawesome/free-solid-svg-icons";
 
 const ExchangeAppScreen = () => {
   const [coinExchangeFrom, setCoinExchangeFrom] = useState("");
@@ -87,21 +89,35 @@ const ExchangeAppScreen = () => {
     setModalShow(true);
   };
 
+  const handleSwap = () => {
+    const temp = coinExchangeFrom;
+    setCoinExchangeFrom(coinExchangeTo);
+    setCoinExchangeTo(temp);
+
+    setCoinPayAmount("");
+    setCoinReceiveAmount("0.00");
+  };
+
   return (
     <Container fluid className="portfolio">
       <Container className="coin_cards">
-        <ExchangeCardUpper
-          coin={coinExchangeFrom}
-          amount={coinPayAmount}
-          onPickModal={handleWhoPickModal}
-          onSettingAmount={setCoinPayAmount}
-          handleSetCoinAmount={handleSetCoinAmount}
-        />
-        <ExchangeCardLower
-          coin={coinExchangeTo}
-          amount={coinReceiveAmount}
-          onPickModal={handleWhoPickModal}
-        />
+        <div className="position-relative mx-auto">
+          <ExchangeCardUpper
+            coin={coinExchangeFrom}
+            amount={coinPayAmount}
+            onPickModal={handleWhoPickModal}
+            onSettingAmount={setCoinPayAmount}
+            handleSetCoinAmount={handleSetCoinAmount}
+          />
+          <p className="swap_btn" onClick={() => handleSwap()}>
+            <FontAwesomeIcon icon={faArrowsUpDown} />
+          </p>
+          <ExchangeCardLower
+            coin={coinExchangeTo}
+            amount={coinReceiveAmount}
+            onPickModal={handleWhoPickModal}
+          />
+        </div>
 
         {coinReceivedMessage && (
           <div className="alert received_alert" role="alert">
