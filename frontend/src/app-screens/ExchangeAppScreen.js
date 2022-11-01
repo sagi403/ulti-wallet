@@ -6,6 +6,8 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import ChooseCoinModal from "../components/ChooseCoinModal";
 import localString from "../utils/localString";
 import { coinAllData, coinUserData } from "../store/coinSlice";
+import ExchangeCardUpper from "../partials/ExchangeCardUpper";
+import ExchangeCardLower from "../partials/ExchangeCardLower";
 
 const ExchangeAppScreen = () => {
   const [coinExchangeFrom, setCoinExchangeFrom] = useState("");
@@ -90,92 +92,18 @@ const ExchangeAppScreen = () => {
   return (
     <Container fluid className="portfolio">
       <Container className="coin_cards">
-        {/* UPPER CARD */}
-        <div className="coin_card_upper">
-          <Row className="m-0">
-            <Col className="d-flex justify-content-start">
-              <p className="chart_total_assets">
-                Balance: {coinExchangeFrom.balance} {coinExchangeFrom.name}
-              </p>
-            </Col>
-          </Row>
-          <Row className="m-0">
-            <Col className="d-flex justify-content-start">
-              <img
-                src={coinExchangeFrom.logo}
-                alt={coinExchangeFrom.name}
-                className="mask"
-              />
-              <h2
-                className="coin_picker"
-                onClick={() => handleWhoPickModal("user")}
-              >
-                {coinExchangeFrom.symbol} &nbsp;&nbsp;&nbsp;
-                <FontAwesomeIcon icon={faChevronDown} />
-              </h2>
-            </Col>
-            <Col className="d-flex justify-content-end">
-              <input
-                type="number"
-                placeholder="0.00"
-                className="amount_exchange"
-                style={{ color: coinExchangeFrom.color }}
-                value={coinPayAmount}
-                onChange={e => setCoinPayAmount(+e.target.value)}
-                onBlur={() => handleSetCoinAmount(coinExchangeFrom)}
-              />
-            </Col>
-          </Row>
-          <Row className="m-0">
-            <Col className="d-flex justify-content-end">
-              <p className="chart_total_assets">
-                =${localString(coinPayAmount * coinExchangeFrom.price)}
-              </p>
-            </Col>
-          </Row>
-        </div>
-
-        {/* LOWER CARD */}
-        <div className="coin_card_lower">
-          <Row className="m-0">
-            <Col className="d-flex justify-content-start">
-              <p className="chart_total_assets">
-                Balance: {coinExchangeTo.balance} {coinExchangeTo.name}
-              </p>
-            </Col>
-          </Row>
-          <Row className="m-0">
-            <Col className="d-flex justify-content-start">
-              <img
-                src={coinExchangeTo.logo}
-                alt={coinExchangeTo.name}
-                className="mask"
-              />
-              <h2
-                className="coin_picker"
-                onClick={() => handleWhoPickModal("all")}
-              >
-                {coinExchangeTo.symbol} &nbsp;&nbsp;&nbsp;
-                <FontAwesomeIcon icon={faChevronDown} />
-              </h2>
-            </Col>
-            <Col className="d-flex justify-content-end">
-              <p
-                className="amount_received"
-                style={{ color: coinExchangeTo.color }}
-              >
-                {localString(coinReceiveAmount, 5)}
-              </p>
-            </Col>
-          </Row>
-          <Row className="m-0">
-            <Col className="d-flex justify-content-end">
-              <p className="chart_total_assets">
-                =${localString(coinReceiveAmount * coinExchangeTo.price)}
-              </p>
-            </Col>
-          </Row>
-        </div>
+        <ExchangeCardUpper
+          coin={coinExchangeFrom}
+          amount={coinPayAmount}
+          onPickModal={handleWhoPickModal}
+          onSettingAmount={setCoinPayAmount}
+          handleSetCoinAmount={handleSetCoinAmount}
+        />
+        <ExchangeCardLower
+          coin={coinExchangeTo}
+          amount={coinReceiveAmount}
+          onPickModal={handleWhoPickModal}
+        />
 
         {coinReceivedMessage && (
           <div className="alert received_alert" role="alert">
