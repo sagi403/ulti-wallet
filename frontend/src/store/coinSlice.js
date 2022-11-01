@@ -50,11 +50,9 @@ export const coinUserData = createAsyncThunk(
   "coin/coinUserData",
   async (data, thunkApi) => {
     try {
-      const coinInfo = thunkApi.getState().coin.coinInfo;
-
-      if (!coinInfo) {
-        return thunkApi.rejectWithValue("No coin info found");
-      }
+      const coinInfo = thunkApi.getState().coin.coinInfo
+        ? thunkApi.getState().coin.coinInfo
+        : (await thunkApi.dispatch(coinCmcData())).payload.coinsData;
 
       const coinsData = [];
       let totalValue = 0;
@@ -86,11 +84,9 @@ export const coinAllData = createAsyncThunk(
   "coin/coinAllData",
   async (data, thunkApi) => {
     try {
-      const coinInfo = thunkApi.getState().coin.coinInfo;
-
-      if (!coinInfo) {
-        return thunkApi.rejectWithValue("No coin info found");
-      }
+      const coinInfo = thunkApi.getState().coin.coinInfo
+        ? thunkApi.getState().coin.coinInfo
+        : (await thunkApi.dispatch(coinCmcData())).payload.coinsData;
 
       const coinsData = [];
 

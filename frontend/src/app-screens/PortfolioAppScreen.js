@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
-import { coinCmcData, coinUserData } from "../store/coinSlice";
+import { coinUserData } from "../store/coinSlice";
 import coinsGeneralData from "../utils/coinsGeneralData";
 import CoinInfoBarPartial from "../partials/CoinInfoBarPartial";
 import localString from "../utils/localString";
@@ -29,7 +29,6 @@ const PortfolioAppScreen = () => {
     error: errorUser,
   } = useSelector(state => state.user);
   const {
-    coinInfo,
     userCoinsInfo,
     totalValue,
     loading: loadingCoin,
@@ -41,31 +40,28 @@ const PortfolioAppScreen = () => {
       dispatch(coinUserData());
       return;
     }
-    if (coinInfo && userCoinsInfo) {
-      const { totalChange, bestAsset, worstAsset } =
-        coinsGeneralData(userCoinsInfo);
 
-      setChartData({
-        labels: userCoinsInfo.map(coin => coin.symbol),
-        datasets: [
-          {
-            label: "Asset Allocation",
-            data: userCoinsInfo.map(coin => coin.value),
-            backgroundColor: [...userCoinsInfo.map(coin => coin.color)],
-            borderColor: "grey",
-            borderWidth: 0.5,
-            cutout: "80%",
-          },
-        ],
-      });
+    const { totalChange, bestAsset, worstAsset } =
+      coinsGeneralData(userCoinsInfo);
 
-      setTotal24hChange(totalChange);
-      setBest24hAsset(bestAsset);
-      setWorst24hAsset(worstAsset);
-    } else {
-      dispatch(coinCmcData());
-    }
-  }, [dispatch, coinInfo, userCoinsInfo]);
+    setChartData({
+      labels: userCoinsInfo.map(coin => coin.symbol),
+      datasets: [
+        {
+          label: "Asset Allocation",
+          data: userCoinsInfo.map(coin => coin.value),
+          backgroundColor: [...userCoinsInfo.map(coin => coin.color)],
+          borderColor: "grey",
+          borderWidth: 0.5,
+          cutout: "80%",
+        },
+      ],
+    });
+
+    setTotal24hChange(totalChange);
+    setBest24hAsset(bestAsset);
+    setWorst24hAsset(worstAsset);
+  }, [dispatch, userCoinsInfo]);
 
   return loadingCoin || loadingUser ? (
     <Loader />

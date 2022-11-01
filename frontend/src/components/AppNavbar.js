@@ -2,7 +2,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Outlet } from "react-router-dom";
-import { logout } from "../store/generalSlice";
+import { logout, refreshStats } from "../store/generalSlice";
 import {
   faRightFromBracket,
   faChartPie,
@@ -12,7 +12,6 @@ import {
   faArrowRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import NavbarIconPartial from "../partials/NavbarIconPartial";
-import { coinCmcData } from "../store/coinSlice";
 import localString from "../utils/localString";
 import { useLocation } from "react-router-dom";
 
@@ -70,7 +69,7 @@ const MainNavbar = () => {
                 <NavbarIconPartial
                   to={location.pathname}
                   icon={faArrowRotateLeft}
-                  onClick={() => dispatch(coinCmcData())}
+                  onClick={() => dispatch(refreshStats())}
                 />
                 <NavbarIconPartial to="/" icon={faGear} />
                 <NavbarIconPartial

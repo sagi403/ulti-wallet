@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button, ButtonGroup, Col, Container, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import ChooseCoinModal from "../components/ChooseCoinModal";
 import localString from "../utils/localString";
 import { coinAllData, coinUserData } from "../store/coinSlice";
@@ -20,7 +18,7 @@ const ExchangeAppScreen = () => {
 
   const dispatch = useDispatch();
 
-  const { coinInfo, userCoinsInfo, allCoinsInfo, loading, error } = useSelector(
+  const { userCoinsInfo, allCoinsInfo, loading, error } = useSelector(
     state => state.coin
   );
 
