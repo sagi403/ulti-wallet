@@ -8,6 +8,9 @@ import ExchangeCardUpper from "../partials/ExchangeCardUpper";
 import ExchangeCardLower from "../partials/ExchangeCardLower";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsUpDown } from "@fortawesome/free-solid-svg-icons";
+import SuccessfulExchangeModal from "../components/SuccessfulExchangeModal";
+
+let newCoins = {};
 
 const ExchangeAppScreen = () => {
   const [coinExchangeFrom, setCoinExchangeFrom] = useState("");
@@ -16,6 +19,7 @@ const ExchangeAppScreen = () => {
   const [coinReceiveAmount, setCoinReceiveAmount] = useState("0.00");
   const [coinReceivedMessage, setCoinReceivedMessage] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+  const [successModalShow, setSuccessModalShow] = useState(false);
   const [modalPickUser, setModalPickUser] = useState(true);
 
   const dispatch = useDispatch();
@@ -34,8 +38,10 @@ const ExchangeAppScreen = () => {
       return;
     }
 
-    userCoinsInfo && setCoinExchangeFrom(userCoinsInfo[0]);
-    allCoinsInfo && setCoinExchangeTo(allCoinsInfo[0]);
+    setCoinExchangeFrom(userCoinsInfo[0]);
+    userCoinsInfo[0].id !== allCoinsInfo[0].id
+      ? setCoinExchangeTo(allCoinsInfo[0])
+      : setCoinExchangeTo(allCoinsInfo[1]);
   }, [dispatch, userCoinsInfo, allCoinsInfo]);
 
   const handleSetCoinAmount = coin => {
@@ -96,6 +102,18 @@ const ExchangeAppScreen = () => {
 
     setCoinPayAmount("");
     setCoinReceiveAmount("0.00");
+    setCoinReceivedMessage(false);
+  };
+
+  const handleSuccessfulSwap = () => {
+    const usdReceivedAmount = coinReceiveAmount * coinExchangeTo.price;
+    newCoins = {
+      ...coinExchangeTo,
+      coinReceiveAmount,
+      usdReceivedAmount,
+    };
+
+    setSuccessModalShow(true);
   };
 
   return (
@@ -151,7 +169,11 @@ const ExchangeAppScreen = () => {
         </div>
 
         <div className="btn_container">
-          <Button className="coins_exchange" disabled={!coinReceivedMessage}>
+          <Button
+            className="coins_exchange"
+            disabled={!coinReceivedMessage}
+            onClick={handleSuccessfulSwap}
+          >
             {coinReceivedMessage ? "EXCHANGE" : "ENTER AMOUNT"}
           </Button>
         </div>
@@ -171,6 +193,12 @@ const ExchangeAppScreen = () => {
           show={modalShow}
           onHide={() => setModalShow(false)}
           coinInfo={modalPickUser ? userCoinsInfo : allCoinsInfo}
+          onCoinPick={handleCoinPick}
+        />
+        <SuccessfulExchangeModal
+          show={successModalShow}
+          onHide={() => setSuccessModalShow(false)}
+          coinInfo={newCoins}
           onCoinPick={handleCoinPick}
         />
       </Container>
