@@ -15,7 +15,7 @@ const ExchangeCardUpper = ({
       <Row className="m-0">
         <Col className="d-flex justify-content-start">
           <p className="chart_total_assets">
-            Balance: {coin.balance} {coin.name}
+            Balance: {localString(coin.balance)} {coin.name}
           </p>
         </Col>
       </Row>

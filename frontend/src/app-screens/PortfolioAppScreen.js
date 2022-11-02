@@ -188,7 +188,7 @@ const PortfolioAppScreen = () => {
                         className="text-end align-middle"
                         style={{ color: item.color }}
                       >
-                        {localString(item.balance)} {item.symbol}
+                        {localString(item.balance, 3)} {item.symbol}
                       </td>
                       <td className="text-end align-middle chart_total_value">
                         ${localString(item.value)}

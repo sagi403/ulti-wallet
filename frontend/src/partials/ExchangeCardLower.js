@@ -9,7 +9,7 @@ const ExchangeCardLower = ({ coin, amount, onPickModal }) => {
       <Row className="m-0">
         <Col className="d-flex justify-content-start">
           <p className="chart_total_assets">
-            Balance: {coin.balance} {coin.name}
+            Balance: {localString(coin.balance) || 0} {coin.name}
           </p>
         </Col>
       </Row>

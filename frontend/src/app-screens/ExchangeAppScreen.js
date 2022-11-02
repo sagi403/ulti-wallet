@@ -9,6 +9,9 @@ import ExchangeCardLower from "../partials/ExchangeCardLower";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsUpDown } from "@fortawesome/free-solid-svg-icons";
 import SuccessfulExchangeModal from "../components/SuccessfulExchangeModal";
+import axios from "axios";
+import FailExchangeModal from "../components/FailExchangeModal";
+import { refreshStats } from "../store/generalSlice";
 
 let newCoins = {};
 
@@ -20,6 +23,7 @@ const ExchangeAppScreen = () => {
   const [coinReceivedMessage, setCoinReceivedMessage] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [successModalShow, setSuccessModalShow] = useState(false);
+  const [failedTransModal, setFailedTransModal] = useState(false);
   const [modalPickUser, setModalPickUser] = useState(true);
 
   const dispatch = useDispatch();
@@ -44,6 +48,12 @@ const ExchangeAppScreen = () => {
       : setCoinExchangeTo(allCoinsInfo[1]);
   }, [dispatch, userCoinsInfo, allCoinsInfo]);
 
+  const resetStates = () => {
+    setCoinPayAmount("");
+    setCoinReceiveAmount("0.00");
+    setCoinReceivedMessage(false);
+  };
+
   const handleSetCoinAmount = coin => {
     coinPayAmount
       ? setCoinReceivedMessage(true)
@@ -66,9 +76,7 @@ const ExchangeAppScreen = () => {
     modalPickUser ? setCoinExchangeFrom(coin) : setCoinExchangeTo(coin);
 
     if (modalPickUser) {
-      setCoinPayAmount("");
-      setCoinReceiveAmount("0.00");
-      setCoinReceivedMessage(false);
+      resetStates();
     } else {
       setCoinReceiveAmount(
         (coinPayAmount * coinExchangeFrom.price) / coin.price
@@ -100,18 +108,42 @@ const ExchangeAppScreen = () => {
     setCoinExchangeFrom(coinExchangeTo);
     setCoinExchangeTo(temp);
 
-    setCoinPayAmount("");
-    setCoinReceiveAmount("0.00");
-    setCoinReceivedMessage(false);
+    resetStates();
   };
 
-  const handleSuccessfulSwap = () => {
+  const handleSuccessfulSwap = async () => {
+    // Sent to modal
     const usdReceivedAmount = coinReceiveAmount * coinExchangeTo.price;
     newCoins = {
       ...coinExchangeTo,
       coinReceiveAmount,
       usdReceivedAmount,
     };
+
+    // Sent to backend
+    const firstCoinNewAmount =
+      coinExchangeFrom.balance - coinPayAmount >= 0
+        ? coinExchangeFrom.balance - coinPayAmount
+        : null;
+    const oldCoinId = coinExchangeFrom.id;
+    const newCoinId = coinExchangeTo.id;
+
+    const transactionData = {
+      firstCoinNewAmount,
+      secondCoinNewAmount: coinReceiveAmount,
+      oldCoinId,
+      newCoinId,
+    };
+
+    try {
+      await axios.put("/api/coins/swap", transactionData);
+      dispatch(refreshStats());
+    } catch (error) {
+      setFailedTransModal(true);
+      return;
+    } finally {
+      resetStates();
+    }
 
     setSuccessModalShow(true);
   };
@@ -200,6 +232,10 @@ const ExchangeAppScreen = () => {
           onHide={() => setSuccessModalShow(false)}
           coinInfo={newCoins}
           onCoinPick={handleCoinPick}
+        />
+        <FailExchangeModal
+          show={failedTransModal}
+          onHide={() => setFailedTransModal(false)}
         />
       </Container>
     </Container>

@@ -23,13 +23,14 @@ const getCoinsInfo = asyncHandler(async (req, res) => {
 // @access  Private
 const getCoinsBasicInfo = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
-    `SELECT coins.id, symbol, name, logo, color, CAST(SUM(balance) AS INTEGER) AS balance
+    `SELECT coins.id, symbol, name, logo, color, CAST(SUM(balance) AS FLOAT) AS balance
     FROM addresses INNER JOIN coins ON 
     addresses.coin_id = coins.id 
     WHERE user_id = $1 
     GROUP BY coins.id, symbol, name, logo, color`,
     [req.user.id]
   );
+  console.log(typeof coins[0].balance);
 
   if (coins.length === 0) {
     res.status(404);
@@ -85,7 +86,7 @@ const getAllCoinsBasicInfo = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
     `SELECT coins.id, symbol, name, logo, color, balance FROM coins
     LEFT JOIN
-    (SELECT coins.id, CAST(SUM(balance) AS INTEGER) AS balance
+    (SELECT coins.id, CAST(SUM(balance) AS FLOAT) AS balance
     FROM addresses INNER JOIN coins ON 
     addresses.coin_id = coins.id 
     WHERE user_id = $1 
