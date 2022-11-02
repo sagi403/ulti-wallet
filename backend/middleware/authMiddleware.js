@@ -18,6 +18,11 @@ const protect = asyncHandler(async (req, res, next) => {
         "SELECT id, name, email, is_admin FROM users WHERE id = $1",
         [decoded.id]
       );
+
+      if (user.rows.length === 0) {
+        throw new Error();
+      }
+
       [req.user] = user.rows;
 
       next();

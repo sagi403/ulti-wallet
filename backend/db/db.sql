@@ -25,7 +25,7 @@ CREATE TABLE addresses (
   public_address uuid NOT NULL DEFAULT uuid_generate_v4(),
   user_id uuid DEFAULT uuid_generate_v4() NOT NULL REFERENCES users(id),
   coin_id INT NOT NULL REFERENCES coins(id),
-  balance BIGINT NOT NULL,
+  balance INT NOT NULL,
   created_at DATE NOT NULL DEFAULT CURRENT_DATE
 );
 

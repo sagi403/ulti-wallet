@@ -23,7 +23,7 @@ const getCoinsInfo = asyncHandler(async (req, res) => {
 // @access  Private
 const getCoinsBasicInfo = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
-    `SELECT coins.id, symbol, name, logo, color, SUM(balance) AS balance
+    `SELECT coins.id, symbol, name, logo, color, CAST(SUM(balance) AS INTEGER) AS balance
     FROM addresses INNER JOIN coins ON 
     addresses.coin_id = coins.id 
     WHERE user_id = $1 
@@ -39,6 +39,45 @@ const getCoinsBasicInfo = asyncHandler(async (req, res) => {
   res.json(coins);
 });
 
+// @desc    Update coins swapping
+// @route   PUT /api/coins/swap
+// @access  Private
+const updateSwapCoins = asyncHandler(async (req, res) => {
+  const { firstCoinNewAmount, secondCoinNewAmount, oldCoinId, newCoinId } =
+    req.body;
+
+  if (
+    typeof firstCoinNewAmount !== "number" ||
+    typeof secondCoinNewAmount !== "number" ||
+    typeof oldCoinId !== "number" ||
+    typeof newCoinId !== "number"
+  ) {
+    res.status(400);
+    throw new Error("Invalid swap information");
+  }
+
+  const { rows: coins } = await pool.query(
+    `WITH updated AS (
+      UPDATE addresses
+      SET balance = 0
+      WHERE user_id = $1 AND addresses.coin_id = $2
+    )
+    INSERT INTO addresses (user_id, coin_id, balance)
+    VALUES
+      ($1, $2, $3),
+      ($1, $4, $5)
+    RETURNING *;`,
+    [req.user.id, oldCoinId, firstCoinNewAmount, newCoinId, secondCoinNewAmount]
+  );
+
+  if (coins.length === 0) {
+    res.status(404);
+    throw new Error("Swap failed");
+  }
+
+  res.json(coins);
+});
+
 // @desc    Get all coins basic information
 // @route   GET /api/coins/basicAll
 // @access  Private
@@ -46,13 +85,13 @@ const getAllCoinsBasicInfo = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
     `SELECT coins.id, symbol, name, logo, color, balance FROM coins
     LEFT JOIN
-    (SELECT coins.id, SUM(balance) AS balance
+    (SELECT coins.id, CAST(SUM(balance) AS INTEGER) AS balance
     FROM addresses INNER JOIN coins ON 
     addresses.coin_id = coins.id 
     WHERE user_id = $1 
     GROUP BY coins.id) AS result
     ON result.id = coins.id
-    ORDER BY balance ASC`,
+    ORDER BY balance DESC NULLS LAST`,
     [req.user.id]
   );
 
@@ -104,6 +143,7 @@ const getAllCoinsId = asyncHandler(async (req, res) => {
 export {
   getCoinsInfo,
   getCoinsBasicInfo,
+  updateSwapCoins,
   getCoinsId,
   getAllCoinsBasicInfo,
   getAllCoinsId,

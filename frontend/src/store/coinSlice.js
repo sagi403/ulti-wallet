@@ -60,7 +60,6 @@ export const coinUserData = createAsyncThunk(
       const { data: userCoinsData } = await axios.get("/api/coins/basic");
 
       for (let coin of userCoinsData) {
-        coin.balance = +coin.balance;
         const value = coin.balance * coinInfo[coin.id].price;
 
         coinsData.push({ ...coin, ...coinInfo[coin.id], value });
@@ -94,7 +93,6 @@ export const coinAllData = createAsyncThunk(
 
       for (let coin of userCoinsData) {
         const price = coinInfo[coin.id].price;
-        coin.balance = +coin.balance;
 
         coinsData.push({ ...coin, price });
       }

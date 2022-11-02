@@ -5,6 +5,7 @@ import pool from "../db/index.js";
 // @route   GET /api/address
 // @access  Private
 const getUserAddresses = asyncHandler(async (req, res) => {
+  // Need to combine calls
   const {
     rows: [user],
   } = await pool.query("SELECT id FROM users WHERE id = $1", [req.user.id]);

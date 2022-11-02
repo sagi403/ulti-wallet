@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { reset as userReset } from "./userSlice";
-import { coinCmcData, coinUserData, reset as coinReset } from "./coinSlice";
+import {
+  coinAllData,
+  coinCmcData,
+  coinUserData,
+  reset as coinReset,
+} from "./coinSlice";
 
 const initialState = {};
 
@@ -22,6 +27,7 @@ export const refreshStats = createAsyncThunk(
     try {
       await thunkApi.dispatch(coinCmcData());
       await thunkApi.dispatch(coinUserData());
+      await thunkApi.dispatch(coinAllData());
     } catch (error) {
       return thunkApi.rejectWithValue(error);
     }
