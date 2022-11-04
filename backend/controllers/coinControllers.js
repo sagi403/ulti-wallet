@@ -30,7 +30,6 @@ const getCoinsBasicInfo = asyncHandler(async (req, res) => {
     GROUP BY coins.id, symbol, name, logo, color`,
     [req.user.id]
   );
-  console.log(typeof coins[0].balance);
 
   if (coins.length === 0) {
     res.status(404);
@@ -44,12 +43,11 @@ const getCoinsBasicInfo = asyncHandler(async (req, res) => {
 // @route   PUT /api/coins/swap
 // @access  Private
 const updateSwapCoins = asyncHandler(async (req, res) => {
-  const { firstCoinNewAmount, secondCoinNewAmount, oldCoinId, newCoinId } =
-    req.body;
+  const { firstCoinAmount, secondCoinAmount, oldCoinId, newCoinId } = req.body;
 
   if (
-    typeof firstCoinNewAmount !== "number" ||
-    typeof secondCoinNewAmount !== "number" ||
+    typeof firstCoinAmount !== "number" ||
+    typeof secondCoinAmount !== "number" ||
     typeof oldCoinId !== "number" ||
     typeof newCoinId !== "number"
   ) {
@@ -57,26 +55,49 @@ const updateSwapCoins = asyncHandler(async (req, res) => {
     throw new Error("Invalid swap information");
   }
 
-  const { rows: coins } = await pool.query(
-    `WITH updated AS (
-      UPDATE addresses
+  const client = await pool.connect();
+
+  try {
+    const {
+      rows: [amount],
+    } = await client.query(
+      `SELECT CAST(SUM(balance) AS FLOAT) AS balance
+      FROM addresses
+      WHERE user_id = $1 AND coin_id = $2`,
+      [req.user.id, oldCoinId]
+    );
+
+    if (!amount || amount.balance < firstCoinAmount) {
+      throw new Error("You don't have enough coins for the transaction");
+    }
+
+    await client.query("BEGIN");
+    await client.query(
+      `UPDATE addresses
       SET balance = 0
-      WHERE user_id = $1 AND addresses.coin_id = $2
-    )
-    INSERT INTO addresses (user_id, coin_id, balance)
-    VALUES
-      ($1, $2, $3),
-      ($1, $4, $5)
-    RETURNING *;`,
-    [req.user.id, oldCoinId, firstCoinNewAmount, newCoinId, secondCoinNewAmount]
-  );
+      WHERE user_id = $1 AND coin_id = $2 AND balance != 0`,
+      [req.user.id, oldCoinId]
+    );
 
-  if (coins.length === 0) {
-    res.status(404);
-    throw new Error("Swap failed");
+    const newFirstAmount = amount.balance - firstCoinAmount;
+
+    const { rows: coins } = await client.query(
+      `INSERT INTO addresses (user_id, coin_id, balance)
+      VALUES
+        ($1, $2, $3),
+        ($1, $4, $5)
+      RETURNING *`,
+      [req.user.id, oldCoinId, newFirstAmount, newCoinId, secondCoinAmount]
+    );
+    await client.query("COMMIT");
+
+    res.json(coins);
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw new Error(error);
+  } finally {
+    client.release();
   }
-
-  res.json(coins);
 });
 
 // @desc    Get all coins basic information

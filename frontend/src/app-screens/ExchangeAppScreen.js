@@ -121,18 +121,11 @@ const ExchangeAppScreen = () => {
     };
 
     // Sent to backend
-    const firstCoinNewAmount =
-      coinExchangeFrom.balance - coinPayAmount >= 0
-        ? coinExchangeFrom.balance - coinPayAmount
-        : null;
-    const oldCoinId = coinExchangeFrom.id;
-    const newCoinId = coinExchangeTo.id;
-
     const transactionData = {
-      firstCoinNewAmount,
-      secondCoinNewAmount: coinReceiveAmount,
-      oldCoinId,
-      newCoinId,
+      firstCoinAmount: coinPayAmount,
+      secondCoinAmount: coinReceiveAmount,
+      oldCoinId: coinExchangeFrom.id,
+      newCoinId: coinExchangeTo.id,
     };
 
     try {
