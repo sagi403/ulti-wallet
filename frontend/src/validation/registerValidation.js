@@ -1,8 +1,16 @@
-import Joi from "joi-browser";
+import Joi from "joi";
+import tlds from "/node_modules/@sideway/address/lib/tlds.js";
 
-const registerSchema = {
+const registerSchema = Joi.object({
   name: Joi.string().min(2).required().label("Name"),
-  email: Joi.string().email().required().label("Email"),
+  email: Joi.string()
+    .email({
+      tlds: {
+        allow: tlds,
+      },
+    })
+    .required()
+    .label("Email"),
   password: Joi.string()
     .trim()
     .required()
@@ -14,29 +22,33 @@ const registerSchema = {
     .min(8)
     .error(errors => {
       errors.forEach(err => {
-        if (err.context && err.context.name === "lowercase") {
+        if (err.local && err.local.name === "lowercase") {
           err.message = "Use 1 or more lowercase characters";
         }
-        if (err.context && err.context.name === "uppercase") {
+        if (err.local && err.local.name === "uppercase") {
           err.message = "Use 1 or more uppercase characters";
         }
-        if (err.context && err.context.name === "number") {
+        if (err.local && err.local.name === "number") {
           err.message = "Use 1 or more numbers";
         }
-        if (err.context && err.context.name === "special") {
+        if (err.local && err.local.name === "special") {
           err.message = "Use 1 or more special characters";
         }
       });
       return errors;
     }),
-
   confirmPassword: Joi.string()
     .equal(Joi.ref("password"))
     .required()
     .label("Confirm Password")
-    .error(() => ({
-      message: `"Confirm Password" must be the same as the password`,
-    })),
-};
+    .error(errors => {
+      errors.forEach(err => {
+        if (err.code === "any.only") {
+          err.message = `"Confirm Password" must be the same as the password`;
+        }
+      });
+      return errors;
+    }),
+});
 
 export default registerSchema;
