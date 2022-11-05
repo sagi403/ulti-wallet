@@ -12,6 +12,8 @@ import SuccessfulExchangeModal from "../components/SuccessfulExchangeModal";
 import axios from "axios";
 import FailExchangeModal from "../components/FailExchangeModal";
 import { refreshStats } from "../store/generalSlice";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 let newCoins = {};
 
@@ -122,8 +124,8 @@ const ExchangeAppScreen = () => {
 
     // Sent to backend
     const transactionData = {
-      firstCoinAmount: coinPayAmount,
-      secondCoinAmount: coinReceiveAmount,
+      firstCoinAmount: +coinPayAmount.toFixed(5),
+      secondCoinAmount: +coinReceiveAmount.toFixed(5),
       oldCoinId: coinExchangeFrom.id,
       newCoinId: coinExchangeTo.id,
     };
@@ -141,7 +143,11 @@ const ExchangeAppScreen = () => {
     setSuccessModalShow(true);
   };
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : error ? (
+    <Message variant="danger">{error}</Message>
+  ) : (
     <Container fluid className="portfolio">
       <Container className="coin_cards">
         <div className="position-relative mx-auto">
@@ -224,7 +230,6 @@ const ExchangeAppScreen = () => {
           show={successModalShow}
           onHide={() => setSuccessModalShow(false)}
           coinInfo={newCoins}
-          onCoinPick={handleCoinPick}
         />
         <FailExchangeModal
           show={failedTransModal}

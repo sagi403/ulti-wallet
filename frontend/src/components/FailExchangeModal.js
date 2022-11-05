@@ -1,10 +1,7 @@
 import { Button, Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-const FailExchangeModal = ({ show, onHide, onCoinPick }) => {
-  const handleCoinPick = () => {
-    onHide();
-  };
-
+const FailExchangeModal = ({ show, onHide }) => {
   return (
     <Modal
       show={show}
@@ -27,13 +24,18 @@ const FailExchangeModal = ({ show, onHide, onCoinPick }) => {
           <p>We couldn't complete your swap, please try again later.</p>
         </div>
       </Modal.Body>
-      <Modal.Footer className="coin_exchange_from_table">
-        <Button className="Portfolio_btn" onClick={onHide}>
-          BACK TO PORTFOLIO
-        </Button>
-        <Button className="new_exchange_btn" onClick={onHide}>
-          START A NEW EXCHANGE
-        </Button>
+      <Modal.Footer className="coin_exchange_from_table d-flex justify-content-evenly">
+        <Link to="/app/portfolio">
+          <Button className="Portfolio_btn" onClick={onHide}>
+            BACK TO PORTFOLIO
+          </Button>
+        </Link>
+
+        <Link to="/app/exchange">
+          <Button className="new_exchange_btn" onClick={onHide}>
+            START A NEW EXCHANGE
+          </Button>
+        </Link>
       </Modal.Footer>
     </Modal>
   );

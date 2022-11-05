@@ -1,12 +1,8 @@
-import { Button, Col, Modal, Row, Table } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import localString from "../utils/localString";
 
-const SuccessfulExchangeModal = ({ show, onHide, coinInfo, onCoinPick }) => {
-  const handleCoinPick = coin => {
-    onCoinPick(coin);
-    onHide();
-  };
-
+const SuccessfulExchangeModal = ({ show, onHide, coinInfo }) => {
   return (
     <Modal
       show={show}
@@ -47,13 +43,17 @@ const SuccessfulExchangeModal = ({ show, onHide, coinInfo, onCoinPick }) => {
           </h3>
         </div>
       </Modal.Body>
-      <Modal.Footer className="coin_exchange_from_table">
-        <Button className="Portfolio_btn" onClick={onHide}>
-          BACK TO PORTFOLIO
-        </Button>
-        <Button className="new_exchange_btn" onClick={onHide}>
-          START A NEW EXCHANGE
-        </Button>
+      <Modal.Footer className="coin_exchange_from_table d-flex justify-content-evenly">
+        <Link to="/app/portfolio">
+          <Button className="Portfolio_btn" onClick={onHide}>
+            BACK TO PORTFOLIO
+          </Button>
+        </Link>
+        <Link to="/app/exchange">
+          <Button className="new_exchange_btn" onClick={onHide}>
+            START A NEW EXCHANGE
+          </Button>
+        </Link>
       </Modal.Footer>
     </Modal>
   );
