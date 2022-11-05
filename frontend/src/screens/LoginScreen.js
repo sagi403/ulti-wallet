@@ -1,5 +1,5 @@
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { autoLogin, login, resetError } from "../store/userSlice";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import FormFieldPartial from "../partials/FormFieldPartial";
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,10 +22,12 @@ const LoginScreen = () => {
 
   const { error, loggedIn } = useSelector(state => state.user);
 
+  const from = location.state?.from?.pathname || "/app/portfolio";
+
   useEffect(() => {
     if (loggedIn) {
       dispatch(autoLogin());
-      navigate("/app/portfolio", { replace: true });
+      navigate(from, { replace: true });
     }
 
     return () => dispatch(resetError());
