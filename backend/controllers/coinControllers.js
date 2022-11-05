@@ -26,7 +26,7 @@ const getCoinsBasicInfo = asyncHandler(async (req, res) => {
     `SELECT coins.id, symbol, name, logo, color, CAST(SUM(balance) AS FLOAT) AS balance
     FROM addresses INNER JOIN coins ON 
     addresses.coin_id = coins.id 
-    WHERE user_id = $1 
+    WHERE user_id = $1 AND balance != 0
     GROUP BY coins.id, symbol, name, logo, color`,
     [req.user.id]
   );
