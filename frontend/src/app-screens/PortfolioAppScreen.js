@@ -10,6 +10,7 @@ import localString from "../utils/localString";
 import DoughnutChart from "../components/DoughnutChart";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import { useNavigate } from "react-router-dom";
 
 const PortfolioAppScreen = () => {
   const [total24hChange, setTotal24hChange] = useState(0);
@@ -22,6 +23,7 @@ const PortfolioAppScreen = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     userInfo,
@@ -62,6 +64,10 @@ const PortfolioAppScreen = () => {
     setBest24hAsset(bestAsset);
     setWorst24hAsset(worstAsset);
   }, [dispatch, userCoinsInfo]);
+
+  const handleCoinPick = coin => {
+    navigate(`/app/transfer/${coin.id}`, { replace: true });
+  };
 
   return loadingCoin || loadingUser ? (
     <Loader />
@@ -159,7 +165,11 @@ const PortfolioAppScreen = () => {
               <tbody>
                 {userCoinsInfo &&
                   userCoinsInfo.map(item => (
-                    <tr key={item.id} className="portfolio_table_body">
+                    <tr
+                      key={item.id}
+                      className="portfolio_table_body"
+                      onClick={() => handleCoinPick(item)}
+                    >
                       <td className="ps-4">
                         <Row>
                           <Col lg="4">

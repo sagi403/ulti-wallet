@@ -1,6 +1,7 @@
 import { faArrowRightArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import ChooseCoinModal from "../components/ChooseCoinModal";
@@ -12,6 +13,8 @@ const TransferAppScreen = () => {
   const [modalShow, setModalShow] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   const { allCoinsInfo, loading, error } = useSelector(state => state.coin);
 
@@ -20,9 +23,15 @@ const TransferAppScreen = () => {
       dispatch(coinAllData());
       return;
     }
+    const [coin] = allCoinsInfo.filter(item => item.id === +id);
 
-    setCurrentCoin(allCoinsInfo[0]);
-  }, [dispatch, allCoinsInfo]);
+    setCurrentCoin(coin ? coin : allCoinsInfo[0]);
+  }, [dispatch, allCoinsInfo, id]);
+
+  const handleCoinPick = coin => {
+    setCurrentCoin(coin);
+    navigate(`/app/transfer/${coin.id}`, { replace: true });
+  };
 
   return (
     <Container fluid className="portfolio">
@@ -66,7 +75,7 @@ const TransferAppScreen = () => {
         show={modalShow}
         onHide={() => setModalShow(false)}
         coinInfo={allCoinsInfo}
-        onCoinPick={coin => setCurrentCoin(coin)}
+        onCoinPick={coin => handleCoinPick(coin)}
       />
     </Container>
   );

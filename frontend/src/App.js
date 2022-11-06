@@ -28,7 +28,7 @@ const App = () => {
             <Route path="app" element={<AppNavbar />}>
               <Route path="portfolio" element={<PortfolioAppScreen />} />
               <Route path="exchange" element={<ExchangeAppScreen />} />
-              <Route path="transfer" element={<TransferAppScreen />} />
+              <Route path="transfer/:id" element={<TransferAppScreen />} />
             </Route>
           </Route>
 
