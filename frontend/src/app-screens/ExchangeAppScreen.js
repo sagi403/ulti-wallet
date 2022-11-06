@@ -57,6 +57,11 @@ const ExchangeAppScreen = () => {
   };
 
   const handleSetCoinAmount = coin => {
+    if (coinPayAmount < 0) {
+      setCoinPayAmount("");
+      return;
+    }
+
     coinPayAmount
       ? setCoinReceivedMessage(true)
       : setCoinReceivedMessage(false);
@@ -158,7 +163,7 @@ const ExchangeAppScreen = () => {
             onSettingAmount={setCoinPayAmount}
             handleSetCoinAmount={handleSetCoinAmount}
           />
-          <p className="swap_btn" onClick={() => handleSwap()}>
+          <p className="swap_btn" onClick={handleSwap}>
             <FontAwesomeIcon icon={faArrowsUpDown} />
           </p>
           <ExchangeCardLower

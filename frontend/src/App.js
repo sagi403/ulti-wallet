@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { autoLogin } from "./store/userSlice";
 import ExchangeAppScreen from "./app-screens/ExchangeAppScreen";
+import TransferAppScreen from "./app-screens/TransferAppScreen";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="app" element={<AppNavbar />}>
               <Route path="portfolio" element={<PortfolioAppScreen />} />
               <Route path="exchange" element={<ExchangeAppScreen />} />
+              <Route path="transfer" element={<TransferAppScreen />} />
             </Route>
           </Route>
 

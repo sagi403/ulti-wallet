@@ -48,7 +48,7 @@ const MainNavbar = () => {
                 classes="btn_nav"
               />
               <NavbarIconPartial
-                to="/"
+                to="/app/transfer"
                 icon={faWallet}
                 color="#7344FF"
                 classes="btn_nav"
