@@ -88,16 +88,20 @@ export const coinAllData = createAsyncThunk(
         : (await thunkApi.dispatch(coinCmcData())).payload.coinsData;
 
       const coinsData = [];
+      let totalValue = 0;
 
       const { data: userCoinsData } = await axios.get("/api/coins/basicAll");
 
       for (let coin of userCoinsData) {
         const price = coinInfo[coin.id].price;
 
+        const value = coin.balance ? coin.balance * price : 0;
+        totalValue += value;
+
         coinsData.push({ ...coin, price });
       }
 
-      return coinsData;
+      return { coinsData, totalValue };
     } catch (error) {
       const err =
         error.response && error.response.data.message
@@ -150,7 +154,8 @@ const coinSlice = createSlice({
     },
     [coinAllData.fulfilled]: (state, action) => {
       state.loading = false;
-      state.allCoinsInfo = action.payload;
+      state.allCoinsInfo = action.payload.coinsData;
+      state.totalValue = action.payload.totalValue;
     },
     [coinAllData.rejected]: (state, action) => {
       state.loading = false;
