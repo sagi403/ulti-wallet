@@ -4,13 +4,17 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import ChooseCoinModal from "../components/ChooseCoinModal";
+import ChooseCoinModal from "../modals/ChooseCoinModal";
 import { coinAllData } from "../store/coinSlice";
 import localString from "../utils/localString";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
+import ReceiveModal from "../modals/ReceiveModal";
 
 const TransferAppScreen = () => {
   const [currentCoin, setCurrentCoin] = useState({});
   const [modalShow, setModalShow] = useState(false);
+  const [receiveModal, setReceiveModal] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,7 +37,11 @@ const TransferAppScreen = () => {
     navigate(`/app/transfer/${coin.id}`, { replace: true });
   };
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : error ? (
+    <Message variant="danger">{error}</Message>
+  ) : (
     <Container fluid className="portfolio">
       <div className="text-center pt-5">
         <div className="polygon mx-auto">
@@ -58,6 +66,7 @@ const TransferAppScreen = () => {
         <Button
           className="transfer_btn mx-2"
           style={{ borderColor: currentCoin.color }}
+          onClick={() => setReceiveModal(true)}
         >
           Receive
         </Button>
@@ -76,6 +85,11 @@ const TransferAppScreen = () => {
         onHide={() => setModalShow(false)}
         coinInfo={allCoinsInfo}
         onCoinPick={coin => handleCoinPick(coin)}
+      />
+      <ReceiveModal
+        show={receiveModal}
+        onHide={() => setReceiveModal(false)}
+        coinInfo={currentCoin}
       />
     </Container>
   );
