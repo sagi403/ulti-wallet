@@ -471,3 +471,24 @@ input[type="number"]::-webkit-outer-spin-button {
 .copy_btn:active {
   transform: translateY(2px);
 }
+
+.send_input {
+  background: #16171d;
+  width: 30rem;
+  padding: 0.6rem;
+  margin: 1rem auto;
+  border-radius: 0;
+  box-shadow: none;
+  color: aliceblue;
+}
+.send_input:focus {
+  background: #16171d;
+  box-shadow: none;
+  color: aliceblue;
+}
+.send_input::placeholder {
+  color: #808b96;
+}
+.send_input:invalid {
+  border: red solid 3px;
+}

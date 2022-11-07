@@ -10,11 +10,13 @@ import localString from "../utils/localString";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import ReceiveModal from "../modals/ReceiveModal";
+import SendModal from "../modals/SendModal";
 
 const TransferAppScreen = () => {
   const [currentCoin, setCurrentCoin] = useState({});
   const [modalShow, setModalShow] = useState(false);
   const [receiveModal, setReceiveModal] = useState(false);
+  const [sendModal, setSendModal] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -60,6 +62,7 @@ const TransferAppScreen = () => {
         <Button
           className="transfer_btn mx-2"
           style={{ borderColor: currentCoin.color }}
+          onClick={() => setSendModal(true)}
         >
           Send
         </Button>
@@ -89,6 +92,11 @@ const TransferAppScreen = () => {
       <ReceiveModal
         show={receiveModal}
         onHide={() => setReceiveModal(false)}
+        coinInfo={currentCoin}
+      />
+      <SendModal
+        show={sendModal}
+        onHide={() => setSendModal(false)}
         coinInfo={currentCoin}
       />
     </Container>

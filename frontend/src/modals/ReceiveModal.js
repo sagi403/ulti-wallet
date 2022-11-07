@@ -1,6 +1,6 @@
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Button, Modal } from "react-bootstrap";
 
 const ReceiveModal = ({ show, onHide, coinInfo }) => {
@@ -18,9 +18,7 @@ const ReceiveModal = ({ show, onHide, coinInfo }) => {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton className="coin_exchange_from_table">
-        <Modal.Title id="contained-modal-title-vcenter"></Modal.Title>
-      </Modal.Header>
+      <Modal.Header closeButton className="coin_exchange_from_table" />
       <Modal.Body className="coin_exchange_from_table">
         <div className="successful_swap_body">
           <div className="polygon position-relative mb-5">
