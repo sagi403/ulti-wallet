@@ -63,6 +63,7 @@ const TransferAppScreen = () => {
           className="transfer_btn mx-2"
           style={{ borderColor: currentCoin.color }}
           onClick={() => setSendModal(true)}
+          disabled={!currentCoin.balance}
         >
           Send
         </Button>

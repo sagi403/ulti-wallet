@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { Form } from "react-bootstrap";
+import localString from "../utils/localString";
 import addressSchema from "../validation/addressValidation";
 import validate from "../validation/validate";
 
 const SendModal = ({ show, onHide, coinInfo }) => {
   const [address, setAddress] = useState("");
-  const [addressValidateMsg, setAddressValidateMsg] = useState(null);
+  const [addressValidateMsg, setAddressValidateMsg] = useState("");
   const [amount, setAmount] = useState("");
+  const [usdAmount, setUsdAmount] = useState("0.00");
 
   useEffect(() => {
     setAddress("");
-    setAddressValidateMsg(null);
+    setAddressValidateMsg("");
   }, [show]);
 
   const handleAddressBlur = () => {
@@ -21,7 +23,29 @@ const SendModal = ({ show, onHide, coinInfo }) => {
       setAddressValidateMsg(error.details[0].message);
       return;
     }
-    setAddressValidateMsg(null);
+    setAddressValidateMsg("");
+  };
+
+  const handleSetCoinAmountBlur = () => {
+    if (amount < 0) {
+      setAmount("");
+      return;
+    }
+
+    if (amount > coinInfo.balance) {
+      setAmount(coinInfo.balance);
+      setUsdAmount(localString(coinInfo.balance * coinInfo.price));
+      return;
+    }
+
+    amount
+      ? setUsdAmount(localString(amount * coinInfo.price))
+      : setUsdAmount("0.00");
+  };
+
+  const handlePickAmountBtn = amountPicked => {
+    setAmount(amountPicked);
+    setUsdAmount(localString(amountPicked * coinInfo.price));
   };
 
   return (
@@ -60,12 +84,22 @@ const SendModal = ({ show, onHide, coinInfo }) => {
                 className="sent_amount d-inline float-start"
                 style={{ color: coinInfo.color }}
                 value={amount}
-                onChange={e => setAmount(+e.target.value || "")}
-                // onBlur={() => handleSetCoinAmount(coin)}
+                onChange={e => setAmount(e.target.value)}
+                onBlur={handleSetCoinAmountBlur}
               />
               <div className="d-flex ms-auto">
-                <p className="send_amount_auto_btn">ALL</p>
-                <p className="send_amount_auto_btn">HALF</p>
+                <p
+                  className="send_amount_auto_btn"
+                  onClick={() => handlePickAmountBtn(coinInfo.balance)}
+                >
+                  ALL
+                </p>
+                <p
+                  className="send_amount_auto_btn"
+                  onClick={() => handlePickAmountBtn(coinInfo.balance / 2)}
+                >
+                  HALF
+                </p>
                 <span className="ms-3 fs-5" style={{ color: coinInfo.color }}>
                   {coinInfo.symbol}
                 </span>
@@ -76,7 +110,7 @@ const SendModal = ({ show, onHide, coinInfo }) => {
               style={{ background: coinInfo.color }}
             />
             <div className="coin_amount_container d-flex align-items-center">
-              <span className="usd_send_value">0.00</span>
+              <span className="usd_send_value">{usdAmount}</span>
               <div className="d-flex ms-auto">
                 <span className="ms-3 fs-5 chart_total_value">USD</span>
               </div>

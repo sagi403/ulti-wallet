@@ -34,7 +34,7 @@ const ExchangeCardUpper = ({
             className="amount_exchange"
             style={{ color: coin.color }}
             value={amount}
-            onChange={e => onSettingAmount(+e.target.value || "")}
+            onChange={e => onSettingAmount(e.target.value)}
             onBlur={() => handleSetCoinAmount(coin)}
           />
         </Col>

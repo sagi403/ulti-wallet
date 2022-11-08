@@ -535,6 +535,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border: 1px solid #25292c;
   padding: 0 10px;
   color: #25292c;
+  cursor: pointer;
 }
 
 .send_hr {
