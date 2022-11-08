@@ -129,8 +129,8 @@ const ExchangeAppScreen = () => {
 
     // Sent to backend
     const transactionData = {
-      firstCoinAmount: +coinPayAmount.toFixed(5),
-      secondCoinAmount: +coinReceiveAmount.toFixed(5),
+      firstCoinAmount: Number((+coinPayAmount).toFixed(5)),
+      secondCoinAmount: Number((+coinReceiveAmount).toFixed(5)),
       oldCoinId: coinExchangeFrom.id,
       newCoinId: coinExchangeTo.id,
     };

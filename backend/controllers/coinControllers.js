@@ -23,7 +23,7 @@ const getCoinsInfo = asyncHandler(async (req, res) => {
 // @access  Private
 const getCoinsBasicInfo = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
-    `SELECT coins.id, symbol, name, logo, color, CAST(SUM(balance) AS FLOAT) AS balance
+    `SELECT coins.id, symbol, name, logo, color, SUM(balance) AS balance
     FROM addresses INNER JOIN coins ON 
     addresses.coin_id = coins.id 
     WHERE user_id = $1 AND balance != 0
@@ -61,7 +61,7 @@ const updateSwapCoins = asyncHandler(async (req, res) => {
     const {
       rows: [amount],
     } = await client.query(
-      `SELECT CAST(SUM(balance) AS FLOAT) AS balance
+      `SELECT SUM(balance) AS balance
       FROM addresses
       WHERE user_id = $1 AND coin_id = $2`,
       [req.user.id, oldCoinId]
@@ -107,7 +107,7 @@ const getAllCoinsBasicInfo = asyncHandler(async (req, res) => {
   const { rows: coins } = await pool.query(
     `SELECT coins.id, symbol, name, logo, color, balance FROM coins
     LEFT JOIN
-    (SELECT coins.id, CAST(SUM(balance) AS FLOAT) AS balance
+    (SELECT coins.id, SUM(balance) AS balance
     FROM addresses INNER JOIN coins ON 
     addresses.coin_id = coins.id 
     WHERE user_id = $1 
