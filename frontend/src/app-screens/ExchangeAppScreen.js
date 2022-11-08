@@ -57,7 +57,7 @@ const ExchangeAppScreen = () => {
   };
 
   const handleSetCoinAmount = coin => {
-    if (coinPayAmount < 0) {
+    if (coinPayAmount <= 0) {
       setCoinPayAmount("");
       return;
     }

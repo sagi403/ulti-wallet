@@ -66,6 +66,7 @@ main {
 
 .portfolio_table_body {
   font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .chart_content {

@@ -27,7 +27,7 @@ const SendModal = ({ show, onHide, coinInfo }) => {
   };
 
   const handleSetCoinAmountBlur = () => {
-    if (amount < 0) {
+    if (amount <= 0) {
       setAmount("");
       return;
     }
@@ -123,6 +123,7 @@ const SendModal = ({ show, onHide, coinInfo }) => {
           onClick={onHide}
           className="close_modal mx-auto my-4 w-25"
           style={{ borderColor: coinInfo.color }}
+          disabled={!(amount > 0 && address !== "" && !addressValidateMsg)}
         >
           Send
         </Button>
