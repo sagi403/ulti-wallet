@@ -409,6 +409,18 @@ input[type="number"]::-webkit-outer-spin-button {
   border-style: solid;
 }
 
+.send_modal_btn {
+  background: linear-gradient(45deg, #101114 0%, #0a0b0e 100%);
+  color: aliceblue;
+  width: 7rem;
+  margin: 2rem auto;
+  box-shadow: none;
+  border-width: 2px;
+  border-style: solid;
+  font-size: 1.1rem;
+  padding: 8px;
+}
+
 /* TransferAppScreen */
 .total_coins {
   font-size: 4rem;
@@ -474,7 +486,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .send_input {
   background: #16171d;
-  width: 30rem;
+  width: 35rem;
   padding: 0.6rem;
   margin: 1rem auto;
   border-radius: 0;
@@ -489,6 +501,49 @@ input[type="number"]::-webkit-outer-spin-button {
 .send_input::placeholder {
   color: #808b96;
 }
-.send_input:invalid {
-  border: red solid 3px;
+
+.sent_amount {
+  background: transparent;
+  width: 25rem;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: aliceblue;
+  font-size: 1.5rem;
+}
+.sent_amount:focus {
+  background: transparent;
+  box-shadow: none;
+  color: aliceblue;
+}
+.sent_amount::placeholder {
+  color: #808b96;
+}
+
+.inputs_container {
+  width: 35rem;
+  margin: auto;
+}
+
+.coin_amount_container {
+  width: 35rem;
+  height: 2.7rem;
+}
+
+.send_amount_auto_btn {
+  margin: auto 0.4rem;
+  border: 1px solid #25292c;
+  padding: 0 10px;
+  color: #25292c;
+}
+
+.send_hr {
+  border: 0;
+  height: 2px;
+  opacity: 1;
+}
+
+.usd_send_value {
+  font-size: 1.5rem;
+  color: aliceblue;
 }
