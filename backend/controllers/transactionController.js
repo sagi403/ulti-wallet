@@ -62,4 +62,65 @@ const updateSwapCoins = asyncHandler(async (req, res) => {
   }
 });
 
-export { updateSwapCoins };
+// @desc    Send coins
+// @route   PUT /api/transaction/send
+// @access  Private
+const sendCoins = asyncHandler(async (req, res) => {
+  const { address, sentAmount, coinId } = req.body;
+
+  if (typeof sentAmount !== "number" || typeof coinId !== "number") {
+    res.status(400);
+    throw new Error("Invalid data provided");
+  }
+
+  const client = await pool.connect();
+
+  try {
+    const {
+      rows: [amount],
+    } = await client.query(
+      `SELECT SUM(balance) AS balance
+      FROM addresses
+      WHERE user_id = $1 AND coin_id = $2`,
+      [req.user.id, coinId]
+    );
+
+    if (!amount || amount.balance < sentAmount) {
+      throw new Error("You don't have enough coins for the transaction");
+    }
+
+    await client.query("BEGIN");
+    await client.query(
+      `UPDATE addresses
+      SET balance = 0
+      WHERE user_id = $1 AND coin_id = $2 AND balance != 0`,
+      [req.user.id, coinId]
+    );
+
+    const newAmount = amount.balance - sentAmount;
+
+    await client.query(
+      `INSERT INTO addresses (user_id, coin_id, balance)
+      VALUES ($1, $2, $3)`,
+      [req.user.id, coinId, newAmount]
+    );
+
+    await client.query(
+      `UPDATE addresses
+      SET balance = balance + $3,
+        used = true
+      WHERE coin_id = $1 AND public_address = $2`,
+      [coinId, address, sentAmount]
+    );
+    await client.query("COMMIT");
+
+    res.json("Transfer succeeded");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw new Error(error);
+  } finally {
+    client.release();
+  }
+});
+
+export { updateSwapCoins, sendCoins };
