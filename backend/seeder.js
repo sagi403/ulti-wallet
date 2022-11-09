@@ -43,8 +43,9 @@ const importData = async () => {
       public_address uuid NOT NULL DEFAULT uuid_generate_v4(),
       user_id uuid DEFAULT uuid_generate_v4() NOT NULL REFERENCES users(id),
       coin_id INT NOT NULL REFERENCES coins(id),
-      balance FLOAT NOT NULL,
-      created_at DATE NOT NULL DEFAULT CURRENT_DATE
+      balance FLOAT NOT NULL CHECK (balance >= 0),
+      created_at DATE NOT NULL DEFAULT CURRENT_DATE,
+      used BOOLEAN NOT NULL DEFAULT true
     );
     `);
 

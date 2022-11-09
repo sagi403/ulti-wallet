@@ -480,6 +480,7 @@ input[type="number"]::-webkit-outer-spin-button {
   float: right;
   line-height: 100%;
   color: #808b96;
+  cursor: pointer;
 }
 .copy_btn:active {
   transform: translateY(2px);
