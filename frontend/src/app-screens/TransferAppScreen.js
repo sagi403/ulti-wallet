@@ -18,16 +18,13 @@ const TransferAppScreen = () => {
   const [modalShow, setModalShow] = useState(false);
   const [receiveModal, setReceiveModal] = useState(false);
   const [sendModal, setSendModal] = useState(false);
+  const [receiveMessage, setReceiveMessage] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
 
   const { allCoinsInfo, loading, error } = useSelector(state => state.coin);
-
-  // useEffect(() => {
-  //   console.log("currentCoin", currentCoin);
-  // }, [currentCoin]);
 
   useEffect(() => {
     if (!allCoinsInfo) {
@@ -45,24 +42,22 @@ const TransferAppScreen = () => {
   };
 
   const handleReceiveCoins = async () => {
-    if (currentCoin && currentCoin.public_address) {
-      setReceiveModal(true);
-      return;
+    if (!currentCoin.public_address) {
+      try {
+        const { data } = await axios.post("/api/address", {
+          coinId: currentCoin.id,
+        });
+
+        setCurrentCoin(prev => {
+          return { ...prev, ...data };
+        });
+      } catch (error) {
+        setReceiveMessage("Couldn't fetch an address, Please try again later.");
+        return;
+      }
     }
 
-    try {
-      const { data } = await axios.post("/api/address", {
-        coinId: currentCoin.id,
-      });
-
-      setCurrentCoin(prev => {
-        return { ...prev, ...data };
-      });
-    } catch (error) {
-      console.log(error);
-      return;
-    }
-
+    setReceiveMessage("");
     setReceiveModal(true);
   };
 
@@ -101,6 +96,7 @@ const TransferAppScreen = () => {
         >
           Receive
         </Button>
+        {receiveMessage && <Message variant="danger">{receiveMessage}</Message>}
         <div>
           <Button
             className="coin_swap"
