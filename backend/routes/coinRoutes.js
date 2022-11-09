@@ -5,7 +5,6 @@ import {
   getCoinsBasicInfo,
   getCoinsId,
   getCoinsInfo,
-  updateSwapCoins,
 } from "../controllers/coinControllers.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -13,7 +12,6 @@ const router = express.Router();
 
 router.route("/").get(protect, getCoinsInfo);
 router.route("/basic").get(protect, getCoinsBasicInfo);
-router.route("/swap").put(protect, updateSwapCoins);
 router.route("/basicAll").get(protect, getAllCoinsBasicInfo);
 router.route("/coinsId").get(protect, getCoinsId);
 router.route("/coinsIdAll").get(protect, getAllCoinsId);

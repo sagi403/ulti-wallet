@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import addressRoutes from "./routes/addressRoutes.js";
 import coinRoutes from "./routes/coinRoutes.js";
 import cmcRoutes from "./routes/cmcRoutes.js";
+import transactionRoute from "./routes/transactionRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/address", addressRoutes);
 app.use("/api/coins", coinRoutes);
 app.use("/api/cmc", cmcRoutes);
+app.use("/api/transaction", transactionRoute);
 
 app.use(notFound);
 

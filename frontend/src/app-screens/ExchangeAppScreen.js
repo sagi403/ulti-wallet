@@ -136,7 +136,7 @@ const ExchangeAppScreen = () => {
     };
 
     try {
-      await axios.put("/api/coins/swap", transactionData);
+      await axios.put("/api/transaction/swap", transactionData);
       dispatch(refreshStats());
     } catch (error) {
       setFailedTransModal(true);
