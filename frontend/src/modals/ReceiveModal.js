@@ -30,7 +30,7 @@ const ReceiveModal = ({ show, onHide, coinInfo }) => {
             style={{ color: coinInfo.color }}
             ref={addressRef}
           >
-            gfdshsfdhfsdpgfdgfdpogrfdgrgreg
+            {coinInfo.public_address}
             <span className="copy_btn" onClick={handleCopyAddress}>
               <FontAwesomeIcon icon={faCopy} />
             </span>

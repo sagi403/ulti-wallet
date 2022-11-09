@@ -11,6 +11,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import ReceiveModal from "../modals/ReceiveModal";
 import SendModal from "../modals/SendModal";
+import axios from "axios";
 
 const TransferAppScreen = () => {
   const [currentCoin, setCurrentCoin] = useState({});
@@ -23,6 +24,10 @@ const TransferAppScreen = () => {
   const { id } = useParams();
 
   const { allCoinsInfo, loading, error } = useSelector(state => state.coin);
+
+  // useEffect(() => {
+  //   console.log("currentCoin", currentCoin);
+  // }, [currentCoin]);
 
   useEffect(() => {
     if (!allCoinsInfo) {
@@ -37,6 +42,28 @@ const TransferAppScreen = () => {
   const handleCoinPick = coin => {
     setCurrentCoin(coin);
     navigate(`/app/transfer/${coin.id}`, { replace: true });
+  };
+
+  const handleReceiveCoins = async () => {
+    if (currentCoin && currentCoin.public_address) {
+      setReceiveModal(true);
+      return;
+    }
+
+    try {
+      const { data } = await axios.post("/api/address", {
+        coinId: currentCoin.id,
+      });
+
+      setCurrentCoin(prev => {
+        return { ...prev, ...data };
+      });
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+
+    setReceiveModal(true);
   };
 
   return loading ? (
@@ -70,7 +97,7 @@ const TransferAppScreen = () => {
         <Button
           className="transfer_btn mx-2"
           style={{ borderColor: currentCoin.color }}
-          onClick={() => setReceiveModal(true)}
+          onClick={handleReceiveCoins}
         >
           Receive
         </Button>

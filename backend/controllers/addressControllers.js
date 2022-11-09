@@ -47,7 +47,7 @@ const createUserAddress = asyncHandler(async (req, res) => {
     [req.user.id, coinId]
   );
 
-  if (addressFound.length !== 0) {
+  if (addressFound && addressFound.length !== 0) {
     res.json(addressFound);
     return;
   }
