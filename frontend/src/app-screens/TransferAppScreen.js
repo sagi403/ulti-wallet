@@ -9,16 +9,10 @@ import { coinAllData } from "../store/coinSlice";
 import localString from "../utils/localString";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import ReceiveModal from "../modals/ReceiveModal";
-import SendModal from "../modals/SendModal";
-import axios from "axios";
 
 const TransferAppScreen = () => {
   const [currentCoin, setCurrentCoin] = useState({});
   const [modalShow, setModalShow] = useState(false);
-  const [receiveModal, setReceiveModal] = useState(false);
-  const [sendModal, setSendModal] = useState(false);
-  const [receiveMessage, setReceiveMessage] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,24 +35,8 @@ const TransferAppScreen = () => {
     navigate(`/app/transfer/${coin.id}`, { replace: true });
   };
 
-  const handleReceiveCoins = async () => {
-    if (!currentCoin.public_address) {
-      try {
-        const { data } = await axios.post("/api/address", {
-          coinId: currentCoin.id,
-        });
-
-        setCurrentCoin(prev => {
-          return { ...prev, ...data };
-        });
-      } catch (error) {
-        setReceiveMessage("Couldn't fetch an address, Please try again later.");
-        return;
-      }
-    }
-
-    setReceiveMessage("");
-    setReceiveModal(true);
+  const handleTransferCoins = action => {
+    navigate(`/app/transfer/${currentCoin.id}/${action}`, { replace: true });
   };
 
   return loading ? (
@@ -84,7 +62,7 @@ const TransferAppScreen = () => {
         <Button
           className="transfer_btn mx-2"
           style={{ borderColor: currentCoin.color }}
-          onClick={() => setSendModal(true)}
+          onClick={() => handleTransferCoins("send")}
           disabled={!currentCoin.balance}
         >
           Send
@@ -92,11 +70,10 @@ const TransferAppScreen = () => {
         <Button
           className="transfer_btn mx-2"
           style={{ borderColor: currentCoin.color }}
-          onClick={handleReceiveCoins}
+          onClick={() => handleTransferCoins("receive")}
         >
           Receive
         </Button>
-        {receiveMessage && <Message variant="danger">{receiveMessage}</Message>}
         <div>
           <Button
             className="coin_swap"
@@ -112,16 +89,6 @@ const TransferAppScreen = () => {
         onHide={() => setModalShow(false)}
         coinInfo={allCoinsInfo}
         onCoinPick={coin => handleCoinPick(coin)}
-      />
-      <ReceiveModal
-        show={receiveModal}
-        onHide={() => setReceiveModal(false)}
-        coinInfo={currentCoin}
-      />
-      <SendModal
-        show={sendModal}
-        onHide={() => setSendModal(false)}
-        coinInfo={currentCoin}
       />
     </Container>
   );

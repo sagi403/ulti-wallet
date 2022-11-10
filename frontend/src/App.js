@@ -10,6 +10,8 @@ import { useEffect } from "react";
 import { autoLogin } from "./store/userSlice";
 import ExchangeAppScreen from "./app-screens/ExchangeAppScreen";
 import TransferAppScreen from "./app-screens/TransferAppScreen";
+import SendAppScreen from "./app-screens/SendAppScreen";
+import ReceiveAppScreen from "./app-screens/ReceiveAppScreen";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,6 +31,11 @@ const App = () => {
               <Route path="portfolio" element={<PortfolioAppScreen />} />
               <Route path="exchange" element={<ExchangeAppScreen />} />
               <Route path="transfer/:id" element={<TransferAppScreen />} />
+              <Route path="transfer/:id/send" element={<SendAppScreen />} />
+              <Route
+                path="transfer/:id/receive"
+                element={<ReceiveAppScreen />}
+              />
             </Route>
           </Route>
 

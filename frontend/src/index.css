@@ -554,3 +554,9 @@ input[type="number"]::-webkit-outer-spin-button {
 .send_info {
   color: aliceblue;
 }
+
+/* SendAppScreen */
+.container_body {
+  background: #0d0e11;
+  min-height: 90.4vh;
+}
