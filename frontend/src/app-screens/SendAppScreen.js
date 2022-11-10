@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import ConfirmSendModal from "../modals/ConfirmSendModal";
+import SuccessfulSendModal from "../modals/SuccessfulSendModal";
 import { coinUserData } from "../store/coinSlice";
 import localString from "../utils/localString";
 import addressSchema from "../validation/addressValidation";
@@ -16,6 +18,8 @@ const SendAppScreen = () => {
   const [addressValidateMsg, setAddressValidateMsg] = useState("");
   const [amount, setAmount] = useState("");
   const [usdAmount, setUsdAmount] = useState("0.00");
+  const [modalShow, setModalShow] = useState(false);
+  const [confirmModalShow, setConfirmModalShow] = useState(false);
 
   const { userCoinsInfo, loading, error } = useSelector(state => state.coin);
 
@@ -65,7 +69,12 @@ const SendAppScreen = () => {
     setUsdAmount(localString(amountPicked * currentCoin.price));
   };
 
-  const handleSendCoinsBtn = () => {};
+  const handleSendCoinsBtn = () => {
+    setCurrentCoin(prev => {
+      return { ...prev, amount, usdAmount, address };
+    });
+    setModalShow(true);
+  };
 
   return loading ? (
     <Loader />
@@ -154,6 +163,17 @@ const SendAppScreen = () => {
           )}
         </div>
       </div>
+      <ConfirmSendModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onConfirm={() => setConfirmModalShow(true)}
+        coinInfo={currentCoin}
+      />
+      <SuccessfulSendModal
+        show={confirmModalShow}
+        onHide={() => setConfirmModalShow(false)}
+        coinInfo={currentCoin}
+      />
     </Container>
   );
 };

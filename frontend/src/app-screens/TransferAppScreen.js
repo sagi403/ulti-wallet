@@ -32,11 +32,11 @@ const TransferAppScreen = () => {
 
   const handleCoinPick = coin => {
     setCurrentCoin(coin);
-    navigate(`/app/transfer/${coin.id}`, { replace: true });
+    navigate(`/app/transfer/${coin.id}`);
   };
 
   const handleTransferCoins = action => {
-    navigate(`/app/transfer/${currentCoin.id}/${action}`, { replace: true });
+    navigate(`/app/transfer/${currentCoin.id}/${action}`);
   };
 
   return loading ? (
@@ -44,7 +44,7 @@ const TransferAppScreen = () => {
   ) : error ? (
     <Message variant="danger">{error}</Message>
   ) : (
-    <Container fluid className="portfolio">
+    <Container fluid className="portfolio py-5">
       <div className="text-center pt-5">
         <div className="polygon mx-auto">
           <img src={currentCoin.logo} alt={currentCoin.name} />

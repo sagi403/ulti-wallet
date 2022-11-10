@@ -475,6 +475,13 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 1rem auto;
 }
 
+.address_box {
+  background: #16171d;
+  width: 30rem;
+  padding: 1.5rem;
+  margin: 1rem auto;
+}
+
 .copy_btn {
   font-size: 1.4rem;
   float: right;
@@ -559,4 +566,13 @@ input[type="number"]::-webkit-outer-spin-button {
 .container_body {
   background: #0d0e11;
   min-height: 90.4vh;
+}
+
+.send_amount {
+  font-size: 2.5rem;
+  color: aliceblue;
+}
+
+.success_send_icon {
+  font-size: 4rem;
 }

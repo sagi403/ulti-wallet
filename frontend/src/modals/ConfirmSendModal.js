@@ -1,6 +1,11 @@
 import { Button, Modal } from "react-bootstrap";
 
-const ReceiveModal = ({ show, onHide, coinInfo, onSuccess }) => {
+const ConfirmSendModal = ({ show, onHide, coinInfo, onConfirm }) => {
+  const handleConfirmSendBtn = () => {
+    onHide();
+    onConfirm();
+  };
+
   return (
     <Modal
       show={show}
@@ -15,23 +20,31 @@ const ReceiveModal = ({ show, onHide, coinInfo, onSuccess }) => {
           <div className="polygon position-relative mb-5">
             <img src={coinInfo.logo} alt={coinInfo.name} />
           </div>
-          <p className="chart_total_value">Your {coinInfo.name} Address</p>
-          <p className="copy_address_box" style={{ color: coinInfo.color }}>
-            {coinInfo.public_address}
-          </p>
+          <p className="chart_total_assets mb-0">Are you sure you want to</p>
+          <p className="send_amount mb-4">Send ${coinInfo.usdAmount || "0"}?</p>
+          <div className="address_box">
+            <p className="fs-5" style={{ color: coinInfo.color }}>
+              {coinInfo.amount} {coinInfo.symbol}
+            </p>
+            <p className="chart_total_assets mb-0">To address</p>
+            <p className="chart_total_value mb-0">{coinInfo.address}</p>
+          </div>
         </div>
       </Modal.Body>
-      <Modal.Footer className="coin_exchange_from_table">
+      <Modal.Footer className="coin_exchange_from_table d-flex justify-content-evenly pb-5">
+        <Button onClick={onHide} className="close_modal">
+          Back
+        </Button>
         <Button
-          onClick={onHide}
+          onClick={handleConfirmSendBtn}
           className="close_modal"
           style={{ borderColor: coinInfo.color }}
         >
-          Close
+          Send
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default ReceiveModal;
+export default ConfirmSendModal;
