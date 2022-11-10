@@ -29,6 +29,7 @@ const SendModal = ({ show, onHide, coinInfo }) => {
   const handleSetCoinAmountBlur = () => {
     if (amount <= 0) {
       setAmount("");
+      setUsdAmount("0.00");
       return;
     }
 
@@ -62,7 +63,7 @@ const SendModal = ({ show, onHide, coinInfo }) => {
           <div className="mb-5">
             <img src={coinInfo.logo} alt={coinInfo.name} />
           </div>
-          <div className="inputs_container">
+          <div className="inputs_container mb-4">
             <div className="my-4">
               <Form.Control
                 type="text"
@@ -116,18 +117,26 @@ const SendModal = ({ show, onHide, coinInfo }) => {
               </div>
             </div>
           </div>
+          <Button
+            onClick={onHide}
+            className="close_modal mx-auto my-4 w-25"
+            style={{ borderColor: coinInfo.color }}
+            disabled={!(amount > 0 && address !== "" && !addressValidateMsg)}
+          >
+            Send
+          </Button>
+          {amount > 0 && address !== "" && !addressValidateMsg && (
+            <div className="send_info">
+              You're sending{" "}
+              <span style={{ color: coinInfo.color }}>
+                {amount} {coinInfo.symbol}
+              </span>{" "}
+              (${usdAmount})
+            </div>
+          )}
         </div>
       </Modal.Body>
-      <Modal.Footer className="coin_exchange_from_table">
-        <Button
-          onClick={onHide}
-          className="close_modal mx-auto my-4 w-25"
-          style={{ borderColor: coinInfo.color }}
-          disabled={!(amount > 0 && address !== "" && !addressValidateMsg)}
-        >
-          Send
-        </Button>
-      </Modal.Footer>
+      <Modal.Footer className="coin_exchange_from_table" />
     </Modal>
   );
 };

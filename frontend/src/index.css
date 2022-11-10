@@ -550,3 +550,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 1.5rem;
   color: aliceblue;
 }
+
+.send_info {
+  color: aliceblue;
+}
