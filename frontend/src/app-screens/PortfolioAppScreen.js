@@ -66,7 +66,7 @@ const PortfolioAppScreen = () => {
   }, [dispatch, userCoinsInfo]);
 
   const handleCoinPick = coin => {
-    navigate(`/app/transfer/${coin.id}`, { replace: true });
+    navigate(`/app/transfer/${coin.id}`);
   };
 
   return loadingCoin || loadingUser ? (

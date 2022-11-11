@@ -1,8 +1,28 @@
+import axios from "axios";
 import { Button, Modal } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { refreshStats } from "../store/generalSlice";
 
-const ConfirmSendModal = ({ show, onHide, coinInfo, onConfirm }) => {
-  const handleConfirmSendBtn = () => {
-    onHide();
+const ConfirmSendModal = ({ show, onHide, coinInfo, onConfirm, onFail }) => {
+  const dispatch = useDispatch();
+
+  const handleConfirmSendBtn = async () => {
+    const data = {
+      address: coinInfo.address,
+      sentAmount: +coinInfo.amount,
+      coinId: +coinInfo.id,
+    };
+
+    try {
+      await axios.put("/api/transaction/send", data);
+      dispatch(refreshStats());
+    } catch (error) {
+      onFail();
+      return;
+    } finally {
+      onHide();
+    }
+
     onConfirm();
   };
 

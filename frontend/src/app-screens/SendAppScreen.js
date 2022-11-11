@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import ConfirmSendModal from "../modals/ConfirmSendModal";
+import FailSendModal from "../modals/FailSendModal";
 import SuccessfulSendModal from "../modals/SuccessfulSendModal";
 import { coinUserData } from "../store/coinSlice";
 import localString from "../utils/localString";
@@ -20,6 +21,7 @@ const SendAppScreen = () => {
   const [usdAmount, setUsdAmount] = useState("0.00");
   const [modalShow, setModalShow] = useState(false);
   const [confirmModalShow, setConfirmModalShow] = useState(false);
+  const [failModal, setFailModal] = useState(false);
 
   const { userCoinsInfo, loading, error } = useSelector(state => state.coin);
 
@@ -167,12 +169,18 @@ const SendAppScreen = () => {
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirm={() => setConfirmModalShow(true)}
+        onFail={() => setFailModal(true)}
         coinInfo={currentCoin}
       />
       <SuccessfulSendModal
         show={confirmModalShow}
         onHide={() => setConfirmModalShow(false)}
         coinInfo={currentCoin}
+      />
+      <FailSendModal
+        show={failModal}
+        onHide={() => setFailModal(false)}
+        coinId={currentCoin.id}
       />
     </Container>
   );
