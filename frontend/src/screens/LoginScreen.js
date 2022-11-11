@@ -20,11 +20,16 @@ const LoginScreen = () => {
     password: null,
   });
 
-  const { error, loggedIn } = useSelector(state => state.user);
+  const { error, loggedIn, userInfo } = useSelector(state => state.user);
 
   const from = location.state?.from?.pathname || "/app/portfolio";
 
   useEffect(() => {
+    if (userInfo) {
+      navigate(from, { replace: true });
+      return;
+    }
+
     if (loggedIn) {
       dispatch(autoLogin());
       navigate(from, { replace: true });

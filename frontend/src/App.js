@@ -12,14 +12,25 @@ import ExchangeAppScreen from "./app-screens/ExchangeAppScreen";
 import TransferAppScreen from "./app-screens/TransferAppScreen";
 import SendAppScreen from "./app-screens/SendAppScreen";
 import ReceiveAppScreen from "./app-screens/ReceiveAppScreen";
+import RequireCoinId from "./components/RequireCoinId";
+import { coinsId } from "./store/coinSlice";
 
 const App = () => {
   const dispatch = useDispatch();
 
-  const { loadingLogin } = useSelector(state => state.user);
+  const { userInfo, loadingLogin } = useSelector(state => state.user);
+  const { allCoinsId, loadingCoinsId } = useSelector(state => state.coin);
 
   useEffect(() => {
-    dispatch(autoLogin());
+    if (!userInfo) {
+      dispatch(autoLogin());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!allCoinsId) {
+      dispatch(coinsId());
+    }
   }, []);
 
   return (
@@ -32,10 +43,14 @@ const App = () => {
               <Route path="exchange" element={<ExchangeAppScreen />} />
               <Route path="transfer/:id" element={<TransferAppScreen />} />
               <Route path="transfer/:id/send" element={<SendAppScreen />} />
-              <Route
-                path="transfer/:id/receive"
-                element={<ReceiveAppScreen />}
-              />
+              {!loadingCoinsId && (
+                <Route element={<RequireCoinId />}>
+                  <Route
+                    path="transfer/:id/receive"
+                    element={<ReceiveAppScreen />}
+                  />
+                </Route>
+              )}
             </Route>
           </Route>
 

@@ -8,7 +8,9 @@ const initialState = {
   totalValue: 0,
   userCoinsInfo: null,
   allCoinsInfo: null,
+  allCoinsId: null,
   loading: false,
+  loadingCoinsId: false,
   error: "",
 };
 
@@ -113,6 +115,24 @@ export const coinAllData = createAsyncThunk(
   }
 );
 
+export const coinsId = createAsyncThunk(
+  "coin/coinsId",
+  async (data, thunkApi) => {
+    try {
+      const { data: coinsId } = await axios.get("/api/coins/coinsIdAll");
+
+      return coinsId;
+    } catch (error) {
+      const err =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      return thunkApi.rejectWithValue(err);
+    }
+  }
+);
+
 const coinSlice = createSlice({
   name: "coin",
   initialState,
@@ -159,6 +179,17 @@ const coinSlice = createSlice({
     },
     [coinAllData.rejected]: (state, action) => {
       state.loading = false;
+      state.error = action.payload;
+    },
+    [coinsId.pending]: state => {
+      state.loadingCoinsId = true;
+    },
+    [coinsId.fulfilled]: (state, action) => {
+      state.loadingCoinsId = false;
+      state.allCoinsId = action.payload;
+    },
+    [coinsId.rejected]: (state, action) => {
+      state.loadingCoinsId = false;
       state.error = action.payload;
     },
   },
