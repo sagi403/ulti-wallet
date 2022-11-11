@@ -1,1 +1,1 @@
-web: sh -c 'node backend/server.js && npm run build --prefix frontend'
+web: node backend/server.js
