@@ -13,6 +13,7 @@ import TransferAppScreen from "./app-screens/TransferAppScreen";
 import SendAppScreen from "./app-screens/SendAppScreen";
 import ReceiveAppScreen from "./app-screens/ReceiveAppScreen";
 import RequireCoinId from "./components/RequireCoinId";
+import NotFoundScreen from "./screens/NotFoundScreen";
 import { coinsId } from "./store/coinSlice";
 
 const App = () => {
@@ -57,7 +58,7 @@ const App = () => {
           <Route path="login" element={<LoginScreen />} />
           <Route path="register" element={<RegisterScreen />} />
           <Route path="/" element={<HomeScreen />} />
-          <Route path="*" element={<p>There's nothing here: 404!</p>} />
+          <Route path="*" element={<NotFoundScreen />} />
         </Routes>
       </Router>
     )
