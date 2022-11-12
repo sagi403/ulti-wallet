@@ -144,6 +144,9 @@ const coinSlice = createSlice({
       state.allCoinsInfo = null;
       state.totalValue = 0;
     },
+    resetError: state => {
+      state.error = "";
+    },
   },
   extraReducers: {
     [coinCmcData.pending]: state => {
@@ -195,6 +198,6 @@ const coinSlice = createSlice({
   },
 });
 
-export const { reset } = coinSlice.actions;
+export const { reset, resetError } = coinSlice.actions;
 
 export default coinSlice.reducer;

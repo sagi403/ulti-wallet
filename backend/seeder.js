@@ -9,6 +9,7 @@ dotenv.config();
 
 const importData = async () => {
   try {
+    await pool.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
     await pool.query("DROP TABLE IF EXISTS addresses");
     await pool.query("DROP TABLE IF EXISTS coins");
     await pool.query("DROP TABLE IF EXISTS users");

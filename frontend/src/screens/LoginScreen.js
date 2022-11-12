@@ -1,7 +1,12 @@
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { autoLogin, login, resetError } from "../store/userSlice";
+import {
+  autoLogin,
+  login,
+  resetError as resetUserError,
+} from "../store/userSlice";
+import { resetError as resetCoinError } from "../store/coinSlice";
 import { useEffect, useState } from "react";
 import Message from "../components/Message";
 import validate from "../validation/validate";
@@ -35,12 +40,15 @@ const LoginScreen = () => {
       navigate(from, { replace: true });
     }
 
-    return () => dispatch(resetError());
+    return () => {
+      dispatch(resetUserError());
+      dispatch(resetCoinError());
+    };
   }, [loggedIn]);
 
   const submitHandler = async e => {
     e.preventDefault();
-    dispatch(resetError());
+    dispatch(resetUserError());
 
     const errors = {};
     const { error } = validate({ email, password }, loginSchema);
