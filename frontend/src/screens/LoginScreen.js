@@ -32,7 +32,10 @@ const LoginScreen = () => {
   useEffect(() => {
     if (userInfo) {
       navigate(from, { replace: true });
-      return;
+      return () => {
+        dispatch(resetUserError());
+        dispatch(resetCoinError());
+      };
     }
 
     if (loggedIn) {

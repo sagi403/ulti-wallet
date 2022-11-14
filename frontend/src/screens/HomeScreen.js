@@ -1,4 +1,4 @@
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWallet } from "@fortawesome/free-solid-svg-icons";
@@ -42,7 +42,9 @@ const HomeScreen = () => {
             </>
           )}
         </Col>
-        <Col>Add Picture</Col>
+        <Col>
+          <Image src="/images/portfolio.png" className="w-100" />
+        </Col>
       </Row>
     </Container>
   );
