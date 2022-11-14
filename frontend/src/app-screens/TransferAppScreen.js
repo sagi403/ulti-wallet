@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import ChooseCoinModal from "../modals/ChooseCoinModal";
-import { coinAllData } from "../store/coinSlice";
+import { coinAllData, resetError } from "../store/coinSlice";
 import localString from "../utils/localString";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
@@ -29,6 +29,12 @@ const TransferAppScreen = () => {
 
     setCurrentCoin(coin ? coin : allCoinsInfo[0]);
   }, [dispatch, allCoinsInfo, id]);
+
+  useEffect(() => {
+    if (error === "Coin not found") {
+      dispatch(resetError());
+    }
+  }, [dispatch, error]);
 
   const handleCoinPick = coin => {
     setCurrentCoin(coin);

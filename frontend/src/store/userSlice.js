@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { coinCmcData } from "./coinSlice";
 import axios from "axios";
 
 const initialState = {
@@ -18,8 +17,6 @@ export const login = createAsyncThunk("user/login", async (user, thunkApi) => {
     const { data } = await axios.post("/api/users/login", user, config);
 
     localStorage.setItem("token", JSON.stringify(data.token));
-
-    await thunkApi.dispatch(coinCmcData());
 
     return data.token;
   } catch (error) {
@@ -41,8 +38,6 @@ export const register = createAsyncThunk(
       const { data } = await axios.post("/api/users", user, config);
 
       localStorage.setItem("token", JSON.stringify(data.token));
-
-      await thunkApi.dispatch(coinCmcData());
 
       return data.token;
     } catch (error) {

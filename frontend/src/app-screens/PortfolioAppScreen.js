@@ -11,6 +11,7 @@ import DoughnutChart from "../components/DoughnutChart";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { useNavigate } from "react-router-dom";
+import { resetError } from "../store/coinSlice";
 
 const PortfolioAppScreen = () => {
   const [total24hChange, setTotal24hChange] = useState(0);
@@ -64,6 +65,12 @@ const PortfolioAppScreen = () => {
     setBest24hAsset(bestAsset);
     setWorst24hAsset(worstAsset);
   }, [dispatch, userCoinsInfo]);
+
+  useEffect(() => {
+    if (errorCoin === "Coin not found") {
+      dispatch(resetError());
+    }
+  }, [dispatch, errorCoin]);
 
   const handleCoinPick = coin => {
     navigate(`/app/transfer/${coin.id}`);

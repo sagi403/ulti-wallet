@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { autoLogin, register, resetError } from "../store/userSlice";
+import {
+  autoLogin,
+  register,
+  resetError as resetUserError,
+} from "../store/userSlice";
+import { resetError as resetCoinError } from "../store/coinSlice";
 import Message from "../components/Message";
 import validate from "../validation/validate";
 import registerSchema from "../validation/registerValidation";
@@ -31,12 +36,15 @@ const RegisterScreen = () => {
       navigate("/app/portfolio", { replace: true });
     }
 
-    return () => dispatch(resetError());
+    return () => {
+      dispatch(resetUserError());
+      dispatch(resetCoinError());
+    };
   }, [loggedIn]);
 
   const submitHandler = e => {
     e.preventDefault();
-    dispatch(resetError());
+    dispatch(resetUserError());
 
     const errors = {};
     const { error } = validate(
