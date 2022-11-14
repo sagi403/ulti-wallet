@@ -1,12 +1,7 @@
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  autoLogin,
-  login,
-  resetError as resetUserError,
-} from "../store/userSlice";
-import { resetError as resetCoinError } from "../store/coinSlice";
+import { autoLogin, login, resetError } from "../store/userSlice";
 import { useEffect, useState } from "react";
 import Message from "../components/Message";
 import validate from "../validation/validate";
@@ -32,10 +27,7 @@ const LoginScreen = () => {
   useEffect(() => {
     if (userInfo) {
       navigate(from, { replace: true });
-      return () => {
-        dispatch(resetUserError());
-        dispatch(resetCoinError());
-      };
+      return;
     }
 
     if (loggedIn) {
@@ -43,15 +35,12 @@ const LoginScreen = () => {
       navigate(from, { replace: true });
     }
 
-    return () => {
-      dispatch(resetUserError());
-      dispatch(resetCoinError());
-    };
+    return () => dispatch(resetError());
   }, [loggedIn]);
 
   const submitHandler = async e => {
     e.preventDefault();
-    dispatch(resetUserError());
+    dispatch(resetError());
 
     const errors = {};
     const { error } = validate({ email, password }, loginSchema);

@@ -6,7 +6,7 @@ const RequireCoinId = () => {
   const location = useLocation();
   const { id } = useParams();
 
-  return allCoinsId.includes(+id) ? (
+  return allCoinsId && allCoinsId.includes(+id) ? (
     <Outlet />
   ) : (
     <Navigate to="/app/portfolio" state={{ from: location }} replace />

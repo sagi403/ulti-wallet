@@ -29,10 +29,10 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (!allCoinsId) {
+    if (!allCoinsId && userInfo) {
       dispatch(coinsId());
     }
-  }, []);
+  }, [userInfo]);
 
   return (
     !loadingLogin && (
