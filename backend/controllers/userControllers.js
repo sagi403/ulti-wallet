@@ -84,4 +84,43 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser, registerUser, getUserProfile };
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+const updateUserProfile = asyncHandler(async (req, res) => {
+  if (!req.body.password) {
+    res.status(404);
+    throw new Error("User didn't provide password");
+  }
+
+  const {
+    rows: [user],
+  } = await pool.query("SELECT id, name, email FROM users WHERE id = $1", [
+    req.user.id,
+  ]);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    const hashedPassword = await hashPassword(req.body.password);
+
+    const {
+      rows: [updatedUser],
+    } = await pool.query(
+      `UPDATE users
+      SET name = $2,
+          email = $3,
+          password = $4
+      WHERE id = $1
+      RETURNING name, email`,
+      [req.user.id, user.name, user.email, hashedPassword]
+    );
+
+    res.json(updatedUser);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+export { authUser, registerUser, getUserProfile, updateUserProfile };

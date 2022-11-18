@@ -67,7 +67,7 @@ const ProfileAppScreen = () => {
 
   return (
     <Container>
-      <Row>
+      <Row className="mt-3">
         <Col md={3}>
           <h2>User Profile</h2>
           {error && <Message variant="danger">{error}</Message>}
