@@ -5,6 +5,9 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import FormFieldPartial from "../partials/FormFieldPartial";
 import { coinUserData } from "../store/coinSlice";
+import { resetError } from "../store/userSlice";
+import registerSchema from "../validation/registerValidation";
+import validate from "../validation/validate";
 
 const ProfileAppScreen = () => {
   const { userInfo, loading, error } = useSelector(state => state.user);
@@ -14,6 +17,12 @@ const ProfileAppScreen = () => {
   const [email, setEmail] = useState(userInfo ? userInfo.email : "");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorsMessage, setErrorsMessage] = useState({
+    name: null,
+    email: null,
+    password: null,
+    confirmPassword: null,
+  });
 
   const dispatch = useDispatch();
 
@@ -25,6 +34,35 @@ const ProfileAppScreen = () => {
 
   const submitHandler = e => {
     e.preventDefault();
+    dispatch(resetError());
+
+    const errors = {};
+    const { error } = validate(
+      { name, email, password, confirmPassword },
+      registerSchema
+    );
+
+    if (error) {
+      for (let errorItem of error.details) {
+        const { context, message } = errorItem;
+
+        if (!errors[context.key]) {
+          errors[context.key] = [];
+        }
+
+        errors[context.key].push(message);
+      }
+
+      setErrorsMessage(errors);
+      return;
+    }
+
+    setErrorsMessage({
+      name: null,
+      email: null,
+      password: null,
+      confirmPassword: null,
+    });
   };
 
   return (
@@ -41,7 +79,7 @@ const ProfileAppScreen = () => {
               controlId="formBasicName"
               value={name}
               onChange={e => setName(e.target.value)}
-              // messages={errorsMessage && errorsMessage.name}
+              messages={errorsMessage && errorsMessage.name}
             />
             <FormFieldPartial
               label="Email address"
@@ -49,7 +87,7 @@ const ProfileAppScreen = () => {
               controlId="formBasicEmail"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              // messages={errorsMessage && errorsMessage.email}
+              messages={errorsMessage && errorsMessage.email}
             />
             <FormFieldPartial
               label="Password"
@@ -57,7 +95,7 @@ const ProfileAppScreen = () => {
               controlId="formBasicPassword"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              // messages={errorsMessage && errorsMessage.password}
+              messages={errorsMessage && errorsMessage.password}
             />
             <FormFieldPartial
               label="Confirm Password"
@@ -65,7 +103,7 @@ const ProfileAppScreen = () => {
               controlId="formBasicConfirmPassword"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
-              // messages={errorsMessage && errorsMessage.confirmPassword}
+              messages={errorsMessage && errorsMessage.confirmPassword}
             />
 
             <Button type="submit" variant="primary">
