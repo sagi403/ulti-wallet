@@ -4,6 +4,7 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import AppNavbar from "./components/AppNavbar";
 import PortfolioAppScreen from "./app-screens/PortfolioAppScreen";
+import ProfileAppScreen from "./app-screens/ProfileAppScreen";
 import RequireAuth from "./components/RequireAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -41,6 +42,7 @@ const App = () => {
           <Route element={<RequireAuth />}>
             <Route path="app" element={<AppNavbar />}>
               <Route path="portfolio" element={<PortfolioAppScreen />} />
+              <Route path="profile" element={<ProfileAppScreen />} />
               <Route path="exchange" element={<ExchangeAppScreen />} />
               <Route path="transfer/:id" element={<TransferAppScreen />} />
               <Route path="transfer/:id/send" element={<SendAppScreen />} />

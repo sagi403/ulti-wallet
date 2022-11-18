@@ -71,7 +71,7 @@ const MainNavbar = () => {
                   icon={faArrowRotateLeft}
                   onClick={() => dispatch(refreshStats())}
                 />
-                <NavbarIconPartial to="/" icon={faGear} />
+                <NavbarIconPartial to="/app/profile" icon={faGear} />
                 <NavbarIconPartial
                   to="/"
                   icon={faRightFromBracket}
@@ -79,38 +79,6 @@ const MainNavbar = () => {
                     dispatch(logout());
                   }}
                 />
-                {/* {userInfo ? (
-                <NavDropdown title={userInfo.name} id="username">
-                  <LinkContainer to="/profile">
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
-                  </LinkContainer>
-                  <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
-              ) : (
-                <LinkContainer to="/login">
-                  <Nav.Link>
-                    <i className="fas fa-user"></i> Sign In
-                  </Nav.Link>
-                </LinkContainer>
-              )} */}
-                {/* {userInfo && userInfo.isAdmin && (
-                <NavDropdown title="Admin" id="adminmenu">
-                  <LinkContainer to="/admin/userlist">
-                    <NavDropdown.Item>Users</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to="/admin/productlist">
-                    <NavDropdown.Item>Products</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to="/admin/orderlist">
-                    <NavDropdown.Item>Orders</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to="/admin/couponlist">
-                    <NavDropdown.Item>Coupons</NavDropdown.Item>
-                  </LinkContainer>
-                </NavDropdown>
-              )} */}
               </Nav>
             </Navbar.Collapse>
           </Container>
