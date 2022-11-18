@@ -78,10 +78,6 @@ const userSlice = createSlice({
     resetError: state => {
       state.error = "";
     },
-    setUserInfo: (state, action) => {
-      state.userInfo = action.payload;
-      state.loggedIn = true;
-    },
   },
   extraReducers: {
     [login.pending]: state => {

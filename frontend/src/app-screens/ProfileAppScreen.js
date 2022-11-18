@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -5,7 +6,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import FormFieldPartial from "../partials/FormFieldPartial";
 import { coinUserData } from "../store/coinSlice";
-import { resetError } from "../store/userSlice";
+import { autoLogin, resetError } from "../store/userSlice";
 import registerSchema from "../validation/registerValidation";
 import validate from "../validation/validate";
 
@@ -23,6 +24,7 @@ const ProfileAppScreen = () => {
     password: null,
     confirmPassword: null,
   });
+  const [fail, setFail] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -32,9 +34,10 @@ const ProfileAppScreen = () => {
     }
   }, []);
 
-  const submitHandler = e => {
+  const submitHandler = async e => {
     e.preventDefault();
     dispatch(resetError());
+    setFail(null);
 
     const errors = {};
     const { error } = validate(
@@ -63,6 +66,23 @@ const ProfileAppScreen = () => {
       password: null,
       confirmPassword: null,
     });
+
+    try {
+      await axios.put("/api/users/profile", {
+        name,
+        email,
+        password,
+      });
+
+      dispatch(autoLogin());
+    } catch (error) {
+      const err =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      setFail(err);
+    }
   };
 
   return (
@@ -71,6 +91,7 @@ const ProfileAppScreen = () => {
         <Col md={3}>
           <h2>User Profile</h2>
           {error && <Message variant="danger">{error}</Message>}
+          {fail && <Message variant="danger">{fail}</Message>}
           {loading && <Loader />}
           <Form onSubmit={submitHandler}>
             <FormFieldPartial
