@@ -9,12 +9,15 @@ import coinRoutes from "./routes/coinRoutes.js";
 import cmcRoutes from "./routes/cmcRoutes.js";
 import transactionRoute from "./routes/transactionRoutes.js";
 import { startMetricsServer } from "./utils/metrics.js";
+import { restResponseTimeChecker } from "./middleware/responseTime.js";
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
+
+app.use(restResponseTimeChecker);
 
 app.use("/api/users", userRoutes);
 app.use("/api/address", addressRoutes);
