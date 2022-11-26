@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import pool from "../db/index.js";
+import { databaseResponseTimeHistogram } from "../metrics/histogram/histogramMetrics.js";
 import generateToken from "../utils/generateToken.js";
 import { matchPassword, hashPassword } from "../utils/passwordHelpers.js";
 
@@ -8,6 +9,8 @@ import { matchPassword, hashPassword } from "../utils/passwordHelpers.js";
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
+  const timer = databaseResponseTimeHistogram.startTimer();
 
   const {
     rows: [user],
@@ -21,6 +24,8 @@ const authUser = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("Invalid email or password");
   }
+
+  timer({ operation: "authUser", success: true });
 });
 
 // @desc    Register a new user
