@@ -1,11 +1,11 @@
 import asyncHandler from "express-async-handler";
 import pool from "../db/index.js";
+import { createUserAddressHistogramMetrics } from "../metrics/histogram/addressHistogramMetrics.js";
 
 // @desc    Get user addresses
 // @route   GET /api/address
 // @access  Private
 const getUserAddresses = asyncHandler(async (req, res) => {
-  // Need to combine calls
   const {
     rows: [user],
   } = await pool.query("SELECT id FROM users WHERE id = $1", [req.user.id]);
@@ -34,6 +34,8 @@ const getUserAddresses = asyncHandler(async (req, res) => {
 const createUserAddress = asyncHandler(async (req, res) => {
   const { coinId } = req.body;
 
+  const timer = createUserAddressHistogramMetrics.startTimer();
+
   if (typeof coinId !== "number") {
     res.status(400);
     throw new Error("Invalid id provided");
@@ -48,6 +50,11 @@ const createUserAddress = asyncHandler(async (req, res) => {
   );
 
   if (addressFound && addressFound.length !== 0) {
+    timer({
+      operation: "createUserAddress",
+      coin_id: coinId,
+    });
+
     res.json(addressFound);
     return;
   }
@@ -66,6 +73,7 @@ const createUserAddress = asyncHandler(async (req, res) => {
     throw new Error("New address couldn't be generated");
   }
 
+  timer({ operation: "createUserAddress", coin_id: coinId });
   res.json(address);
 });
 

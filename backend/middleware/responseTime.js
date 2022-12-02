@@ -1,5 +1,5 @@
 import responseTime from "response-time";
-import { restResponseTimeHistogram } from "../metrics/histogram/histogramMetrics.js";
+import { restResponseTimeHistogram } from "../metrics/histogram/restHistogramMetrics.js";
 
 export const restResponseTimeChecker = responseTime((req, res, time) => {
   if (req?.route?.path) {

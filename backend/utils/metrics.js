@@ -14,6 +14,8 @@ export const startMetricsServer = () => {
   });
 
   app.listen(8000, () => {
-    console.log("Metrics server started at http://localhost:8000".yellow.bold);
+    console.log(
+      "Metrics server started at http://localhost:8000/metrics".yellow.bold
+    );
   });
 };
