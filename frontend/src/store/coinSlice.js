@@ -19,6 +19,11 @@ export const coinCmcData = createAsyncThunk(
   async (data, thunkApi) => {
     try {
       const { data: coinsId } = await axios.get("/api/coins/coinsIdAll");
+
+      if (coinsId.length === 0) {
+        throw new Error("Coin not found");
+      }
+
       const { data: cmcCoinsData } = await axios.post("/api/cmc", {
         coinsId,
       });

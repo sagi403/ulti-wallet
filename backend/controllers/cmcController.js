@@ -15,11 +15,6 @@ const getCmcCoins = asyncHandler(async (req, res) => {
     },
   };
 
-  if (coinsId.length === 0) {
-    res.status(404);
-    throw new Error("Coin not found");
-  }
-
   const {
     data: { data },
   } = await axios.get(
@@ -29,7 +24,7 @@ const getCmcCoins = asyncHandler(async (req, res) => {
 
   if (!data) {
     res.status(400);
-    throw new Error("Server can’t respond due to client error");
+    throw new Error("Couldn't fetch data from the API");
   }
 
   res.json(data);
