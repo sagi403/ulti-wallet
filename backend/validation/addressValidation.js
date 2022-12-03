@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const createUserAddressValidation = [body("coinId").isNumeric().trim()];
+export const createUserAddressValidation = [body("coinId").isNumeric()];
 
 export const getAddressCoinsValidation = [
   body("id")

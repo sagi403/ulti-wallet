@@ -13,16 +13,6 @@ const updateSwapCoins = asyncHandler(async (req, res) => {
 
   const timer = updateSwapCoinsHistogramMetrics.startTimer();
 
-  if (
-    typeof firstCoinAmount !== "number" ||
-    typeof secondCoinAmount !== "number" ||
-    typeof oldCoinId !== "number" ||
-    typeof newCoinId !== "number"
-  ) {
-    res.status(400);
-    throw new Error("Invalid swap information");
-  }
-
   const client = await pool.connect();
 
   try {
@@ -83,11 +73,6 @@ const sendCoins = asyncHandler(async (req, res) => {
   const { address, sentAmount, coinId } = req.body;
 
   const timer = sendCoinsHistogramMetrics.startTimer();
-
-  if (typeof sentAmount !== "number" || typeof coinId !== "number") {
-    res.status(400);
-    throw new Error("Invalid data provided");
-  }
 
   const client = await pool.connect();
 
