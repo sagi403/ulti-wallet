@@ -35,7 +35,7 @@ export const register = createAsyncThunk(
     try {
       const config = { headers: { "Content-Type": "application/json" } };
 
-      const { data } = await axios.post("/api/users", user, config);
+      const { data } = await axios.post("/api/users/register", user, config);
 
       localStorage.setItem("token", JSON.stringify(data.token));
 

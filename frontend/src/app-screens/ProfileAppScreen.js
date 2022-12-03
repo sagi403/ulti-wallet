@@ -7,7 +7,7 @@ import Message from "../components/Message";
 import FormFieldPartial from "../partials/FormFieldPartial";
 import { coinUserData } from "../store/coinSlice";
 import { autoLogin, resetError } from "../store/userSlice";
-import registerSchema from "../validation/registerValidation";
+import updateSchema from "../validation/updateValidation";
 import validate from "../validation/validate";
 
 const ProfileAppScreen = () => {
@@ -42,7 +42,7 @@ const ProfileAppScreen = () => {
     const errors = {};
     const { error } = validate(
       { name, email, password, confirmPassword },
-      registerSchema
+      updateSchema
     );
 
     if (error) {

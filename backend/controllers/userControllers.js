@@ -32,7 +32,7 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Register a new user
-// @route   POST /api/users
+// @route   POST /api/users/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -100,21 +100,19 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  if (!req.body.password) {
-    res.status(404);
-    throw new Error("User didn't provide password");
-  }
-
   const {
     rows: [user],
-  } = await pool.query("SELECT id, name, email FROM users WHERE id = $1", [
-    req.user.id,
-  ]);
+  } = await pool.query(
+    "SELECT id, name, email, password FROM users WHERE id = $1",
+    [req.user.id]
+  );
 
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    const hashedPassword = await hashPassword(req.body.password);
+    user.password = req.body.password
+      ? await hashPassword(req.body.password)
+      : user.password;
 
     const {
       rows: [updatedUser],
@@ -125,7 +123,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
           password = $4
       WHERE id = $1
       RETURNING name, email`,
-      [req.user.id, user.name, user.email, hashedPassword]
+      [req.user.id, user.name, user.email, user.password]
     );
 
     res.json(updatedUser);
