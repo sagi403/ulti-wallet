@@ -36,11 +36,6 @@ const createUserAddress = asyncHandler(async (req, res) => {
 
   const timer = createUserAddressHistogramMetrics.startTimer();
 
-  if (typeof coinId !== "number") {
-    res.status(400);
-    throw new Error("Invalid id provided");
-  }
-
   const {
     rows: [addressFound],
   } = await pool.query(

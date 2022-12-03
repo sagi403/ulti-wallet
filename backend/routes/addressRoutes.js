@@ -5,13 +5,29 @@ import {
   createUserAddress,
 } from "../controllers/addressControllers.js";
 import { protect } from "../middleware/authMiddleware.js";
+import validateInputs from "../middleware/validateInputs.js";
+import {
+  createUserAddressValidation,
+  getAddressCoinsValidation,
+} from "../validation/addressValidation.js";
 
 const router = express.Router();
 
 router
   .route("/")
   .get(protect, getUserAddresses)
-  .post(protect, createUserAddress);
-router.route("/coins").get(protect, getAddressCoins);
+  .post(
+    createUserAddressValidation,
+    validateInputs,
+    protect,
+    createUserAddress
+  );
+router.get(
+  "/coins",
+  getAddressCoinsValidation,
+  validateInputs,
+  protect,
+  getAddressCoins
+);
 
 export default router;
